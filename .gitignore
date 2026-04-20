@@ -16,6 +16,8 @@ Desktop.ini
 *.orig
 *~.docx
 ~$*
+.~*
+.~lock.*#
 
 # ─── Build / deploy artifacts ──────────────
 .vercel/

@@ -15,33 +15,33 @@
    ======================================================================== */
 
 :root {
-  /* Sunset palette */
-  --sky-peach:   #ffc9a8;
-  --sky-rose:    #ff9f8a;
-  --sky-coral:   #f07a65;
-  --sky-lav:     #b8a3ce;
-  --sky-mauve:   #9680b2;
-  --sky-mist:    #d8cce4;
+  /* Sunset palette — lighter, dreamier */
+  --sky-peach:   #ffd8bc;
+  --sky-rose:    #f4b5bf;
+  --sky-coral:   #e89fb5;
+  --sky-lav:     #c8aadc;
+  --sky-mauve:   #a890c0;
+  --sky-mist:    #ded2ea;
 
-  /* Water / reflection */
-  --water-teal:  #7cb0a8;
-  --water-deep:  #3c5878;
-  --water-pool:  #2c4062;
+  /* Water / reflection — softer */
+  --water-teal:  #8fc4be;
+  --water-deep:  #6884a8;
+  --water-pool:  #4a6a90;
 
-  /* Ground / twilight */
-  --dusk:        #2a2040;
-  --dusk-deep:   #1a1528;
-  --ink:         #13101c;
+  /* Ground / twilight — less harsh */
+  --dusk:        #4a3868;
+  --dusk-deep:   #2e1f44;
+  --ink:         #2e1f44;
 
   /* Warm accents */
-  --ember:       #e66b5c;
-  --ember-deep:  #c84a3a;
-  --gold-dust:   #e8c098;
+  --ember:       #e89fb5;
+  --ember-deep:  #c87a96;
+  --gold-dust:   #e8c898;
 
-  /* Paper / cream */
-  --paper:       #f4ead8;
-  --paper-warm:  #ecdfc6;
-  --paper-soft:  #e0d2b6;
+  /* Paper — light lavender instead of cream-yellow */
+  --paper:       #f5f0f8;
+  --paper-warm:  #ede5f2;
+  --paper-soft:  #ddd0e8;
 
   --serif-en: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
   --serif-cn: 'Noto Serif SC', 'Songti SC', serif;
@@ -110,14 +110,13 @@ nav.top a:hover { opacity: 1; }
   overflow: hidden;
   background: linear-gradient(
     180deg,
-    #f6c9a0 0%,
-    #f4a88e 14%,
-    #e07f74 28%,
-    #c06a84 42%,
-    #8b6ca0 58%,
-    #5a5b8a 72%,
-    #2e3f65 86%,
-    #1a2a42 100%
+    #fbe9e9 0%,
+    #f4cfd9 12%,
+    #e8b8d0 26%,
+    #ccaadc 44%,
+    #b098cc 62%,
+    #9488bc 80%,
+    #7a6ea0 100%
   );
 }
 
@@ -178,11 +177,11 @@ nav.top a:hover { opacity: 1; }
   bottom: 0; left: 0; right: 0;
   height: 22%;
   background: linear-gradient(180deg,
-    #6b7a5e 0%,
-    #5a6f58 30%,
-    #4c6c60 55%,
-    #3a5868 80%,
-    #2c4062 100%);
+    #a8b898 0%,
+    #90a890 30%,
+    #80a098 55%,
+    #7090a0 80%,
+    #6884a8 100%);
   z-index: 3;
 }
 .hero .ground::before {
@@ -411,7 +410,7 @@ section.manifesto {
    WORKS — essays as portal cards
    ────────────────────────────────────────────────────────────── */
 section.works {
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 60%, #d4c4a4 100%);
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 60%, var(--paper-soft) 100%);
   padding: 80px 0 160px;
   position: relative;
 }
@@ -604,7 +603,7 @@ section.works {
    RESEARCH — highlighted proposal block
    ────────────────────────────────────────────────────────────── */
 section.research {
-  background: linear-gradient(180deg, #d4c4a4 0%, #8896b2 40%, #4c6480 80%, #2c3e5c 100%);
+  background: linear-gradient(180deg, var(--paper-soft) 0%, #b098cc 40%, #7a6ea0 75%, #4a3868 100%);
   color: var(--paper);
   padding: 140px 0 160px;
   position: relative;
@@ -746,7 +745,7 @@ section.research {
    ABOUT / CONTACT — quiet closer
    ────────────────────────────────────────────────────────────── */
 section.about {
-  background: var(--dusk-deep);
+  background: linear-gradient(180deg, #4a3868 0%, #2e1f44 100%);
   color: var(--paper);
   padding: 140px 0 80px;
   position: relative;
@@ -884,6 +883,7 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
     <li><a href="#manifesto">Manifesto</a></li>
     <li><a href="#works">Works</a></li>
     <li><a href="reading/">Reading</a></li>
+    <li><a href="learning/">Learning</a></li>
     <li><a href="#research">Research</a></li>
     <li><a href="#about">About</a></li>
   </ul>
@@ -1039,7 +1039,7 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
 </section>
 
 <!-- ══════════════════════════  READING COLUMN TEASER  ══════════════════════════ -->
-<section style="background: linear-gradient(180deg, #d4c4a4 0%, #c8a8b8 50%, #9680b2 100%); padding: 120px 0; position: relative; overflow: hidden;">
+<section style="background: linear-gradient(180deg, var(--paper-warm) 0%, #d8c4e0 40%, #b098cc 80%, #8870a8 100%); padding: 120px 0; position: relative; overflow: hidden;">
   <div class="wrap" style="max-width: 1040px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; position: relative; z-index: 2;">
     <div>
       <div class="eyebrow" style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #c84a3a; margin-bottom: 22px;">Reading Column · 四维阅读</div>

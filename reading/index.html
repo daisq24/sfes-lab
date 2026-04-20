@@ -4,11 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>阅读笔记 · Reading Column | 四维空间感知实验室</title>
-<meta name="description" content="A four-dimensional reading column: mapping papers on embodied cognition, world models, spatial AI, and urban intelligence across cognition × scale × application × time. 一个四维坐标系下的文献阅读与分享专栏。">
+<meta name="description" content="A four-dimensional reading column mapping world-model papers across Cognition × Scale × Application × Time. 一个四维坐标系下的文献阅读与分享专栏。">
 
-<!-- Open Graph -->
 <meta property="og:title" content="阅读笔记 · Reading Column | SFES Lab">
-<meta property="og:description" content="Mapping world-model papers across cognition × scale × application × time — a four-dimensional reading column.">
+<meta property="og:description" content="World-model papers mapped in 3D coordinate space — Cognition × Scale × Application × Time.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sfes-lab.vercel.app/reading/">
 <meta name="twitter:card" content="summary_large_image">
@@ -16,41 +15,49 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Noto+Serif+SC:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
 <style>
 /* ========================================================================
-   READING COLUMN · 阅读笔记
-   Four-dimensional literature review framework
+   READING COLUMN · 阅读笔记 — light lavender edition
    ======================================================================== */
-
 :root {
-  --sky-peach:   #ffc9a8;
-  --sky-rose:    #ff9f8a;
-  --sky-coral:   #f07a65;
-  --sky-lav:     #b8a3ce;
-  --sky-mauve:   #9680b2;
-  --sky-mist:    #d8cce4;
+  /* Light lavender base */
+  --paper:       #f5f0f8;   /* very light lavender */
+  --paper-warm:  #ede5f2;   /* slightly deeper */
+  --paper-soft:  #ddd0e8;   /* soft lavender */
+  --paper-edge:  #c8b4da;   /* deeper lavender edge */
 
-  --water-teal:  #7cb0a8;
-  --water-deep:  #3c5878;
-  --water-pool:  #2c4062;
+  /* Dreamy accents */
+  --rose:        #e89fb5;   /* dusty rose */
+  --rose-deep:   #c87a96;
+  --lav:         #b49ad0;   /* lavender */
+  --lav-deep:    #8872a8;
+  --teal:        #8fc4be;   /* soft teal */
+  --teal-deep:   #5e9a92;
+  --gold:        #d8b888;
+  --gold-deep:   #a88850;
+  --coral:       #e88a78;
+  --coral-deep:  #c46650;
 
-  --dusk:        #2a2040;
-  --dusk-deep:   #1a1528;
-  --ink:         #13101c;
-
-  --ember:       #e66b5c;
-  --ember-deep:  #c84a3a;
-  --gold-dust:   #e8c098;
-
-  --paper:       #f4ead8;
-  --paper-warm:  #ecdfc6;
-  --paper-soft:  #e0d2b6;
+  /* Ink */
+  --ink:         #2e1f44;
+  --ink-soft:    #4a3a62;
+  --ink-faint:   #7a6a92;
 
   /* Axis colors — one per dimension */
-  --axis-cog:   #c84a3a;   /* 认知 — red */
-  --axis-scale: #9680b2;   /* 尺度 — lavender */
-  --axis-app:   #7cb0a8;   /* 应用 — teal */
-  --axis-time:  #e8c098;   /* 时间 — gold */
+  --axis-x: #c87a96;   /* Cognition 认知 — rose */
+  --axis-y: #8872a8;   /* Scale 尺度 — purple */
+  --axis-z: #5e9a92;   /* Application 应用 — teal */
+  --axis-t: #c4895a;   /* Time 时间 — gold */
 
   --serif-en: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
   --serif-cn: 'Noto Serif SC', 'Songti SC', serif;
@@ -69,43 +76,36 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
-
 body::after {
   content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-  opacity: 0.28;
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 100;
+  opacity: 0.18;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.12  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.3  0 0 0 0 0.5  0 0 0 0.4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
 .wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
 
-/* ─── Top nav ─── */
+/* ─── NAV ─── */
 nav.top {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 50;
   padding: 22px 48px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; justify-content: space-between; align-items: center;
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--dusk-deep);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink);
+  transition: color 0.3s;
 }
-nav.top.on-dark { color: var(--paper); mix-blend-mode: difference; }
-nav.top .brand { font-weight: 500; }
-nav.top .brand a { color: inherit; text-decoration: none; }
+nav.top.on-dark { color: #f5f0f8; mix-blend-mode: difference; }
+nav.top .brand a { color: inherit; text-decoration: none; font-weight: 500; }
 nav.top ul { list-style: none; display: flex; gap: 28px; }
 nav.top a { color: inherit; text-decoration: none; opacity: 0.85; transition: opacity 0.2s; }
 nav.top a:hover { opacity: 1; }
 nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
 
-/* ─── HERO — sunset + motto ─── */
+/* ─── HERO ─── */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -114,25 +114,23 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   align-items: center;
   background: linear-gradient(
     180deg,
-    #f6c9a0 0%,
-    #f4a88e 12%,
-    #e07f74 25%,
-    #c06a84 40%,
-    #8b6ca0 55%,
-    #5a5b8a 70%,
-    #2e3f65 85%,
-    #1a2a42 100%
+    #fbe9e9 0%,
+    #f4cfd9 14%,
+    #e5b3ce 30%,
+    #ccaadc 50%,
+    #b0a0d4 70%,
+    #9488bc 88%,
+    #7d74a2 100%
   );
 }
-
 .hero::before {
   content: '';
   position: absolute;
-  top: 18%; left: 50%; transform: translateX(-50%);
-  width: 220px; height: 220px;
+  top: 20%; left: 50%; transform: translateX(-50%);
+  width: 240px; height: 240px;
   border-radius: 50%;
   background: radial-gradient(circle,
-    #fff5e0 0%, #ffdfa8 22%, #ffb980 42%, rgba(255,150,120,0) 75%);
+    #fffbf0 0%, #ffe5c8 22%, #ffbfa0 42%, rgba(255,180,150,0) 75%);
   filter: blur(3px);
 }
 
@@ -142,19 +140,17 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   max-width: 1000px;
   margin: 0 auto;
   padding: 120px 48px 80px;
-  color: var(--paper);
+  color: #fefaff;
   text-align: center;
 }
-
 .hero .eyebrow {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  opacity: 0.82;
+  opacity: 0.88;
   margin-bottom: 30px;
 }
-
 .hero h1 {
   font-family: var(--serif-cn);
   font-weight: 400;
@@ -162,6 +158,8 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   line-height: 1.15;
   letter-spacing: 0.01em;
   margin-bottom: 20px;
+  color: #fefaff;
+  text-shadow: 0 2px 20px rgba(70,40,90,0.18);
 }
 .hero h1 .en {
   display: block;
@@ -170,16 +168,15 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-weight: 300;
   font-size: 0.46em;
   letter-spacing: 0.03em;
-  opacity: 0.85;
+  opacity: 0.9;
   margin-top: 14px;
 }
-
 .hero .motto {
   margin: 48px auto 16px;
   max-width: 680px;
   padding: 26px 32px;
-  border-left: 2px solid rgba(232,192,152,0.7);
-  border-right: 2px solid rgba(232,192,152,0.7);
+  border-left: 2px solid rgba(255,248,230,0.7);
+  border-right: 2px solid rgba(255,248,230,0.7);
   text-align: left;
 }
 .hero .motto p {
@@ -188,7 +185,6 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-weight: 300;
   font-size: clamp(20px, 2.4vw, 30px);
   line-height: 1.4;
-  color: var(--paper);
   letter-spacing: 0.005em;
 }
 .hero .motto cite {
@@ -198,18 +194,17 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-size: 10px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--gold-dust);
+  color: #ffecc8;
   margin-top: 18px;
-  opacity: 0.85;
+  opacity: 0.92;
 }
-
 .hero .credo {
   font-family: var(--serif-cn);
   font-size: 16px;
   line-height: 1.9;
   max-width: 620px;
   margin: 40px auto 0;
-  opacity: 0.9;
+  opacity: 0.94;
 }
 .hero .credo .en {
   display: block;
@@ -217,9 +212,8 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-style: italic;
   font-size: 14.5px;
   margin-top: 8px;
-  opacity: 0.82;
+  opacity: 0.86;
 }
-
 .scroll-cue {
   position: absolute;
   bottom: 28px; left: 50%;
@@ -228,33 +222,33 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.3em;
-  color: var(--paper);
-  opacity: 0.7;
+  color: #fefaff;
+  opacity: 0.75;
   text-transform: uppercase;
   animation: drift 3s ease-in-out infinite;
 }
 @keyframes drift {
-  0%,100% { transform: translate(-50%, 0); opacity: 0.7; }
+  0%,100% { transform: translate(-50%, 0); opacity: 0.75; }
   50%     { transform: translate(-50%, 6px); opacity: 1; }
 }
 
-/* ─── FRAMEWORK EXPLAINER ─── */
+/* ─── 3D FRAMEWORK VIEWER ─── */
 .framework {
-  background: var(--paper);
-  padding: 140px 0 120px;
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
+  padding: 120px 0 100px;
   position: relative;
 }
 .framework-head {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto 80px;
+  margin: 0 auto 60px;
 }
 .framework-head .eyebrow {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--ember-deep);
+  color: var(--rose-deep);
   margin-bottom: 22px;
 }
 .framework-head h2 {
@@ -262,7 +256,7 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-weight: 400;
   font-size: clamp(28px, 3.6vw, 44px);
   line-height: 1.25;
-  color: var(--dusk-deep);
+  color: var(--ink);
   margin-bottom: 16px;
 }
 .framework-head h2 .en {
@@ -272,98 +266,231 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-weight: 300;
   font-size: 0.52em;
   margin-top: 12px;
-  color: var(--water-deep);
-  letter-spacing: 0.015em;
+  color: var(--lav-deep);
 }
 .framework-head p {
   font-family: var(--serif-cn);
   font-size: 16px;
   line-height: 1.9;
-  color: #2a2438;
-  margin-top: 20px;
+  color: var(--ink-soft);
+  margin-top: 16px;
 }
 
-/* Compass: big radar showing the 4 axes */
-.compass-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 80px;
-  align-items: center;
+.viewer-card {
   max-width: 1040px;
   margin: 0 auto;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(180,154,208,0.3);
+  border-radius: 4px;
+  padding: 32px;
+  box-shadow: 0 24px 60px -20px rgba(80,60,120,0.18);
+  position: relative;
 }
 
-.compass-svg {
-  display: block;
+.viewer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 36px;
+  align-items: center;
+}
+
+#three-canvas-wrap {
+  position: relative;
   width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
   aspect-ratio: 1/1;
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: 3px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center,
+    rgba(255,240,250,0.6) 0%,
+    rgba(220,200,240,0.4) 60%,
+    rgba(180,160,210,0.2) 100%);
+  cursor: grab;
+}
+#three-canvas-wrap:active { cursor: grabbing; }
+#three-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+
+#paper-tooltip {
+  position: absolute;
+  pointer-events: none;
+  padding: 8px 12px;
+  background: rgba(46,31,68,0.92);
+  color: #f5f0f8;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  border-radius: 2px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -120%);
+  transition: opacity 0.15s;
+  z-index: 10;
+}
+#paper-tooltip .t-title {
+  display: block;
+  font-family: var(--serif-cn);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+  opacity: 0.95;
 }
 
 .axes-list {
   display: grid;
-  gap: 26px;
+  gap: 22px;
 }
 .axis-item {
   display: grid;
-  grid-template-columns: 44px 1fr;
-  gap: 18px;
+  grid-template-columns: 14px 1fr;
+  gap: 16px;
   align-items: start;
 }
 .axis-dot {
-  width: 14px; height: 14px;
+  width: 12px; height: 12px;
   border-radius: 50%;
-  margin-top: 8px;
-  margin-left: 15px;
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.9), 0 0 12px currentColor;
+  margin-top: 7px;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.9), 0 0 10px currentColor;
 }
-.axis-dot.cog   { background: var(--axis-cog);   color: var(--axis-cog);   }
-.axis-dot.scale { background: var(--axis-scale); color: var(--axis-scale); }
-.axis-dot.app   { background: var(--axis-app);   color: var(--axis-app);   }
-.axis-dot.time  { background: var(--axis-time);  color: #b88a48;           }
-
+.axis-dot.x { background: var(--axis-x); color: var(--axis-x); }
+.axis-dot.y { background: var(--axis-y); color: var(--axis-y); }
+.axis-dot.z { background: var(--axis-z); color: var(--axis-z); }
+.axis-dot.t { background: var(--axis-t); color: var(--axis-t); }
 .axis-item h4 {
   font-family: var(--serif-cn);
   font-weight: 500;
-  font-size: 17px;
-  color: var(--dusk-deep);
+  font-size: 16px;
+  color: var(--ink);
   margin-bottom: 2px;
+}
+.axis-item h4 .axis-name {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  margin-left: 8px;
 }
 .axis-item h4 .en {
   font-family: var(--serif-en);
   font-style: italic;
   font-weight: 300;
-  font-size: 13.5px;
-  color: var(--water-deep);
+  font-size: 12.5px;
+  color: var(--lav-deep);
   margin-left: 8px;
 }
 .axis-item .range {
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: #5a4a6a;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
   line-height: 1.55;
   margin-top: 4px;
 }
 .axis-item .range .sep { opacity: 0.4; padding: 0 4px; }
 
-/* ─── PAPERS — cards with mini radars ─── */
+/* Time slider */
+.time-control {
+  margin-top: 28px;
+  padding: 18px 20px;
+  background: rgba(196,137,90,0.08);
+  border-left: 2px solid var(--axis-t);
+  border-radius: 2px;
+}
+.time-control label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: 12px;
+}
+.time-control label .current {
+  font-family: var(--serif-cn);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--gold-deep);
+}
+#time-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--coral) 100%);
+  outline: none;
+  opacity: 0.85;
+}
+#time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--gold-deep);
+  border: 3px solid var(--paper);
+  box-shadow: 0 2px 6px rgba(100,70,30,0.3);
+  cursor: pointer;
+}
+#time-slider::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--gold-deep);
+  border: 3px solid var(--paper);
+  cursor: pointer;
+}
+.time-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+.viewer-hint {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(120,100,150,0.25);
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.viewer-hint kbd {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: rgba(184,140,210,0.15);
+  border: 1px solid rgba(136,114,168,0.3);
+  border-radius: 2px;
+  color: var(--lav-deep);
+}
+
+/* ─── PAPERS ─── */
 .papers {
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
-  padding: 100px 0 160px;
+  background: linear-gradient(180deg, var(--paper-warm) 0%, var(--paper-soft) 100%);
+  padding: 80px 0 160px;
 }
 .papers-head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 .papers-head .title {
   font-family: var(--serif-cn);
   font-weight: 400;
   font-size: clamp(26px, 3vw, 36px);
-  color: var(--dusk-deep);
+  color: var(--ink);
 }
 .papers-head .title .en {
   display: block;
@@ -378,38 +505,82 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.22em;
-  color: var(--water-deep);
+  color: var(--lav-deep);
   text-transform: uppercase;
 }
 
 .paper {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 48px;
+  grid-template-columns: 220px 1fr;
+  gap: 44px;
   padding: 44px 0;
-  border-top: 1px solid rgba(60,40,80,0.15);
+  border-top: 1px solid rgba(120,100,160,0.2);
   scroll-margin-top: 80px;
+  transition: background 0.3s;
 }
-.paper:last-child { border-bottom: 1px solid rgba(60,40,80,0.15); }
+.paper:last-child { border-bottom: 1px solid rgba(120,100,160,0.2); }
+.paper:target,
+.paper.highlighted {
+  background: rgba(232,159,181,0.12);
+  border-radius: 2px;
+  padding-left: 18px;
+  padding-right: 18px;
+  margin: 0 -18px;
+}
 
-.paper:target { background: rgba(232,192,152,0.15); border-radius: 2px; padding-left: 18px; padding-right: 18px; margin: 0 -18px; }
-
-.paper-radar {
-  position: relative;
+.paper-coords {
+  position: sticky;
+  top: 100px;
+  align-self: start;
 }
-.paper-radar svg {
-  display: block;
-  width: 100%;
-  max-width: 180px;
-}
-.paper-radar .num {
-  position: absolute;
-  top: -6px; left: 0;
+.paper-num {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.28em;
-  color: var(--ember-deep);
+  letter-spacing: 0.3em;
+  color: var(--rose-deep);
   text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.coord-box {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(180,154,208,0.4);
+  border-radius: 3px;
+  padding: 18px 20px;
+  font-family: var(--mono);
+  box-shadow: 0 6px 20px -8px rgba(100,80,140,0.18);
+}
+.coord-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  font-size: 12.5px;
+  letter-spacing: 0.05em;
+}
+.coord-line + .coord-line { border-top: 1px dashed rgba(180,154,208,0.3); }
+.coord-line .axis-label { color: var(--ink-faint); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+.coord-line .axis-value { font-weight: 500; color: var(--ink); }
+.coord-line.x .axis-value { color: var(--axis-x); }
+.coord-line.y .axis-value { color: var(--axis-y); }
+.coord-line.z .axis-value { color: var(--axis-z); }
+.coord-line.t .axis-value { color: var(--axis-t); }
+
+.coord-summary {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(232,159,181,0.12);
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  text-align: center;
+}
+.coord-summary .xyz {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--rose-deep);
 }
 
 .paper-body h3 {
@@ -417,7 +588,7 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-weight: 500;
   font-size: 22px;
   line-height: 1.3;
-  color: var(--dusk-deep);
+  color: var(--ink);
   margin-bottom: 6px;
 }
 .paper-body h3 .en {
@@ -426,44 +597,46 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-style: italic;
   font-weight: 300;
   font-size: 0.78em;
-  color: var(--water-deep);
+  color: var(--lav-deep);
   margin-top: 6px;
 }
 .paper-meta {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10.5px;
   letter-spacing: 0.12em;
-  color: #5a4a6a;
+  color: var(--ink-faint);
   margin-top: 10px;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
 }
+
 .paper-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 20px;
 }
 .tag {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 5px 11px;
+  padding: 5px 10px;
   border-radius: 2px;
-  background: rgba(60,40,80,0.06);
-  color: #3a3048;
-  border: 1px solid rgba(60,40,80,0.08);
+  background: rgba(120,100,160,0.07);
+  color: var(--ink-soft);
+  border: 1px solid rgba(120,100,160,0.12);
 }
-.tag.cog   { background: rgba(200,74,58,0.1);   color: var(--axis-cog);   border-color: rgba(200,74,58,0.25);   }
-.tag.scale { background: rgba(150,128,178,0.12); color: #6b4f92;          border-color: rgba(150,128,178,0.3);  }
-.tag.app   { background: rgba(124,176,168,0.15); color: #3e7a70;          border-color: rgba(124,176,168,0.35); }
-.tag.time  { background: rgba(232,192,152,0.22); color: #9a7038;          border-color: rgba(184,138,72,0.35);  }
+.tag.x { background: rgba(200,122,150,0.12); color: var(--rose-deep); border-color: rgba(200,122,150,0.3); }
+.tag.y { background: rgba(136,114,168,0.12); color: var(--lav-deep); border-color: rgba(136,114,168,0.3); }
+.tag.z { background: rgba(94,154,146,0.14); color: var(--teal-deep); border-color: rgba(94,154,146,0.32); }
+.tag.t { background: rgba(196,137,90,0.14); color: var(--gold-deep); border-color: rgba(196,137,90,0.32); }
 
 .paper-body p.summary {
   font-family: var(--serif-cn);
   font-size: 15.5px;
   line-height: 1.85;
-  color: #2a2438;
+  color: var(--ink);
   margin-bottom: 14px;
 }
 .paper-body p.en-summary {
@@ -472,22 +645,23 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-weight: 300;
   font-size: 14.5px;
   line-height: 1.7;
-  color: #4a4258;
+  color: var(--ink-soft);
   margin-bottom: 20px;
 }
 
 .paper-note {
-  background: rgba(255,255,255,0.4);
-  border-left: 2px solid var(--ember-deep);
+  background: rgba(255,255,255,0.45);
+  border-left: 2px solid var(--rose-deep);
   padding: 16px 20px;
   margin-top: 18px;
+  border-radius: 2px;
 }
 .paper-note .label {
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ember-deep);
+  color: var(--rose-deep);
   margin-bottom: 8px;
   display: block;
 }
@@ -495,12 +669,12 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-family: var(--serif-cn);
   font-size: 14.5px;
   line-height: 1.8;
-  color: #2a2438;
+  color: var(--ink);
   font-style: italic;
 }
 
 .paper-actions {
-  margin-top: 22px;
+  margin-top: 20px;
   display: flex;
   gap: 18px;
   flex-wrap: wrap;
@@ -510,19 +684,22 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   text-transform: uppercase;
 }
 .paper-actions a {
-  color: var(--water-deep);
+  color: var(--lav-deep);
   text-decoration: none;
-  border-bottom: 1px dashed rgba(60,88,120,0.5);
+  border-bottom: 1px dashed rgba(136,114,168,0.5);
   padding-bottom: 2px;
-  transition: color 0.2s;
+  cursor: pointer;
 }
-.paper-actions a:hover { color: var(--ember-deep); border-bottom-color: var(--ember-deep); }
+.paper-actions a:hover { color: var(--rose-deep); border-bottom-color: var(--rose-deep); }
 
 /* ─── CLOSER ─── */
 .closer {
-  background: var(--dusk-deep);
-  color: var(--paper);
-  padding: 140px 0 100px;
+  background: linear-gradient(180deg,
+    var(--paper-soft) 0%,
+    #c8aed2 50%,
+    #9a88b8 100%);
+  color: #f8f4fa;
+  padding: 130px 0 90px;
   position: relative;
   overflow: hidden;
 }
@@ -532,8 +709,8 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   bottom: 0; left: 0; right: 0;
   height: 220px;
   background: radial-gradient(ellipse at 50% 100%,
-    rgba(255,140,100,0.22) 0%,
-    rgba(150,100,140,0.12) 40%,
+    rgba(255,200,180,0.22) 0%,
+    rgba(200,150,180,0.12) 40%,
     transparent 70%);
 }
 .closer .wrap { max-width: 760px; text-align: center; position: relative; z-index: 2; }
@@ -542,8 +719,8 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-size: 11px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  opacity: 0.65;
-  margin-bottom: 28px;
+  opacity: 0.72;
+  margin-bottom: 26px;
 }
 .closer h2 {
   font-family: var(--serif-en);
@@ -558,7 +735,7 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   font-weight: 300;
   font-size: 17px;
   line-height: 1.9;
-  opacity: 0.9;
+  opacity: 0.92;
   margin-top: 18px;
 }
 .closer .share-row {
@@ -573,18 +750,17 @@ nav.top a.active { opacity: 1; border-bottom: 1px solid currentColor; padding-bo
   text-transform: uppercase;
 }
 .closer .share-row a {
-  color: var(--gold-dust);
+  color: #ffecc8;
   text-decoration: none;
-  border-bottom: 1px dashed rgba(232,192,152,0.4);
+  border-bottom: 1px dashed rgba(255,236,200,0.5);
   padding-bottom: 2px;
-  transition: color 0.2s;
 }
-.closer .share-row a:hover { color: var(--paper); }
+.closer .share-row a:hover { color: #fff; }
 
 /* ─── FOOTER ─── */
 footer {
   background: var(--ink);
-  color: rgba(244,234,216,0.55);
+  color: rgba(248,240,252,0.55);
   padding: 32px 48px;
   display: flex;
   justify-content: space-between;
@@ -593,25 +769,25 @@ footer {
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-wrap: wrap; gap: 12px;
 }
-footer .sig { color: var(--gold-dust); opacity: 0.85; }
+footer .sig { color: #d8b888; opacity: 0.9; }
 footer a { color: inherit; text-decoration: none; }
-footer a:hover { color: var(--gold-dust); }
+footer a:hover { color: #d8b888; }
 
 /* ─── Responsive ─── */
 @media (max-width: 900px) {
-  .compass-grid { grid-template-columns: 1fr; gap: 50px; }
-  .paper { grid-template-columns: 1fr; gap: 24px; }
-  .paper-radar { max-width: 160px; }
+  .viewer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .paper { grid-template-columns: 1fr; gap: 20px; }
+  .paper-coords { position: static; }
+  .coord-box { max-width: 320px; }
 }
 @media (max-width: 600px) {
   .wrap { padding: 0 24px; }
   nav.top { padding: 18px 24px; }
   nav.top ul { gap: 14px; }
   .hero-inner { padding: 100px 24px 70px; }
-  .hero .motto { padding: 20px 22px; }
+  .viewer-card { padding: 22px; }
   footer { padding: 26px 24px; font-size: 9px; }
 }
 </style>
@@ -624,6 +800,7 @@ footer a:hover { color: var(--gold-dust); }
     <li><a href="../#works">Works</a></li>
     <li><a href="../#research">Research</a></li>
     <li><a href="./" class="active">Reading</a></li>
+    <li><a href="../learning/">Learning</a></li>
     <li><a href="../#about">About</a></li>
   </ul>
 </nav>
@@ -632,17 +809,14 @@ footer a:hover { color: var(--gold-dust); }
 <header class="hero">
   <div class="hero-inner">
     <div class="eyebrow">Reading Column · Est. 2026</div>
-
     <h1>
       四维阅读 · 笔记
       <span class="en">A Four-Dimensional Reading Column</span>
     </h1>
-
     <blockquote class="motto">
       <p>"What I cannot create, I do not understand."</p>
       <cite>— Richard P. Feynman</cite>
     </blockquote>
-
     <p class="credo">
       如果要说信仰，那便是：想教会 AI，我们是如何爱这个物质世界的。
       <span class="en">If there is a creed here, it is this: to teach AI how we have loved this material world.</span>
@@ -651,94 +825,71 @@ footer a:hover { color: var(--gold-dust); }
   <div class="scroll-cue">↓ &nbsp; Enter &nbsp; ↓</div>
 </header>
 
-<!-- ══════════════════════════  FRAMEWORK EXPLAINER  ══════════════════════════ -->
+<!-- ══════════════════════════  3D FRAMEWORK VIEWER  ══════════════════════════ -->
 <section class="framework" id="framework">
   <div class="wrap">
     <div class="framework-head">
       <div class="eyebrow">The Framework · 四维坐标</div>
       <h2>
-        沿四条轴线阅读世界模型
-        <span class="en">Reading World-Model Papers Along Four Axes</span>
+        在三维坐标系里读论文，时间是第四个维度
+        <span class="en">Papers Mapped in 3D Space — Time as the Fourth Axis</span>
       </h2>
-      <p>每一篇论文不仅在回答一个问题，也占据一个位置 —— 在认知、尺度、应用、时间四个维度构成的空间里。这个专栏试图把它们一一标注、比照、连接，形成一张属于我的阅读星图。</p>
+      <p>每篇论文不仅在回答一个问题，也占据一个坐标。拖拽旋转视角，拉动时间滑块穿越单细胞到 AI —— 一张动态的阅读星图。</p>
     </div>
 
-    <div class="compass-grid">
-      <!-- Compass SVG: four axes with labels -->
-      <svg class="compass-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="compassGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#f4c998" stop-opacity="0.35"/>
-            <stop offset="65%" stop-color="#b48aa8" stop-opacity="0.15"/>
-            <stop offset="100%" stop-color="#3c5878" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-
-        <!-- Soft central glow -->
-        <circle cx="200" cy="200" r="150" fill="url(#compassGlow)"/>
-
-        <!-- Concentric rings -->
-        <circle cx="200" cy="200" r="40"  fill="none" stroke="#c8b896" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.5"/>
-        <circle cx="200" cy="200" r="80"  fill="none" stroke="#c8b896" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.5"/>
-        <circle cx="200" cy="200" r="120" fill="none" stroke="#c8b896" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.5"/>
-        <circle cx="200" cy="200" r="150" fill="none" stroke="#a89678" stroke-width="1" opacity="0.6"/>
-
-        <!-- Four axis lines -->
-        <line x1="200" y1="50"  x2="200" y2="350" stroke="#6a5a7a" stroke-width="0.8" opacity="0.4"/>
-        <line x1="50"  y1="200" x2="350" y2="200" stroke="#6a5a7a" stroke-width="0.8" opacity="0.4"/>
-
-        <!-- Axis endpoints with color dots -->
-        <circle cx="200" cy="50"  r="6" fill="#c84a3a"/>
-        <circle cx="350" cy="200" r="6" fill="#9680b2"/>
-        <circle cx="200" cy="350" r="6" fill="#7cb0a8"/>
-        <circle cx="50"  cy="200" r="6" fill="#e8c098"/>
-
-        <!-- Labels -->
-        <text x="200" y="32"  text-anchor="middle" font-family="Noto Serif SC, serif" font-size="16" font-weight="500" fill="#1a1528">认知 Cognition</text>
-        <text x="362" y="200" text-anchor="start"  font-family="Noto Serif SC, serif" font-size="16" font-weight="500" fill="#1a1528" dominant-baseline="middle">尺度</text>
-        <text x="362" y="216" text-anchor="start"  font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#4a4258" dominant-baseline="middle">Scale</text>
-        <text x="200" y="376" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="16" font-weight="500" fill="#1a1528">应用 Application</text>
-        <text x="38" y="200" text-anchor="end"    font-family="Noto Serif SC, serif" font-size="16" font-weight="500" fill="#1a1528" dominant-baseline="middle">时间</text>
-        <text x="38" y="216" text-anchor="end"    font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#4a4258" dominant-baseline="middle">Time</text>
-
-        <!-- Centre dot -->
-        <circle cx="200" cy="200" r="3.5" fill="#1a1528"/>
-      </svg>
-
-      <div class="axes-list">
-        <div class="axis-item">
-          <div class="axis-dot cog"></div>
-          <div>
-            <h4>认知 <span class="en">Cognition</span></h4>
-            <div class="range">主观感知 <span class="sep">›</span> 生成 <span class="sep">›</span> 探索 <span class="sep">›</span> 改造<br>
-            <span style="opacity:0.7;">Subjective · Generation · Exploration · Transformation</span></div>
-          </div>
+    <div class="viewer-card">
+      <div class="viewer-grid">
+        <!-- 3D canvas -->
+        <div id="three-canvas-wrap">
+          <div id="paper-tooltip"><span class="t-num"></span><span class="t-title"></span></div>
         </div>
 
-        <div class="axis-item">
-          <div class="axis-dot scale"></div>
-          <div>
-            <h4>尺度 <span class="en">Scale</span></h4>
-            <div class="range">个体 <span class="sep">›</span> 多智能体 <span class="sep">›</span> 社区 <span class="sep">›</span> 城市<br>
-            <span style="opacity:0.7;">Individual · Multi-Agent · Community · City</span></div>
+        <!-- Axes legend + time slider -->
+        <div>
+          <div class="axes-list">
+            <div class="axis-item">
+              <div class="axis-dot x"></div>
+              <div>
+                <h4>认知<span class="axis-name">X</span><span class="en">Cognition</span></h4>
+                <div class="range">主观 <span class="sep">›</span> 生成 <span class="sep">›</span> 探索 <span class="sep">›</span> 改造</div>
+              </div>
+            </div>
+            <div class="axis-item">
+              <div class="axis-dot y"></div>
+              <div>
+                <h4>尺度<span class="axis-name">Y</span><span class="en">Scale</span></h4>
+                <div class="range">个体 <span class="sep">›</span> 多智能体 <span class="sep">›</span> 社区 <span class="sep">›</span> 城市</div>
+              </div>
+            </div>
+            <div class="axis-item">
+              <div class="axis-dot z"></div>
+              <div>
+                <h4>应用<span class="axis-name">Z</span><span class="en">Application</span></h4>
+                <div class="range">脑认知 <span class="sep">›</span> 感知 <span class="sep">›</span> 强化学习 <span class="sep">›</span> 策略执行</div>
+              </div>
+            </div>
+            <div class="axis-item">
+              <div class="axis-dot t"></div>
+              <div>
+                <h4>时间<span class="axis-name">T</span><span class="en">Temporal — 4th axis</span></h4>
+                <div class="range">单细胞 <span class="sep">›</span> 动物 <span class="sep">›</span> 人类 <span class="sep">›</span> AI</div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="axis-item">
-          <div class="axis-dot app"></div>
-          <div>
-            <h4>应用 <span class="en">Application</span></h4>
-            <div class="range">脑空间认知 <span class="sep">›</span> 感知 <span class="sep">›</span> 强化学习 <span class="sep">›</span> 策略执行<br>
-            <span style="opacity:0.7;">Brain cognition · Perception · RL · Policy execution</span></div>
+          <div class="time-control">
+            <label for="time-slider">
+              <span>Time Filter · 时间维度</span>
+              <span class="current" id="time-current">All · 全部</span>
+            </label>
+            <input type="range" id="time-slider" min="-1" max="3" step="1" value="-1">
+            <div class="time-ticks">
+              <span>All</span><span>Cell</span><span>Animal</span><span>Human</span><span>AI</span>
+            </div>
           </div>
-        </div>
 
-        <div class="axis-item">
-          <div class="axis-dot time"></div>
-          <div>
-            <h4>时间 <span class="en">Temporal</span></h4>
-            <div class="range">单细胞 <span class="sep">›</span> 动物 <span class="sep">›</span> 人类 <span class="sep">›</span> AI<br>
-            <span style="opacity:0.7;">Single-cell · Animals · Humans · AI</span></div>
+          <div class="viewer-hint">
+            <kbd>Drag</kbd> 旋转视角 &nbsp;·&nbsp; <kbd>Scroll</kbd> 缩放 &nbsp;·&nbsp; <kbd>Click</kbd> 跳转论文
           </div>
         </div>
       </div>
@@ -754,26 +905,20 @@ footer a:hover { color: var(--gold-dust); }
         在读与已读
         <span class="en">Papers, Mapped</span>
       </div>
-      <div class="count">06 &nbsp;/&nbsp; Papers</div>
+      <div class="count">07 &nbsp;/&nbsp; Papers</div>
     </div>
 
     <!-- 001 · Minds in Movement -->
-    <article class="paper" id="p001">
-      <div class="paper-radar">
-        <div class="num">001</div>
-        <!-- Values: cog=1, scale=2, app=0, time=2 → coords from center(100,100), r=80 -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="100" cy="100" r="26.7" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="53.3" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="80"   fill="none" stroke="#8a7858" stroke-width="0.9" opacity="0.55"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <line x1="20" y1="100" x2="180" y2="100" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <polygon points="100,73.3 153.3,100 100,100 46.7,100" fill="rgba(200,74,58,0.15)" stroke="#c84a3a" stroke-width="1.2"/>
-          <circle cx="100" cy="73.3" r="3.5" fill="#c84a3a"/>
-          <circle cx="153.3" cy="100" r="3.5" fill="#9680b2"/>
-          <circle cx="100" cy="100" r="3.5" fill="#7cb0a8"/>
-          <circle cx="46.7" cy="100" r="3.5" fill="#e8c098"/>
-        </svg>
+    <article class="paper" id="p001" data-coords="1,2,0,2">
+      <div class="paper-coords">
+        <div class="paper-num">No. 001</div>
+        <div class="coord-box">
+          <div class="coord-line x"><span class="axis-label">X · Cognition</span><span class="axis-value">Generation · 1</span></div>
+          <div class="coord-line y"><span class="axis-label">Y · Scale</span><span class="axis-value">Community · 2</span></div>
+          <div class="coord-line z"><span class="axis-label">Z · Application</span><span class="axis-value">Brain Cog · 0</span></div>
+          <div class="coord-line t"><span class="axis-label">T · Time</span><span class="axis-value">Human · 2</span></div>
+          <div class="coord-summary"><span class="xyz">(1, 2, 0)</span> @ Human</div>
+        </div>
       </div>
       <div class="paper-body">
         <h3>
@@ -782,41 +927,35 @@ footer a:hover { color: var(--gold-dust); }
         </h3>
         <div class="paper-meta">Barrett, L. &amp; Stout, D. &nbsp;·&nbsp; Phil. Trans. R. Soc. B &nbsp;·&nbsp; 2024</div>
         <div class="paper-tags">
-          <span class="tag cog">Cog · Generation</span>
-          <span class="tag scale">Scale · Community</span>
-          <span class="tag app">App · Brain Cognition</span>
-          <span class="tag time">Time · Human</span>
+          <span class="tag x">Cog · Generation</span>
+          <span class="tag y">Scale · Community</span>
+          <span class="tag z">App · Brain Cog</span>
+          <span class="tag t">Time · Human</span>
         </div>
         <p class="summary">一个跨学科特刊的导论：以 4E 认知（embodied / embedded / enactive / extended）为坐标，重估"身体"在人类认知、文化与演化中的位置。两个核心议题 —— 语言与身体的纠缠、人际感知与社会协调的身体机制 —— 正好对应 AGI 最难触及的两类认知。</p>
-        <p class="en-summary">A thematic framing of embodied cognition at the intersection of 4E theory and generative AI — arguing that a dis-embodied computational model of mind is incomplete, and that body-grounded perception-action loops remain a crucible AI has not entered.</p>
+        <p class="en-summary">A thematic framing of embodied cognition at the intersection of 4E theory and generative AI — arguing a dis-embodied computational mind is incomplete, and body-grounded perception-action loops remain a crucible AI has not entered.</p>
         <div class="paper-note">
           <span class="label">Why it matters · 我的阅读笔记</span>
           <p>如果机器没有身体，它理解的"空间"永远是符号的空间，而非被肉身走过、被记忆捶打的空间。这篇为 SFES 提供了认知理论侧的锚点。</p>
         </div>
         <div class="paper-actions">
           <a href="https://royalsocietypublishing.org/doi/10.1098/rstb.2023.0144" target="_blank" rel="noopener">Read paper ↗</a>
-          <a href="#p001" onclick="copyPermalink(event, 'p001')">Copy link #</a>
+          <a onclick="copyPermalink(event, 'p001')">Copy link #</a>
         </div>
       </div>
     </article>
 
     <!-- 002 · Theory of Space -->
-    <article class="paper" id="p002">
-      <div class="paper-radar">
-        <div class="num">002</div>
-        <!-- Values: cog=2, scale=0, app=2, time=3 -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="100" cy="100" r="26.7" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="53.3" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="80"   fill="none" stroke="#8a7858" stroke-width="0.9" opacity="0.55"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <line x1="20" y1="100" x2="180" y2="100" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <polygon points="100,46.7 100,100 100,153.3 20,100" fill="rgba(120,120,180,0.12)" stroke="#6c5e92" stroke-width="1.2"/>
-          <circle cx="100" cy="46.7" r="3.5" fill="#c84a3a"/>
-          <circle cx="100" cy="100" r="3.5" fill="#9680b2"/>
-          <circle cx="100" cy="153.3" r="3.5" fill="#7cb0a8"/>
-          <circle cx="20" cy="100" r="3.5" fill="#e8c098"/>
-        </svg>
+    <article class="paper" id="p002" data-coords="2,0,2,3">
+      <div class="paper-coords">
+        <div class="paper-num">No. 002</div>
+        <div class="coord-box">
+          <div class="coord-line x"><span class="axis-label">X · Cognition</span><span class="axis-value">Exploration · 2</span></div>
+          <div class="coord-line y"><span class="axis-label">Y · Scale</span><span class="axis-value">Individual · 0</span></div>
+          <div class="coord-line z"><span class="axis-label">Z · Application</span><span class="axis-value">RL / Policy · 2</span></div>
+          <div class="coord-line t"><span class="axis-label">T · Time</span><span class="axis-value">AI · 3</span></div>
+          <div class="coord-summary"><span class="xyz">(2, 0, 2)</span> @ AI</div>
+        </div>
       </div>
       <div class="paper-body">
         <h3>
@@ -825,10 +964,10 @@ footer a:hover { color: var(--gold-dust); }
         </h3>
         <div class="paper-meta">Preprint &nbsp;·&nbsp; 2025</div>
         <div class="paper-tags">
-          <span class="tag cog">Cog · Exploration</span>
-          <span class="tag scale">Scale · Individual</span>
-          <span class="tag app">App · RL / Policy</span>
-          <span class="tag time">Time · AI</span>
+          <span class="tag x">Cog · Exploration</span>
+          <span class="tag y">Scale · Individual</span>
+          <span class="tag z">App · RL / Policy</span>
+          <span class="tag t">Time · AI</span>
         </div>
         <p class="summary">把"空间信念"这个来自心智理论（ToM）家族的概念，移植到基础模型之上：agent 能否在主动行动中累积并修正它对环境的内部表征？这是 SFES 提案的近邻 —— 我们都在追问，空间对 agent 是"被动输入"还是"动态塑形"。</p>
         <p class="en-summary">Probes whether foundation-model agents can form and update internal spatial beliefs via active exploration — close cousin to SFES, asking whether space is merely sensed or genuinely inhabited.</p>
@@ -838,28 +977,22 @@ footer a:hover { color: var(--gold-dust); }
         </div>
         <div class="paper-actions">
           <a href="#" target="_blank" rel="noopener">Read paper ↗</a>
-          <a href="#p002" onclick="copyPermalink(event, 'p002')">Copy link #</a>
+          <a onclick="copyPermalink(event, 'p002')">Copy link #</a>
         </div>
       </div>
     </article>
 
     <!-- 003 · WorldMove -->
-    <article class="paper" id="p003">
-      <div class="paper-radar">
-        <div class="num">003</div>
-        <!-- Values: cog=0, scale=3, app=1, time=2 -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="100" cy="100" r="26.7" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="53.3" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="80"   fill="none" stroke="#8a7858" stroke-width="0.9" opacity="0.55"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <line x1="20" y1="100" x2="180" y2="100" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <polygon points="100,100 180,100 100,126.7 46.7,100" fill="rgba(124,176,168,0.15)" stroke="#3e7a70" stroke-width="1.2"/>
-          <circle cx="100" cy="100" r="3.5" fill="#c84a3a"/>
-          <circle cx="180" cy="100" r="3.5" fill="#9680b2"/>
-          <circle cx="100" cy="126.7" r="3.5" fill="#7cb0a8"/>
-          <circle cx="46.7" cy="100" r="3.5" fill="#e8c098"/>
-        </svg>
+    <article class="paper" id="p003" data-coords="0,3,1,2">
+      <div class="paper-coords">
+        <div class="paper-num">No. 003</div>
+        <div class="coord-box">
+          <div class="coord-line x"><span class="axis-label">X · Cognition</span><span class="axis-value">Subjective · 0</span></div>
+          <div class="coord-line y"><span class="axis-label">Y · Scale</span><span class="axis-value">City+ · 3</span></div>
+          <div class="coord-line z"><span class="axis-label">Z · Application</span><span class="axis-value">Perception · 1</span></div>
+          <div class="coord-line t"><span class="axis-label">T · Time</span><span class="axis-value">Human · 2</span></div>
+          <div class="coord-summary"><span class="xyz">(0, 3, 1)</span> @ Human</div>
+        </div>
       </div>
       <div class="paper-body">
         <h3>
@@ -868,10 +1001,10 @@ footer a:hover { color: var(--gold-dust); }
         </h3>
         <div class="paper-meta">Preprint &nbsp;·&nbsp; 2025</div>
         <div class="paper-tags">
-          <span class="tag cog">Cog · Subjective</span>
-          <span class="tag scale">Scale · City+</span>
-          <span class="tag app">App · Perception</span>
-          <span class="tag time">Time · Human</span>
+          <span class="tag x">Cog · Subjective</span>
+          <span class="tag y">Scale · City+</span>
+          <span class="tag z">App · Perception</span>
+          <span class="tag t">Time · Human</span>
         </div>
         <p class="summary">把"人类如何在地表移动"作为一张全球开放数据集发布 —— 从个人轨迹到城市尺度的集合。这是在建"物质世界中人类行为的语料库"。</p>
         <p class="en-summary">Releases a global open dataset of human mobility — from individual trajectories to city-scale aggregates — a corpus of how bodies actually move through space.</p>
@@ -881,28 +1014,22 @@ footer a:hover { color: var(--gold-dust); }
         </div>
         <div class="paper-actions">
           <a href="#" target="_blank" rel="noopener">Read paper ↗</a>
-          <a href="#p003" onclick="copyPermalink(event, 'p003')">Copy link #</a>
+          <a onclick="copyPermalink(event, 'p003')">Copy link #</a>
         </div>
       </div>
     </article>
 
     <!-- 004 · EmbodiedCity -->
-    <article class="paper" id="p004">
-      <div class="paper-radar">
-        <div class="num">004</div>
-        <!-- Values: cog=2, scale=3, app=2, time=3 -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="100" cy="100" r="26.7" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="53.3" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="80"   fill="none" stroke="#8a7858" stroke-width="0.9" opacity="0.55"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <line x1="20" y1="100" x2="180" y2="100" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <polygon points="100,46.7 180,100 100,153.3 20,100" fill="rgba(230,107,92,0.15)" stroke="#c84a3a" stroke-width="1.2"/>
-          <circle cx="100" cy="46.7" r="3.5" fill="#c84a3a"/>
-          <circle cx="180" cy="100" r="3.5" fill="#9680b2"/>
-          <circle cx="100" cy="153.3" r="3.5" fill="#7cb0a8"/>
-          <circle cx="20" cy="100" r="3.5" fill="#e8c098"/>
-        </svg>
+    <article class="paper" id="p004" data-coords="2,3,2,3">
+      <div class="paper-coords">
+        <div class="paper-num">No. 004</div>
+        <div class="coord-box">
+          <div class="coord-line x"><span class="axis-label">X · Cognition</span><span class="axis-value">Exploration · 2</span></div>
+          <div class="coord-line y"><span class="axis-label">Y · Scale</span><span class="axis-value">City+ · 3</span></div>
+          <div class="coord-line z"><span class="axis-label">Z · Application</span><span class="axis-value">RL / Policy · 2</span></div>
+          <div class="coord-line t"><span class="axis-label">T · Time</span><span class="axis-value">AI · 3</span></div>
+          <div class="coord-summary"><span class="xyz">(2, 3, 2)</span> @ AI</div>
+        </div>
       </div>
       <div class="paper-body">
         <h3>
@@ -911,10 +1038,10 @@ footer a:hover { color: var(--gold-dust); }
         </h3>
         <div class="paper-meta">Gao, C., Zhao, B., Li, Y. et al. &nbsp;·&nbsp; Tsinghua University &nbsp;·&nbsp; 2024</div>
         <div class="paper-tags">
-          <span class="tag cog">Cog · Exploration</span>
-          <span class="tag scale">Scale · City+</span>
-          <span class="tag app">App · RL / Policy</span>
-          <span class="tag time">Time · AI</span>
+          <span class="tag x">Cog · Exploration</span>
+          <span class="tag y">Scale · City+</span>
+          <span class="tag z">App · RL / Policy</span>
+          <span class="tag t">Time · AI</span>
         </div>
         <p class="summary">把具身 AI 从室内搬到室外 —— 基于北京一个真实商业片区的高保真三维仿真环境，覆盖场景理解、问答、对话、视觉语言导航、任务规划五类任务，评测现有多模态大模型在城市中的具身能力。</p>
         <p class="en-summary">Pushes embodied AI out of the room and into the street — a high-fidelity 3D simulator based on a real commercial district in Beijing, benchmarking multimodal LLMs on scene understanding, QA, dialogue, VLN, and task planning.</p>
@@ -924,85 +1051,73 @@ footer a:hover { color: var(--gold-dust); }
         </div>
         <div class="paper-actions">
           <a href="https://embodied-city.fiblab.net" target="_blank" rel="noopener">Project site ↗</a>
-          <a href="#p004" onclick="copyPermalink(event, 'p004')">Copy link #</a>
+          <a onclick="copyPermalink(event, 'p004')">Copy link #</a>
         </div>
       </div>
     </article>
 
     <!-- 005 · Human vs. AI Safety Perception -->
-    <article class="paper" id="p005">
-      <div class="paper-radar">
-        <div class="num">005</div>
-        <!-- Values: cog=0, scale=2, app=1, time=2 -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="100" cy="100" r="26.7" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="53.3" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="80"   fill="none" stroke="#8a7858" stroke-width="0.9" opacity="0.55"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <line x1="20" y1="100" x2="180" y2="100" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <polygon points="100,100 153.3,100 100,126.7 46.7,100" fill="rgba(232,192,152,0.2)" stroke="#9a7038" stroke-width="1.2"/>
-          <circle cx="100" cy="100" r="3.5" fill="#c84a3a"/>
-          <circle cx="153.3" cy="100" r="3.5" fill="#9680b2"/>
-          <circle cx="100" cy="126.7" r="3.5" fill="#7cb0a8"/>
-          <circle cx="46.7" cy="100" r="3.5" fill="#e8c098"/>
-        </svg>
+    <article class="paper" id="p005" data-coords="0,2,1,2">
+      <div class="paper-coords">
+        <div class="paper-num">No. 005</div>
+        <div class="coord-box">
+          <div class="coord-line x"><span class="axis-label">X · Cognition</span><span class="axis-value">Subjective · 0</span></div>
+          <div class="coord-line y"><span class="axis-label">Y · Scale</span><span class="axis-value">Community · 2</span></div>
+          <div class="coord-line z"><span class="axis-label">Z · Application</span><span class="axis-value">Perception · 1</span></div>
+          <div class="coord-line t"><span class="axis-label">T · Time</span><span class="axis-value">Human↔AI · 2.5</span></div>
+          <div class="coord-summary"><span class="xyz">(0, 2, 1)</span> @ Human↔AI</div>
+        </div>
       </div>
       <div class="paper-body">
         <h3>
           人类 vs. AI 的安全感知：用眼动系统、街景与可解释 AI 解码
-          <span class="en">Human vs. AI Safety Perception? Decoding Human Safety Perception with Eye-Tracking, Street View Images, and Explainable AI</span>
+          <span class="en">Human vs. AI Safety Perception? Decoding Human Safety Perception with Eye-Tracking, Street View, and Explainable AI</span>
         </h3>
-        <div class="paper-meta">Kang, Y., Chen, J., Ratti, C. et al. &nbsp;·&nbsp; MIT Senseable City Lab &nbsp;·&nbsp; Computers, Environment &amp; Urban Systems &nbsp;·&nbsp; 2025</div>
+        <div class="paper-meta">Kang, Y., Chen, J., Ratti, C. et al. &nbsp;·&nbsp; MIT Senseable City Lab &nbsp;·&nbsp; CEUS &nbsp;·&nbsp; 2025</div>
         <div class="paper-tags">
-          <span class="tag cog">Cog · Subjective</span>
-          <span class="tag scale">Scale · Community</span>
-          <span class="tag app">App · Perception</span>
-          <span class="tag time">Time · Human↔AI</span>
+          <span class="tag x">Cog · Subjective</span>
+          <span class="tag y">Scale · Community</span>
+          <span class="tag z">App · Perception</span>
+          <span class="tag t">Time · Human↔AI</span>
         </div>
         <p class="summary">在瑞典 Helsingborg 让人戴上眼动仪看街景图片 —— 提取"人类究竟在看什么 → 觉得哪里安全"，再拿 XGradCAM / EigenCAM 等 XAI 方法对照 AI 的注意力图。发现：人看楼梯、招牌、旗帜、椅子；AI 看天空。</p>
-        <p class="en-summary">Uses eye-tracking + street view + XAI to compare where humans vs. AI "look" when judging urban safety. Finds human attention concentrates on infrastructure cues (stairs, signs) and civic markers (flags, chairs); AI often over-weights sky.</p>
+        <p class="en-summary">Uses eye-tracking + street view + XAI to compare where humans vs. AI "look" when judging urban safety. Humans concentrate on infrastructure cues and civic markers; AI over-weights sky.</p>
         <div class="paper-note">
           <span class="label">Why it matters · 我的阅读笔记</span>
-          <p>这不只是 benchmarking，这是在测量"人与机器看同一条街时，看见的是不同的城市"。SFES 的核心张力在此具象化。</p>
+          <p>这不只是 benchmarking —— 是在测量"人与机器看同一条街时，看见的是不同的城市"。SFES 的核心张力在此具象化。</p>
         </div>
         <div class="paper-actions">
           <a href="https://arxiv.org/abs/2509.25457" target="_blank" rel="noopener">arXiv:2509.25457 ↗</a>
-          <a href="#p005" onclick="copyPermalink(event, 'p005')">Copy link #</a>
+          <a onclick="copyPermalink(event, 'p005')">Copy link #</a>
         </div>
       </div>
     </article>
 
     <!-- 006 · Robot-City Interaction Survey -->
-    <article class="paper" id="p006">
-      <div class="paper-radar">
-        <div class="num">006</div>
-        <!-- Values: cog=3, scale=3, app=2, time=3 -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="100" cy="100" r="26.7" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="53.3" fill="none" stroke="#a89678" stroke-width="0.7" stroke-dasharray="2 3" opacity="0.5"/>
-          <circle cx="100" cy="100" r="80"   fill="none" stroke="#8a7858" stroke-width="0.9" opacity="0.55"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <line x1="20" y1="100" x2="180" y2="100" stroke="#6a5a7a" stroke-width="0.6" opacity="0.35"/>
-          <polygon points="100,20 180,100 100,153.3 20,100" fill="rgba(200,74,58,0.14)" stroke="#c84a3a" stroke-width="1.2"/>
-          <circle cx="100" cy="20" r="3.5" fill="#c84a3a"/>
-          <circle cx="180" cy="100" r="3.5" fill="#9680b2"/>
-          <circle cx="100" cy="153.3" r="3.5" fill="#7cb0a8"/>
-          <circle cx="20" cy="100" r="3.5" fill="#e8c098"/>
-        </svg>
+    <article class="paper" id="p006" data-coords="3,3,2,3">
+      <div class="paper-coords">
+        <div class="paper-num">No. 006</div>
+        <div class="coord-box">
+          <div class="coord-line x"><span class="axis-label">X · Cognition</span><span class="axis-value">Transformation · 3</span></div>
+          <div class="coord-line y"><span class="axis-label">Y · Scale</span><span class="axis-value">City+ · 3</span></div>
+          <div class="coord-line z"><span class="axis-label">Z · Application</span><span class="axis-value">RL / Policy · 2</span></div>
+          <div class="coord-line t"><span class="axis-label">T · Time</span><span class="axis-value">AI · 3</span></div>
+          <div class="coord-summary"><span class="xyz">(3, 3, 2)</span> @ AI</div>
+        </div>
       </div>
       <div class="paper-body">
         <h3>
           机器人—城市交互：一份研究版图综述
-          <span class="en">Robot–City Interaction: Mapping the Research Landscape — A Survey of the Interactions Between Robots and Modern Cities</span>
+          <span class="en">Robot–City Interaction: Mapping the Research Landscape</span>
         </h3>
         <div class="paper-meta">Tiddi, I., Bastianelli, E., Daga, E. et al. &nbsp;·&nbsp; Int. J. of Social Robotics &nbsp;·&nbsp; 2020</div>
         <div class="paper-tags">
-          <span class="tag cog">Cog · Transformation</span>
-          <span class="tag scale">Scale · City+</span>
-          <span class="tag app">App · RL / Policy</span>
-          <span class="tag time">Time · AI</span>
+          <span class="tag x">Cog · Transformation</span>
+          <span class="tag y">Scale · City+</span>
+          <span class="tag z">App · RL / Policy</span>
+          <span class="tag t">Time · AI</span>
         </div>
-        <p class="summary">把"机器人进入现代城市"作为一个正在涌现的研究领域（RCI）来勘测：67 篇文献、一个分析性的维度集合、城市—机器人的相互改造关系。是把第 001 号（具身认知）与第 004 号（具身城市）放回社会学坐标的地图。</p>
+        <p class="summary">把"机器人进入现代城市"作为一个正在涌现的研究领域（RCI）来勘测：67 篇文献、一个分析性的维度集合、城市—机器人的相互改造关系。是把第 001 号与第 004 号放回社会学坐标的地图。</p>
         <p class="en-summary">Surveys the emerging field of Robot-City Interaction — 67 papers, a set of analytical dimensions, and the reciprocal transformation between cities and the autonomous agents deployed into them.</p>
         <div class="paper-note">
           <span class="label">Why it matters · 我的阅读笔记</span>
@@ -1010,7 +1125,44 @@ footer a:hover { color: var(--gold-dust); }
         </div>
         <div class="paper-actions">
           <a href="https://doi.org/10.1007/s12369-019-00534-x" target="_blank" rel="noopener">DOI ↗</a>
-          <a href="#p006" onclick="copyPermalink(event, 'p006')">Copy link #</a>
+          <a onclick="copyPermalink(event, 'p006')">Copy link #</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 007 · Seoul World Model -->
+    <article class="paper" id="p007" data-coords="1,3,2,3">
+      <div class="paper-coords">
+        <div class="paper-num">No. 007</div>
+        <div class="coord-box">
+          <div class="coord-line x"><span class="axis-label">X · Cognition</span><span class="axis-value">Generation · 1</span></div>
+          <div class="coord-line y"><span class="axis-label">Y · Scale</span><span class="axis-value">City+ · 3</span></div>
+          <div class="coord-line z"><span class="axis-label">Z · Application</span><span class="axis-value">RL / Policy · 2</span></div>
+          <div class="coord-line t"><span class="axis-label">T · Time</span><span class="axis-value">AI · 3</span></div>
+          <div class="coord-summary"><span class="xyz">(1, 3, 2)</span> @ AI</div>
+        </div>
+      </div>
+      <div class="paper-body">
+        <h3>
+          首尔世界模型：将世界仿真模型扎根于真实大都市
+          <span class="en">Grounding World Simulation Models in a Real-World Metropolis (Seoul World Model)</span>
+        </h3>
+        <div class="paper-meta">Seo, J., Choi, H., Kim, J.-H. et al. &nbsp;·&nbsp; KAIST AI / NAVER AI Lab / SNU AIIS &nbsp;·&nbsp; 2026</div>
+        <div class="paper-tags">
+          <span class="tag x">Cog · Generation</span>
+          <span class="tag y">Scale · City+</span>
+          <span class="tag z">App · RL / Policy</span>
+          <span class="tag t">Time · AI</span>
+        </div>
+        <p class="summary">把 video world model 从"想象的世界"搬进真实首尔：用 440k 张街景图像做 retrieval-augmented conditioning，让视频生成贴合真实地理。提出 cross-temporal pairing 处理参考帧与生成帧的时序错位，提出 virtual lookahead sink 稳定数百米长时程的生成。在首尔、釜山、Ann Arbor 三城测试了跨城泛化。</p>
+        <p class="en-summary">SWM fine-tunes a video world model on 440k Seoul street-view images, grounding autoregressive video generation via retrieval. Introduces cross-temporal pairing + virtual lookahead sink for stable city-scale, long-horizon synthesis. Tested across Seoul, Busan, and Ann Arbor.</p>
+        <div class="paper-note">
+          <span class="label">Why it matters · 我的阅读笔记</span>
+          <p>和 EmbodiedCity 是同代、不同路 —— 那个是"让 agent 在真实城市里行动"，这个是"让世界模型生成真实城市"。两者合起来接近一个完整的 city-scale 闭环：感知—生成—行动。</p>
+        </div>
+        <div class="paper-actions">
+          <a href="https://seoul-world-model.github.io" target="_blank" rel="noopener">Project site ↗</a>
+          <a onclick="copyPermalink(event, 'p007')">Copy link #</a>
         </div>
       </div>
     </article>
@@ -1027,6 +1179,7 @@ footer a:hover { color: var(--gold-dust); }
     <div class="share-row">
       <a href="https://twitter.com/intent/tweet?text=%E5%9B%9B%E7%BB%B4%E7%A9%BA%E9%97%B4%E6%84%9F%E7%9F%A5%E5%AE%9E%E9%AA%8C%E5%AE%A4%20%C2%B7%20Reading%20Column&url=https://sfes-lab.vercel.app/reading/" target="_blank" rel="noopener">Share to X ↗</a>
       <a href="mailto:daisq220@gmail.com?subject=Reading%20Column%20discussion">Write to Eva ↗</a>
+      <a href="../learning/">Learning path ↗</a>
       <a href="../">Back to lab ↗</a>
     </div>
   </div>
@@ -1037,8 +1190,248 @@ footer a:hover { color: var(--gold-dust); }
   <div class="sig">Built quietly · 于空间之外</div>
 </footer>
 
+<!-- ────────── Three.js 3D scene ────────── -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// Paper data
+const papers = [
+  { id: 'p001', num: '001', title: '运动中的心智', x: 1, y: 2, z: 0, t: 2, color: 0xc87a96 },
+  { id: 'p002', num: '002', title: '空间理论 · 基础模型',    x: 2, y: 0, z: 2, t: 3, color: 0x8872a8 },
+  { id: 'p003', num: '003', title: 'WorldMove',             x: 0, y: 3, z: 1, t: 2, color: 0xe89fb5 },
+  { id: 'p004', num: '004', title: '具身城市 EmbodiedCity',  x: 2, y: 3, z: 2, t: 3, color: 0x5e9a92 },
+  { id: 'p005', num: '005', title: '人类 vs AI 安全感知',    x: 0, y: 2, z: 1, t: 2, color: 0xc4895a },
+  { id: 'p006', num: '006', title: '机器人—城市交互',        x: 3, y: 3, z: 2, t: 3, color: 0x6b4f92 },
+  { id: 'p007', num: '007', title: '首尔世界模型 SWM',       x: 1, y: 3, z: 2, t: 3, color: 0xe88a78 },
+];
+
+const wrap = document.getElementById('three-canvas-wrap');
+const tooltip = document.getElementById('paper-tooltip');
+
+// Scene
+const scene = new THREE.Scene();
+scene.background = null;
+
+// Camera
+const size = wrap.clientWidth;
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+camera.position.set(6, 5, 6);
+camera.lookAt(1.5, 1.5, 1.5);
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(size, size);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+wrap.appendChild(renderer.domElement);
+
+// OrbitControls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(1.5, 1.5, 1.5);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.enablePan = false;
+controls.minDistance = 4;
+controls.maxDistance = 14;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.6;
+
+// Lights
+scene.add(new THREE.AmbientLight(0xfff5f0, 0.85));
+const dl = new THREE.DirectionalLight(0xffe8d4, 0.8);
+dl.position.set(4, 6, 4);
+scene.add(dl);
+const dl2 = new THREE.DirectionalLight(0xd4c0f0, 0.4);
+dl2.position.set(-4, 3, -3);
+scene.add(dl2);
+
+// ── Axes ──
+const axisColors = { x: 0xc87a96, y: 0x8872a8, z: 0x5e9a92 };
+const AXIS_LEN = 3.5;
+
+function makeAxis(dir, color) {
+  const mat = new THREE.LineBasicMaterial({ color, linewidth: 2, transparent: true, opacity: 0.75 });
+  const geo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(0, 0, 0),
+    dir.clone().multiplyScalar(AXIS_LEN),
+  ]);
+  return new THREE.Line(geo, mat);
+}
+scene.add(makeAxis(new THREE.Vector3(1, 0, 0), axisColors.x));
+scene.add(makeAxis(new THREE.Vector3(0, 1, 0), axisColors.y));
+scene.add(makeAxis(new THREE.Vector3(0, 0, 1), axisColors.z));
+
+// Axis tick marks (at 1, 2, 3 on each axis)
+function addTick(pos, color) {
+  const geo = new THREE.SphereGeometry(0.04, 8, 8);
+  const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.55 });
+  const m = new THREE.Mesh(geo, mat);
+  m.position.copy(pos);
+  scene.add(m);
+}
+for (let i = 1; i <= 3; i++) {
+  addTick(new THREE.Vector3(i, 0, 0), axisColors.x);
+  addTick(new THREE.Vector3(0, i, 0), axisColors.y);
+  addTick(new THREE.Vector3(0, 0, i), axisColors.z);
+}
+
+// Ground grid (faint)
+const grid = new THREE.GridHelper(7, 7, 0xb49ad0, 0xd8c8e4);
+grid.position.set(1.5, -0.05, 1.5);
+grid.material.opacity = 0.25;
+grid.material.transparent = true;
+scene.add(grid);
+
+// Axis labels (canvas sprites)
+function makeTextSprite(text, color = '#2e1f44', fontSize = 44) {
+  const cvs = document.createElement('canvas');
+  const pad = 20;
+  cvs.width = 256; cvs.height = 128;
+  const ctx = cvs.getContext('2d');
+  ctx.font = `500 ${fontSize}px "Noto Serif SC", "Fraunces", serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = color;
+  ctx.fillText(text, cvs.width / 2, cvs.height / 2);
+  const tex = new THREE.CanvasTexture(cvs);
+  tex.minFilter = THREE.LinearFilter;
+  const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+  const spr = new THREE.Sprite(mat);
+  spr.scale.set(1.2, 0.6, 1);
+  return spr;
+}
+const lxl = makeTextSprite('X · 认知', '#c87a96'); lxl.position.set(AXIS_LEN + 0.35, 0, 0); scene.add(lxl);
+const lyl = makeTextSprite('Y · 尺度', '#8872a8'); lyl.position.set(0, AXIS_LEN + 0.35, 0); scene.add(lyl);
+const lzl = makeTextSprite('Z · 应用', '#5e9a92'); lzl.position.set(0, 0, AXIS_LEN + 0.35); scene.add(lzl);
+
+// ── Paper points ──
+const timeColors = ['#8aa884', '#a8b474', '#c4895a', '#c46650']; // cell → AI
+const pointObjects = []; // { mesh, sprite, data }
+
+papers.forEach((p) => {
+  const geo = new THREE.SphereGeometry(0.18, 24, 24);
+  const mat = new THREE.MeshStandardMaterial({
+    color: p.color,
+    emissive: p.color,
+    emissiveIntensity: 0.35,
+    roughness: 0.45,
+    metalness: 0.1,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(p.x, p.y, p.z);
+  mesh.userData = p;
+  scene.add(mesh);
+
+  // Stem line down to y=0
+  const stemGeo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(p.x, p.y, p.z),
+    new THREE.Vector3(p.x, 0, p.z),
+  ]);
+  const stemMat = new THREE.LineBasicMaterial({ color: p.color, transparent: true, opacity: 0.35 });
+  scene.add(new THREE.Line(stemGeo, stemMat));
+
+  // Number sprite
+  const spr = makeTextSprite(p.num, '#2e1f44', 56);
+  spr.scale.set(0.6, 0.3, 1);
+  spr.position.set(p.x, p.y + 0.38, p.z);
+  scene.add(spr);
+
+  pointObjects.push({ mesh, sprite: spr, data: p });
+});
+
+// ── Raycasting for hover/click ──
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function onPointerMove(e) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const hits = raycaster.intersectObjects(pointObjects.map((p) => p.mesh));
+  if (hits.length > 0) {
+    const p = hits[0].object.userData;
+    tooltip.innerHTML = `No. ${p.num}<span class="t-title">${p.title}</span>`;
+    tooltip.style.opacity = '1';
+    tooltip.style.left = (e.clientX - rect.left) + 'px';
+    tooltip.style.top = (e.clientY - rect.top) + 'px';
+    wrap.style.cursor = 'pointer';
+  } else {
+    tooltip.style.opacity = '0';
+    wrap.style.cursor = 'grab';
+  }
+}
+function onPointerClick(e) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const hits = raycaster.intersectObjects(pointObjects.map((p) => p.mesh));
+  if (hits.length > 0) {
+    const p = hits[0].object.userData;
+    const target = document.getElementById(p.id);
+    if (target) {
+      document.querySelectorAll('.paper').forEach((el) => el.classList.remove('highlighted'));
+      target.classList.add('highlighted');
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => target.classList.remove('highlighted'), 3000);
+    }
+  }
+}
+renderer.domElement.addEventListener('pointermove', onPointerMove);
+renderer.domElement.addEventListener('click', onPointerClick);
+
+// Pause auto-rotate on interaction
+['pointerdown', 'wheel'].forEach((ev) =>
+  renderer.domElement.addEventListener(ev, () => { controls.autoRotate = false; })
+);
+
+// ── Time slider ──
+const slider = document.getElementById('time-slider');
+const timeLabel = document.getElementById('time-current');
+const timeNames = ['单细胞 · Cell', '动物 · Animal', '人类 · Human', 'AI'];
+slider.addEventListener('input', () => {
+  const v = parseInt(slider.value, 10);
+  if (v === -1) {
+    timeLabel.textContent = 'All · 全部';
+    pointObjects.forEach(({ mesh, sprite }) => {
+      mesh.material.opacity = 1;
+      mesh.material.transparent = false;
+      mesh.scale.set(1, 1, 1);
+      sprite.material.opacity = 1;
+    });
+  } else {
+    timeLabel.textContent = timeNames[v];
+    pointObjects.forEach(({ mesh, sprite, data }) => {
+      const match = Math.round(data.t) === v;
+      mesh.material.transparent = true;
+      mesh.material.opacity = match ? 1 : 0.18;
+      mesh.scale.setScalar(match ? 1.25 : 0.7);
+      sprite.material.opacity = match ? 1 : 0.2;
+    });
+  }
+});
+
+// ── Resize ──
+function onResize() {
+  const s = wrap.clientWidth;
+  renderer.setSize(s, s);
+  camera.aspect = 1;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', onResize);
+
+// ── Animate ──
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+
+<!-- ────────── Page UI ────────── -->
 <script>
-// ── Copy permalink to clipboard
 function copyPermalink(e, id) {
   e.preventDefault();
   const url = window.location.origin + window.location.pathname + '#' + id;
@@ -1047,12 +1440,9 @@ function copyPermalink(e, id) {
     const orig = a.textContent;
     a.textContent = 'Copied ✓';
     setTimeout(() => { a.textContent = orig; }, 1800);
-  }).catch(() => {
-    window.location.hash = id;
-  });
+  }).catch(() => { window.location.hash = id; });
 }
 
-// ── Top nav color switches based on scroll (over hero = on-dark, else off)
 (function(){
   const nav = document.getElementById('topnav');
   const hero = document.querySelector('.hero');

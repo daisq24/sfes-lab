@@ -27,7 +27,13 @@ The homepage that ties these together is [`index.html`](./index.html).
 
 A four-dimensional reading column on world models, embodied AI, and urban intelligence — live at [`/reading/`](./reading/).
 
-一个沿着 **认知 × 尺度 × 应用 × 时间** 四条轴线阅读世界模型相关论文的持续更新专栏。座右铭来自 Feynman：*"What I cannot create, I do not understand."*
+一个沿着 **认知 × 尺度 × 应用 × 时间** 四条轴线阅读世界模型相关论文的持续更新专栏，论文在交互式 3D 坐标空间中可视化，时间维度作为滑块。座右铭来自 Feynman：*"What I cannot create, I do not understand."*
+
+## Learning Path · 学习路径
+
+An architect's self-study plan toward AI research — live at [`/learning/`](./learning/).
+
+一位建筑师通向 AI 研究的学习路径：从已完成的数学地基（线代 · 微积分 · 概率）到正在建造的楼层（机器学习 → 深度学习 → 强化学习 → 神经认知）。以建筑立面图的形式呈现。
 
 ## Research · 在做的研究
 
