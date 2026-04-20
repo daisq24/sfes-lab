@@ -883,6 +883,7 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
   <ul>
     <li><a href="#manifesto">Manifesto</a></li>
     <li><a href="#works">Works</a></li>
+    <li><a href="reading/">Reading</a></li>
     <li><a href="#research">Research</a></li>
     <li><a href="#about">About</a></li>
   </ul>
@@ -1033,6 +1034,57 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
         </div>
       </a>
 
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════  READING COLUMN TEASER  ══════════════════════════ -->
+<section style="background: linear-gradient(180deg, #d4c4a4 0%, #c8a8b8 50%, #9680b2 100%); padding: 120px 0; position: relative; overflow: hidden;">
+  <div class="wrap" style="max-width: 1040px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; position: relative; z-index: 2;">
+    <div>
+      <div class="eyebrow" style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #c84a3a; margin-bottom: 22px;">Reading Column · 四维阅读</div>
+      <h2 style="font-family: var(--serif-cn); font-weight: 400; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.25; color: var(--dusk-deep); margin-bottom: 14px;">
+        沿四条轴线阅读世界模型
+        <span style="display: block; font-family: var(--serif-en); font-style: italic; font-weight: 300; font-size: 0.54em; margin-top: 10px; color: var(--water-deep); letter-spacing: 0.01em;">A four-dimensional reading column — Cognition × Scale × Application × Time</span>
+      </h2>
+      <p style="font-family: var(--serif-en); font-style: italic; font-weight: 300; font-size: 17px; line-height: 1.7; color: #3a2e48; opacity: 0.95; margin-top: 22px; max-width: 500px;">"What I cannot create, I do not understand." — Feynman</p>
+      <p style="font-family: var(--serif-cn); font-size: 15.5px; line-height: 1.85; color: #2a2438; margin-top: 18px; max-width: 500px;">每一篇论文不仅在回答一个问题，也占据一个位置。这个专栏把它们一一标注、比照、连接 —— 为了更完整地理解"我们是如何爱这个物质世界的"，并把那种爱教会 AI。</p>
+      <a href="reading/" style="display: inline-flex; align-items: center; gap: 12px; margin-top: 36px; padding: 14px 22px; background: var(--dusk-deep); color: var(--paper); text-decoration: none; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; border-radius: 2px; box-shadow: 0 8px 24px -8px rgba(0,0,0,0.3);">
+        Enter the column · 进入阅读专栏
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+    <div style="position: relative; aspect-ratio: 1/1; max-width: 360px; margin: 0 auto;">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+        <defs>
+          <radialGradient id="teaserGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff5e0" stop-opacity="0.6"/>
+            <stop offset="55%" stop-color="#f4a88e" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#3c5878" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="200" cy="200" r="170" fill="url(#teaserGlow)"/>
+        <circle cx="200" cy="200" r="50"  fill="none" stroke="rgba(244,234,216,0.35)" stroke-width="0.8" stroke-dasharray="2 3"/>
+        <circle cx="200" cy="200" r="100" fill="none" stroke="rgba(244,234,216,0.35)" stroke-width="0.8" stroke-dasharray="2 3"/>
+        <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(244,234,216,0.55)" stroke-width="1"/>
+        <line x1="200" y1="50"  x2="200" y2="350" stroke="rgba(244,234,216,0.3)" stroke-width="0.8"/>
+        <line x1="50"  y1="200" x2="350" y2="200" stroke="rgba(244,234,216,0.3)" stroke-width="0.8"/>
+        <!-- 6 overlapping mini polygons (faded) representing papers -->
+        <polygon points="200,146.7 253.3,200 200,200 146.7,200" fill="rgba(200,74,58,0.18)" stroke="rgba(200,74,58,0.7)" stroke-width="1"/>
+        <polygon points="200,120 200,200 200,253.3 120,200"     fill="rgba(150,128,178,0.18)" stroke="rgba(150,128,178,0.7)" stroke-width="1"/>
+        <polygon points="200,200 280,200 200,226.7 146.7,200"   fill="rgba(124,176,168,0.18)" stroke="rgba(124,176,168,0.7)" stroke-width="1"/>
+        <polygon points="200,120 280,200 200,253.3 120,200"     fill="rgba(230,107,92,0.14)" stroke="rgba(230,107,92,0.7)" stroke-width="1"/>
+        <!-- Axis endpoints -->
+        <circle cx="200" cy="50"  r="6" fill="#fff5e0"/>
+        <circle cx="350" cy="200" r="6" fill="#d8cce4"/>
+        <circle cx="200" cy="350" r="6" fill="#a8d4c8"/>
+        <circle cx="50"  cy="200" r="6" fill="#e8c098"/>
+        <circle cx="200" cy="200" r="3" fill="#fff5e0"/>
+        <text x="200" y="32"  text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" fill="#f4ead8">认知</text>
+        <text x="372" y="204" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" fill="#f4ead8">尺度</text>
+        <text x="200" y="374" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" fill="#f4ead8">应用</text>
+        <text x="28"  y="204" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" fill="#f4ead8">时间</text>
+      </svg>
     </div>
   </div>
 </section>

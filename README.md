@@ -1,5 +1,7 @@
 # 四维空间感知实验室 · SFES Lab
 
+**🌅 Live → [sfes-lab.vercel.app](https://sfes-lab.vercel.app)**
+
 > *Space does not speak — yet it remembers everything.*
 > 空间不说话，但它记得一切。
 
@@ -20,6 +22,12 @@ An independent research laboratory on built environments, embodied cognition, an
 | — | SFES Research Proposal v2 | [SFES_Research_Proposal_v2.docx](./SFES_Research_Proposal_v2.docx) |
 
 The homepage that ties these together is [`index.html`](./index.html).
+
+## Reading Column · 阅读专栏
+
+A four-dimensional reading column on world models, embodied AI, and urban intelligence — live at [`/reading/`](./reading/).
+
+一个沿着 **认知 × 尺度 × 应用 × 时间** 四条轴线阅读世界模型相关论文的持续更新专栏。座右铭来自 Feynman：*"What I cannot create, I do not understand."*
 
 ## Research · 在做的研究
 
