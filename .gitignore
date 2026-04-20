@@ -1,0 +1,25 @@
+# ─── System ────────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# ─── Temporary / cache ─────────────────────
+*.log
+*.tmp
+*.bak
+*.orig
+*~.docx
+~$*
+
+# ─── Build / deploy artifacts ──────────────
+.vercel/
+.netlify/
+node_modules/
+dist/
+.cache/

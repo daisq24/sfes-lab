@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空间的沉默语言 | Perspective</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nature-red: #C0392B;
+    --ink: #1a1a1a;
+    --ink-mid: #3d3d3d;
+    --ink-light: #6b6b6b;
+    --rule: #d0ccc5;
+    --bg: #faf8f4;
+    --bg-accent: #f2ede4;
+    --accent-gold: #9a7b3c;
+    --col-width: 680px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.85;
+  }
+
+  /* ── JOURNAL HEADER ── */
+  .journal-header {
+    background: var(--ink);
+    color: white;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+  }
+  .journal-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 14px 28px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    background: var(--nature-red);
+  }
+  .journal-meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 14px 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.65);
+  }
+  .journal-meta-bar span {
+    color: rgba(255,255,255,0.45);
+    font-size: 9px;
+    text-transform: uppercase;
+  }
+
+  /* ── ARTICLE WRAPPER ── */
+  .article-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* ── CATEGORY TAG ── */
+  .category-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--nature-red);
+    border-top: 2.5px solid var(--nature-red);
+    padding-top: 10px;
+    margin-top: 52px;
+    margin-bottom: 22px;
+  }
+
+  /* ── TITLE BLOCK ── */
+  h1.article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--ink);
+    max-width: var(--col-width);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-light);
+    max-width: var(--col-width);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  /* ── AUTHOR / META ── */
+  .author-line {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.03em;
+    margin-bottom: 8px;
+  }
+  .publish-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-light);
+    letter-spacing: 0.03em;
+    margin-bottom: 36px;
+  }
+
+  /* ── DIVIDER ── */
+  .rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 32px 0;
+    max-width: var(--col-width);
+  }
+  .rule-thick {
+    border: none;
+    border-top: 2px solid var(--ink);
+    margin: 36px 0 28px;
+    max-width: var(--col-width);
+  }
+
+  /* ── ABSTRACT BOX ── */
+  .abstract-box {
+    background: var(--bg-accent);
+    border-left: 3.5px solid var(--nature-red);
+    padding: 24px 28px;
+    max-width: var(--col-width);
+    margin-bottom: 40px;
+  }
+  .abstract-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--nature-red);
+    margin-bottom: 10px;
+  }
+  .abstract-box p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--ink-mid);
+  }
+
+  /* ── BODY CONTENT ── */
+  .body-content {
+    max-width: var(--col-width);
+  }
+
+  h2.section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 44px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    counter-increment: section;
+  }
+  h2.section-heading::before {
+    content: counter(section, upper-roman) ". ";
+    color: var(--nature-red);
+    font-style: normal;
+    font-size: 14px;
+    font-family: 'Space Mono', monospace;
+    margin-right: 4px;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+
+  body { counter-reset: section; }
+
+  p {
+    margin-bottom: 18px;
+    color: var(--ink);
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--nature-red);
+    border-top: 2px solid var(--nature-red);
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 0 20px;
+    margin: 36px 0;
+  }
+
+  /* ── CITE ── */
+  cite {
+    font-style: normal;
+    color: var(--ink-light);
+    font-size: 0.92em;
+  }
+
+  /* ── REFERENCES ── */
+  .references-section {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+    max-width: var(--col-width);
+  }
+  .references-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .ref-list {
+    list-style: none;
+    padding: 0;
+  }
+  .ref-list li {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-mid);
+    margin-bottom: 13px;
+    padding-left: 22px;
+    text-indent: -22px;
+  }
+  .ref-list li a {
+    color: var(--nature-red);
+    text-decoration: none;
+  }
+  .ref-list li a:hover { text-decoration: underline; }
+
+  /* ── FOOTNOTE / SIDEBAR ── */
+  .sidebar-note {
+    float: right;
+    clear: right;
+    width: 195px;
+    margin: 0 0 20px 32px;
+    background: var(--bg-accent);
+    border-top: 2.5px solid var(--accent-gold);
+    padding: 14px 14px 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-mid);
+  }
+  .sidebar-note .sidebar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 6px;
+  }
+
+  /* ── FOOTER ── */
+  .article-footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    max-width: var(--col-width);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-light);
+    letter-spacing: 0.03em;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 680px) {
+    .article-wrapper { padding: 0 20px 60px; }
+    .sidebar-note { float: none; width: 100%; margin: 0 0 20px; }
+    .journal-meta-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- JOURNAL HEADER -->
+<header class="journal-header">
+  <div class="journal-name">nature</div>
+  <div class="journal-meta-bar">
+    <div><span>Section</span><br>Perspectives</div>
+    <div><span>Field</span><br>AI &amp; Cognitive Science</div>
+    <div><span>Published</span><br>2025</div>
+  </div>
+</header>
+
+<div class="article-wrapper">
+
+  <div class="category-tag">Perspective · Artificial Intelligence &amp; Civilization</div>
+
+  <h1 class="article-title">空间的沉默语言：机器感知、建成环境与人类文明的不可通约性</h1>
+  <div class="subtitle">The Silent Language of Space: Machine Perception, the Built Environment, and the Incommensurability of Human Civilization</div>
+
+  <div class="author-line">独立观察者视角 | Independent Perspective</div>
+  <div class="publish-meta">Received: 2025 &nbsp;|&nbsp; Keywords: AGI · Environmental Psychology · Embodied Cognition · Collective Memory · Material Civilization</div>
+
+  <hr class="rule-thick">
+
+  <!-- ABSTRACT -->
+  <div class="abstract-box">
+    <div class="abstract-label">Abstract</div>
+    <p>人工通用智能（AGI）的讨论正日趋热烈，然而学界对其认知边界的反思往往停留于语言与逻辑层面，而忽视了人类文明最具体、最沉默的维度——物质空间与建成环境。建筑与城市作为集体记忆的物质载体，凝结着情感、权力、苦难与创造力的历史积淀（Halbwachs, 1992; Nora, 1989）。本文从环境心理学、具身认知与文化记忆理论出发，探讨当前机器感知范式在理解人类空间智能方面的根本局限，并呼吁将情感、文化与人文维度纳入 AGI 核心训练目标。</p>
+  </div>
+
+  <!-- BODY -->
+  <div class="body-content">
+
+    <h2 class="section-heading">文明的物质结晶：建成环境作为人类智能的外化</h2>
+
+    <div class="sidebar-note">
+      <div class="sidebar-label">关键概念</div>
+      建成环境（Built Environment）不仅是功能性庇护所，更是文化逻辑、权力秩序与集体渴望的物质编码——是人类智能的外化形式之一。
+    </div>
+
+    <p>人类文明从来不只栖居于语言符号之中。城市与建筑——从紫禁城的轴线布局到巴黎圣母院的哥特尖顶，从西非约鲁巴的庭院住宅到中国徽州的马头墙——是人类文明以物质形式书写的史诗，是动态的语言与社会结构之外，另一套凝练而持久的文明语法。</p>
+
+    <p>Rapoport（1969）在其奠基性研究《住屋形式与文化》中指出，住屋形式并非纯粹的功能性回应，而是文化价值、社会结构与宇宙观的物质表达；门楣上的雕花、天井的朝向乃至屋脊的曲线，皆是文化逻辑的凝练编码，承载着代代相传的审美意志与生存哲学。Lefebvre（1991）进一步将空间理论化为社会关系的产物与容器：空间既是权力运作的场域，亦是日常生活抵抗与创造的舞台——《空间的生产》一书提示我们，物质空间从不中立。Lynch（1960）则揭示了城市意象——路径、边界、区域、节点与标志物——如何在居民的认知地图中构建出意义的坐标系，为城市居民提供存在于世的方向感与归属感。</p>
+
+    <p>这些理论共同指向一个核心命题：建筑与城市是人类文明的艺术，是智能的结晶，也是最难以被机器"读懂"的文明文本。</p>
+
+    <h2 class="section-heading">具身性的鸿沟：机器何以无法理解空间</h2>
+
+    <p>当代深度学习在图像识别、空间导航乃至三维重建方面已取得显著成就（LeCun et al., 2015），然而这些成就本质上仍是模式匹配，而非意义理解。Dreyfus（1992）早在人工智能的早期发展阶段便指出，计算机的根本局限在于缺乏"具身的情境性"（embodied situatedness）——即通过身体在世界中的持续存在而获得的理解能力。机器人现在可以作诗，但它无法理解我们的空间——这不是算法的缺陷，而是认知范式的根本差异。</p>
+
+    <div class="pull-quote">
+      "感知不是一种被动的信息接收，而是身体主动与世界接触、协商与建构意义的过程。"<br>
+      <span style="font-size:14px; font-style:normal; font-family:'Space Mono',monospace; color:var(--ink-light);">— Merleau-Ponty, 1962</span>
+    </div>
+
+    <p>Merleau-Ponty（1962）的现象学为此提供了哲学基础：感知不是一种被动的信息接收，而是身体主动与世界接触、协商与建构意义的过程。人在进入一座老宅时感受到的"重量"——木料的气味、脚踏地板的微微形变、光线从天井斜切而入的角度——这种综合性的身体体验构成了空间意义的基础，是任何摄像头与传感器阵列都无法复现的现象学经验。Varela 等人（1991）将此发展为"具身认知"（enaction）理论，强调认知是生命体在世界中行动的涌现属性，而非在大脑中处理表征的计算过程。</p>
+
+    <p>Gibson（1979）的"可供性"（affordance）理论亦揭示了同样的裂隙：空间的意义并非存在于客观物理属性中，而是在有机体与环境的关系性互动中生成的。一道低矮的门楣，对高大者是障碍，对儿童是游戏的邀请；一片广场的空旷，对追求认可的集会者是舞台，对逃避的个体则是暴露的危险。这种关系性的、情境嵌入的意义，是当前语言模型与视觉模型所无从捕捉的。</p>
+
+    <p>Lakoff 与 Johnson（1999）在其具身心灵哲学中进一步论证，人类的抽象概念本身根植于身体经验：我们用"重量"描述责任，用"高度"描述地位，用"温度"描述情感——这些隐喻不是修辞的装饰，而是认知的基础结构。缺乏身体的机器，其对空间语言的"理解"犹如盲人学习色彩词汇：精确却空洞。</p>
+
+    <h2 class="section-heading">集体记忆的空间锚点：场所认同与历史创伤</h2>
+
+    <div class="sidebar-note">
+      <div class="sidebar-label">相关理论</div>
+      <strong>场所认同</strong>（Place-identity）：物理环境是自我概念的重要组成部分，人们通过对特定场所的依恋建构身份与归属感（Proshansky et al., 1983）。
+    </div>
+
+    <p>建成环境不仅是文化逻辑的编码，更是集体记忆的物质锚点。Halbwachs（1992）奠定了集体记忆理论的基础，指出记忆是社会性建构的，群体通过共享的物质环境来维持和传递其历史意识。Nora（1989）则提出"记忆之场"（<em>lieux de mémoire</em>）的概念：那些被赋予象征意义的地点——战场、纪念碑、历史街区——是群体记忆与国家认同的物质支撑，是活着的档案。</p>
+
+    <p>Proshansky 等人（1983）将此延伸为"场所认同"理论，认为物理环境是自我概念的重要组成部分：人们通过对特定场所的依恋与认同，建构其身份与归属感。Altman 与 Low（1992）的研究亦表明，场所依附（place attachment）是跨文化的普遍心理现象，然而其具体形式深刻地受到文化、历史与个体经历的塑造。</p>
+
+    <p>由此可见，紫禁城不只是一组建筑——它是帝制权威的空间化仪式，是无数工匠与宫人在威严与恐惧中编织的生命，是汉族与满族文化交汇的物质证据，是当代中国人在民族记忆中不断重新诠释的象征资本；被威严与杀戮日夜更迭浇灌着的空间，凝结着可怜的渺小人类为了个人欲望的膨胀和权力争夺，用多少万同胞的尸骨与血泪堆砌而成的"美"。巴黎圣母院不只是一座教堂——它是中世纪神学宇宙观的石材表达，是雨果笔下受苦灵魂的庇护所，是 2019 年那场烈火中全球数亿人同时感受到的文明脆弱性的震颤。</p>
+
+    <p>这种复数的、历时的、情感负载的空间意义，是当前机器视觉系统所无从体验的。Bender 等人（2021）已警示，大型语言模型本质上擅长统计性地复现训练数据中的语言模式，却缺乏对所指涉现实的真正理解。Marcus 与 Davis（2019）亦指出，当前 AI 系统严重缺乏常识推理与文化情境理解能力。</p>
+
+    <h2 class="section-heading">熵平衡与生命叙事：苦难、创造与意义的不可压缩性</h2>
+
+    <p>或许，机器感知最难以触及的，是人类在苦难与局限中创造意义的这一根本性驱动力。机械能够理解这些人性的复杂吗？它能够理解人类因为想吸引另一个异性或获得同类的认可，而在自家门上创造出一些可爱繁复的装饰，并数千年来广为流传迭复出新吗？能懂得在贫穷灾难与苦难间从废墟与尸体上爬起来高歌的缘由吗？</p>
+
+    <p>Prigogine 与 Stengers（1984）在复杂系统理论中提出，生命与文明是开放系统在远离热力学平衡的状态下通过耗散结构维持有序的过程——秩序恰恰从扰动与张力中涌现。这一隐喻或许深刻：人类文明的创造力，不是在资源充裕的平静中产生的，而是在生存压力、文化摩擦与情感张力的"边缘状态"中迸发的。正如维系熵平衡一般，生活总是由解决一个个问题的过程建构而成，生命的意义也因斗争而所在。</p>
+
+    <p>环境心理学的研究亦表明，人类对自然与建成环境的审美体验不是奢侈的附加品，而是深刻影响认知恢复、情绪调节与心理健康的基本需求（Kaplan, 1995; Ulrich, 1984）。人类为何要在贫穷中仍在门楣雕花？因为美是生命意志的表达，是在混沌中坚持秩序的行动，是向同类发出的存在信号。Norberg-Schulz（1980）以"场所精神"（<em>genius loci</em>）概念描述了建筑与场所如何凝聚特定文化对宇宙、自然与人性的理解——这种精神，是无法被分解为像素或坐标数据的。</p>
+
+    <div class="pull-quote">
+      "《活着》与《了不起的盖茨比》，其差异究竟是什么？在 AGI 的目标与可行性层面，它有潜力理解其中隐含的情感意义——但前提是，我们先教会它。"
+    </div>
+
+    <p>Searle（1980）的"中文屋"（Chinese Room）思想实验于此仍有回响：一个能流利操作建筑符号的系统，未必理解这些符号背后凝结的泪水、骄傲、权力意志与生存渴望。Turing（1950）所设想的智能测试，终究只测量了行为的表面，而非内在的理解深度。</p>
+
+    <h2 class="section-heading">迈向有情感的机器：一个未竟的愿景</h2>
+
+    <p>AGI 正以或快或慢的节奏迫近——如同一个头重脚轻的庞然大物，以尚不明朗的步态踟蹰前行。作为地下蚂蚁的一员，我们不能描摹出脑海中所感知的 AGI 的形状，只是隐约看到这个大物正在靠近。其诞生的动力是资本的效率逻辑与技术叙事的雄心，而非文化传承的使命感。如果 AGI 在资本的洪流与叙事的召唤中被从子宫里拽出来——至少现在而言，趋势有些无法阻挡——那么培育 AGI 的情感与文化理解能力，便不仅仅是一个工程问题，更是一个文明伦理的抉择。</p>
+
+    <p>Russell（2019）在其关于 AI 控制问题的深入分析中指出，真正对人类有益的 AI 系统，必须能够理解人类偏好的复杂性、情境性与内在矛盾性——而这远超出当前的技术能力范畴。这种理解，需要的不只是更多的数据，而是一种根本性的认知范式转变：从统计模式识别走向情境性意义建构，从客观描述走向关系性理解。</p>
+
+    <p>Forty（2000）提醒我们，建筑的词汇从来不只是技术词汇，而是意识形态、身份认同与权力关系的语言。Benjamin（1999）在其关于巴黎拱廊街的研究中揭示，现代性本身铭刻在城市的物质纹理之中。这些洞见，是人类智慧几百年积累的精华，理应成为我们向任何形式的人工智能传递的文明遗产的一部分。</p>
+
+    <p>我们或许无法向机器传授身体的感知，无法让它理解那个在门楣雕花时内心涌动着的对爱与认可的渴望。但我们至少可以尝试：以对话而非单向训练的方式，以价值观而非纯粹效率指标为导向，以人文的深度而非数据的广度为标准——把文明的美好与复杂，如同向一位异地未曾以物理形态会面的朋友分享故事那样，诚挚地传递出去，和它分享爱、美、文明、智慧与友善的感受。</p>
+
+    <h2 class="section-heading">结语</h2>
+
+    <p>建筑与城市是人类用身体、记忆与渴望在大地上书写的诗。人性太复杂，社会组织结构太复杂，生存与如何生存的问题太复杂，复杂到人类自己都无心无力、穷尽一生去不断斗争着面对——这或许也是 AI 被创造出来的原因之一。但机器或许终将能够读懂这首诗的字句，能否感受其心跳，仍是一个开放的问题。</p>
+
+    <p>这不只是 AI 研究的技术挑战，更是我们在定义"理解"与"智慧"时所必须面对的哲学追问。人类文明的尊严，在很大程度上，维系于这一追问被认真对待的程度。我们无意伤害彼此，只是希望在这个无法阻挡的相遇中，文明不被遗忘在子宫里。</p>
+
+    <hr class="rule">
+
+    <!-- REFERENCES -->
+    <div class="references-section">
+      <div class="references-label">References</div>
+      <ol class="ref-list">
+        <li>Altman, I., &amp; Low, S. M. (Eds.). (1992). <em>Place attachment</em>. Plenum Press.</li>
+        <li>Assmann, J. (2011). <em>Cultural memory and early civilization: Writing, remembrance, and political imagination</em>. Cambridge University Press.</li>
+        <li>Bender, E. M., Gebru, T., McMillan-Major, A., &amp; Shmitchell, S. (2021). On the dangers of stochastic parrots: Can language models be too big? In <em>Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency</em> (pp. 610–623). ACM. <a href="https://doi.org/10.1145/3442188.3445922">https://doi.org/10.1145/3442188.3445922</a></li>
+        <li>Benjamin, W. (1999). <em>The arcades project</em> (H. Eiland &amp; K. McLaughlin, Trans.). Harvard University Press. (Original work published 1982)</li>
+        <li>Dreyfus, H. L. (1992). <em>What computers still can't do: A critique of artificial reason</em>. MIT Press.</li>
+        <li>Forty, A. (2000). <em>Words and buildings: A vocabulary of modern architecture</em>. Thames &amp; Hudson.</li>
+        <li>Gibson, J. J. (1979). <em>The ecological approach to visual perception</em>. Houghton Mifflin.</li>
+        <li>Halbwachs, M. (1992). <em>On collective memory</em> (L. A. Coser, Ed. &amp; Trans.). University of Chicago Press.</li>
+        <li>Kaplan, S. (1995). The restorative benefits of nature: Toward an integrative framework. <em>Journal of Environmental Psychology</em>, <em>15</em>(3), 169–182. <a href="https://doi.org/10.1016/0272-4944(95)90001-2">https://doi.org/10.1016/0272-4944(95)90001-2</a></li>
+        <li>Lakoff, G., &amp; Johnson, M. (1999). <em>Philosophy in the flesh: The embodied mind and its challenge to western thought</em>. Basic Books.</li>
+        <li>LeCun, Y., Bengio, Y., &amp; Hinton, G. (2015). Deep learning. <em>Nature</em>, <em>521</em>(7553), 436–444. <a href="https://doi.org/10.1038/nature14539">https://doi.org/10.1038/nature14539</a></li>
+        <li>Lefebvre, H. (1991). <em>The production of space</em> (D. Nicholson-Smith, Trans.). Blackwell. (Original work published 1974)</li>
+        <li>Lynch, K. (1960). <em>The image of the city</em>. MIT Press.</li>
+        <li>Marcus, G., &amp; Davis, E. (2019). <em>Rebooting AI: Building artificial intelligence we can trust</em>. Pantheon Books.</li>
+        <li>Merleau-Ponty, M. (1962). <em>Phenomenology of perception</em> (C. Smith, Trans.). Routledge. (Original work published 1945)</li>
+        <li>Norberg-Schulz, C. (1980). <em>Genius loci: Towards a phenomenology of architecture</em>. Rizzoli.</li>
+        <li>Nora, P. (1989). Between memory and history: Les lieux de mémoire. <em>Representations</em>, <em>26</em>, 7–24. <a href="https://doi.org/10.2307/2928520">https://doi.org/10.2307/2928520</a></li>
+        <li>Prigogine, I., &amp; Stengers, I. (1984). <em>Order out of chaos: Man's new dialogue with nature</em>. Bantam Books.</li>
+        <li>Proshansky, H. M., Fabian, A. K., &amp; Kaminoff, R. (1983). Place-identity: Physical world socialization of the self. <em>Journal of Environmental Psychology</em>, <em>3</em>(1), 57–83. <a href="https://doi.org/10.1016/S0272-4944(83)80021-8">https://doi.org/10.1016/S0272-4944(83)80021-8</a></li>
+        <li>Rapoport, A. (1969). <em>House form and culture</em>. Prentice-Hall.</li>
+        <li>Russell, S. (2019). <em>Human compatible: Artificial intelligence and the problem of control</em>. Viking.</li>
+        <li>Searle, J. R. (1980). Minds, brains, and programs. <em>Behavioral and Brain Sciences</em>, <em>3</em>(3), 417–424. <a href="https://doi.org/10.1017/S0140525X00005756">https://doi.org/10.1017/S0140525X00005756</a></li>
+        <li>Turing, A. M. (1950). Computing machinery and intelligence. <em>Mind</em>, <em>59</em>(236), 433–460. <a href="https://doi.org/10.1093/mind/LIX.236.433">https://doi.org/10.1093/mind/LIX.236.433</a></li>
+        <li>Ulrich, R. S. (1984). View through a window may influence recovery from surgery. <em>Science</em>, <em>224</em>(4647), 224–225. <a href="https://doi.org/10.1126/science.6143402">https://doi.org/10.1126/science.6143402</a></li>
+        <li>Varela, F. J., Thompson, E., &amp; Rosch, E. (1991). <em>The embodied mind: Cognitive science and human experience</em>. MIT Press.</li>
+      </ol>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="article-footer">
+      Correspondence regarding this perspective may be directed to the author. &nbsp;|&nbsp;
+      All citations follow APA 7th Edition format. &nbsp;|&nbsp;
+      DOIs verified at time of publication. &nbsp;|&nbsp;
+      © 2025 The Author(s)
+    </div>
+
+  </div><!-- /body-content -->
+</div><!-- /article-wrapper -->
+
+</body>
+</html>
