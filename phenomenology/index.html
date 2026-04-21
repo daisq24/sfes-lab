@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>时空现象学 · 具身架构设计 — Phenomenology of Space-Time · Embodied Architectonics</title>
+<meta name="description" content="一个关于身体、空间与栖居的研究专题。从维特鲁威人到 affordance field，从梅洛-庞蒂到 World Labs —— 在现象学、具身认知与空间智能三条脉络的交汇处写札记。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Noto+Serif+SC:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ========================================================================
+   Phenomenology of Space-Time · Embodied Architectonics
+   时空现象学 · 具身架构设计
+   Landing = 薰衣调子的「名人画廊」;单篇札记另切暗色书房。
+   ======================================================================== */
+
+:root {
+  --sky-peach:   #ffd8bc;
+  --sky-rose:    #f4b5bf;
+  --sky-coral:   #e89fb5;
+  --sky-lav:     #c8aadc;
+  --sky-mauve:   #a890c0;
+  --sky-mist:    #ded2ea;
+  --water-teal:  #8fc4be;
+  --water-deep:  #6884a8;
+  --water-pool:  #4a6a90;
+  --dusk:        #4a3868;
+  --dusk-deep:   #2e1f44;
+  --ink:         #2e1f44;
+  --ember:       #e89fb5;
+  --ember-deep:  #c87a96;
+  --gold-dust:   #e8c898;
+  --gold-deep:   #b88c5a;
+  --paper:       #f5f0f8;
+  --paper-warm:  #ede5f2;
+  --paper-soft:  #ddd0e8;
+  --serif-en: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
+  --serif-cn: 'Noto Serif SC', 'Songti SC', serif;
+  --mono:     'JetBrains Mono', ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif-cn), var(--serif-en);
+  font-size: 16px;
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  z-index: 100; opacity: 0.22; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.12  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+
+/* ── Top nav ── */
+nav.top {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding: 22px 48px; display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper); mix-blend-mode: difference;
+}
+nav.top .brand { font-weight: 500; }
+nav.top ul { list-style: none; display: flex; gap: 26px; flex-wrap: wrap; }
+nav.top a { color: inherit; text-decoration: none; opacity: 0.82; transition: opacity 0.2s; }
+nav.top a:hover, nav.top a.current { opacity: 1; }
+nav.top a.current { border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+
+/* ══════════════════════════ HERO ══════════════════════════ */
+.hero {
+  position: relative; min-height: 88vh; overflow: hidden;
+  background: linear-gradient(180deg,
+    #f4cfd9 0%, #e8b8d0 18%, #d8a8cc 38%,
+    #c0a0cc 58%, #a088bc 78%, #7a6ea0 100%);
+  padding-top: 120px;
+}
+.hero .sun {
+  position: absolute; top: 14%; right: 18%;
+  width: 140px; height: 140px; border-radius: 50%;
+  background: radial-gradient(circle,
+    #fff5e0 0%, #ffd8a8 22%, #f4a888 48%, rgba(180,120,140,0) 78%);
+  filter: blur(1.5px); z-index: 1;
+}
+.hero .moon-sm {
+  position: absolute; top: 22%; left: 16%;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: radial-gradient(circle, #f6ecd4 0%, #e8c898 70%, rgba(220,180,140,0) 100%);
+  opacity: 0.75; z-index: 1;
+}
+.hero-inner {
+  position: relative; z-index: 2; padding: 60px 0 100px;
+  color: var(--paper);
+}
+.hero .eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.32em;
+  text-transform: uppercase; opacity: 0.8; margin-bottom: 22px;
+  color: var(--gold-dust);
+}
+.hero h1 {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(34px, 5.2vw, 68px); line-height: 1.08; letter-spacing: 0.015em;
+  margin-bottom: 16px; text-shadow: 0 2px 24px rgba(0,0,0,0.22);
+}
+.hero h1 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 300; font-size: 0.42em; letter-spacing: 0.03em;
+  opacity: 0.86; margin-top: 14px; text-shadow: none;
+}
+.hero .lede {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 19px; line-height: 1.6; opacity: 0.92;
+  max-width: 680px; margin-top: 22px;
+}
+.hero .lede-cn {
+  font-family: var(--serif-cn); font-weight: 300;
+  font-size: 16px; line-height: 1.85; opacity: 0.88;
+  max-width: 680px; margin-top: 18px;
+}
+.hero .index-rail {
+  margin-top: 56px; display: flex; gap: 28px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.24em;
+  text-transform: uppercase; opacity: 0.74;
+}
+.hero .index-rail a {
+  color: var(--paper); text-decoration: none; border-bottom: 1px dashed rgba(244,234,216,0.4);
+  padding-bottom: 3px; transition: color 0.2s, border-color 0.2s;
+}
+.hero .index-rail a:hover { color: var(--gold-dust); border-color: var(--gold-dust); }
+
+/* ══════════════════════════ MANIFESTO ══════════════════════════ */
+section.manifesto {
+  background: var(--paper); padding: 120px 0 90px;
+}
+.manifesto .wrap { max-width: 880px; }
+.manifesto .eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--ember-deep); margin-bottom: 22px;
+}
+.manifesto h2 {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 42px); line-height: 1.3;
+  color: var(--dusk-deep); margin-bottom: 18px;
+}
+.manifesto h2 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 300; font-size: 0.56em; margin-top: 12px;
+  color: var(--water-deep); letter-spacing: 0.01em;
+}
+.manifesto p {
+  font-size: 16.5px; line-height: 1.9; margin-top: 22px;
+  color: #2a2438;
+}
+.manifesto p.en {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  color: #4a4258; font-size: 15px; line-height: 1.75;
+}
+.manifesto .rule { width: 52px; height: 1px; background: var(--ember-deep);
+  margin: 32px 0 10px; opacity: 0.55; }
+.manifesto blockquote {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 17px; line-height: 1.7; color: #3a2e48;
+  border-left: 2px solid var(--ember-deep);
+  padding: 4px 0 4px 22px; margin: 28px 0;
+  max-width: 620px;
+}
+.manifesto blockquote cite {
+  display: block; font-family: var(--mono); font-style: normal;
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--water-deep); margin-top: 10px;
+}
+
+/* ══════════════════════════ FIELD MAP ══════════════════════════ */
+section.field-map {
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 40%, #d8c4e0 100%);
+  padding: 100px 0 120px; position: relative;
+}
+.field-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 48px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
+}
+.field-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.field-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+.field-head .count {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  color: var(--water-deep); text-transform: uppercase;
+}
+
+.venn-wrap { position: relative; }
+.venn-legend {
+  display: flex; gap: 22px; flex-wrap: wrap; margin-bottom: 18px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  color: var(--dusk); text-transform: uppercase;
+}
+.venn-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.venn-legend span::before {
+  content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+}
+.lg-phe::before { background: var(--ember); }
+.lg-emb::before { background: var(--ember-deep); }
+.lg-spa::before { background: var(--water-teal); }
+.lg-you::before { background: var(--gold-dust); }
+
+.venn-box {
+  position: relative; aspect-ratio: 1000/640;
+  background: linear-gradient(180deg, #efe4f0 0%, #e8d8e8 100%);
+  border-radius: 3px; overflow: hidden;
+  box-shadow: 0 22px 60px -20px rgba(60,40,80,0.3),
+              inset 0 0 0 1px rgba(255,255,255,0.5);
+}
+.venn-box svg { width: 100%; height: 100%; display: block; }
+
+.field-label {
+  font-family: var(--serif-cn); font-size: 15px; font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.field-sub {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 10.5px;
+}
+
+.node { cursor: pointer; transition: all 0.18s; }
+.node circle { transition: all 0.18s; }
+.node text {
+  font-family: var(--serif-en); font-size: 11.5px;
+  fill: var(--dusk-deep); pointer-events: none;
+  text-anchor: middle; font-weight: 400;
+}
+.node:hover circle { r: 9; filter: brightness(1.1); }
+.node.active circle { r: 10; filter: brightness(1.15); stroke: var(--dusk-deep); stroke-width: 1.5; }
+.node.active text { font-weight: 600; }
+
+.crack-ring { animation: pulse 2.8s ease-in-out infinite; }
+@keyframes pulse {
+  0%,100% { opacity: 0.5; }
+  50%     { opacity: 1; }
+}
+.you-are-here {
+  font-family: var(--serif-cn); font-size: 12.5px;
+  fill: var(--gold-deep); font-weight: 500; text-anchor: middle;
+  letter-spacing: 0.4px;
+}
+
+.node-panel {
+  background: rgba(46,31,68,0.94); color: var(--paper);
+  border: 1px solid rgba(232,200,152,0.22); border-radius: 3px;
+  padding: 24px 28px; margin-top: 24px; min-height: 148px;
+  backdrop-filter: blur(8px); box-shadow: 0 18px 48px -16px rgba(40,24,60,0.4);
+  transition: all 0.2s;
+}
+.node-panel h3 {
+  font-family: var(--serif-en); font-style: italic; font-weight: 400;
+  font-size: 20px; color: var(--paper); margin-bottom: 4px;
+}
+.node-panel .tag {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--gold-dust); text-transform: uppercase; margin-bottom: 14px;
+}
+.node-panel .works { font-size: 14px; color: #e4d8ea; margin-bottom: 10px; line-height: 1.6; }
+.node-panel .why { font-size: 14px; color: #c8b8d4; line-height: 1.7; }
+.node-panel .works b, .node-panel .why b { color: var(--gold-dust); font-weight: 500; }
+.node-panel .hint {
+  font-family: var(--serif-en); font-style: italic; color: #a898b8;
+  font-size: 14px; margin-top: 6px;
+}
+
+/* ══════════════════════════ ARTICLES ══════════════════════════ */
+section.articles {
+  background: linear-gradient(180deg, #d8c4e0 0%, var(--paper-warm) 40%, var(--paper) 100%);
+  padding: 110px 0 110px;
+}
+.articles-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 50px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
+}
+.articles-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.articles-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+
+.article-grid {
+  display: grid; grid-template-columns: 1fr; gap: 0;
+  border-top: 1px solid var(--sky-lav);
+}
+.article-row {
+  display: grid; grid-template-columns: 96px 1fr 180px;
+  gap: 36px; padding: 28px 8px 28px 8px;
+  border-bottom: 1px solid rgba(168,144,192,0.4);
+  text-decoration: none; color: inherit;
+  transition: background 0.3s;
+  align-items: start;
+}
+.article-row:hover { background: rgba(244,181,191,0.12); }
+.article-row.pending { opacity: 0.56; cursor: default; }
+.article-row.pending:hover { background: transparent; }
+
+.article-row .num {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em;
+  color: var(--ember-deep); text-transform: uppercase;
+  padding-top: 6px;
+}
+.article-row .body h3 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 22px;
+  line-height: 1.35; color: var(--dusk-deep);
+}
+.article-row .body h3 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 300; font-size: 0.72em; opacity: 0.78;
+  margin-top: 6px; color: var(--water-deep);
+}
+.article-row .body p {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 14px; line-height: 1.68; color: #4a3e58;
+  margin-top: 12px; max-width: 620px;
+}
+.article-row .body .keywords {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+  color: var(--water-deep); margin-top: 14px; text-transform: uppercase;
+  opacity: 0.82;
+}
+.article-row .meta {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em;
+  color: var(--water-deep); text-transform: uppercase;
+  text-align: right; padding-top: 6px;
+}
+.article-row .meta strong {
+  display: block; font-weight: 500; color: var(--dusk-deep);
+  margin-top: 6px; font-size: 12px;
+}
+.article-row.pending .meta strong { color: var(--ember-deep); }
+
+/* ══════════════════════════ TIMELINE (思想史轴) ══════════════════════════ */
+section.timeline {
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
+  padding: 110px 0; position: relative; overflow: hidden;
+}
+.timeline-head {
+  margin-bottom: 56px; padding: 0 8px;
+}
+.timeline-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.timeline-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+.timeline-head .sub {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 15px; color: #4a3e58; max-width: 720px; margin-top: 16px;
+  line-height: 1.7;
+}
+
+.timeline-rail {
+  position: relative; padding: 40px 0 20px;
+}
+.timeline-rail::before {
+  content: ''; position: absolute;
+  top: 64px; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, var(--ember-deep) 0%, var(--sky-lav) 50%, var(--water-teal) 100%);
+  opacity: 0.55;
+}
+.tl-track {
+  display: grid; grid-template-columns: repeat(14, 1fr);
+  gap: 12px; position: relative;
+}
+.tl-epoch {
+  text-align: center; padding: 0 4px;
+  grid-column: span 1;
+}
+.tl-epoch .year {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+  color: var(--water-deep); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.tl-epoch .dot {
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--paper); border: 1.5px solid var(--ember-deep);
+  margin: 0 auto 16px; box-shadow: 0 0 0 4px rgba(244,234,216,0.6);
+  position: relative; z-index: 2;
+}
+.tl-epoch.epoch-phe .dot { border-color: var(--ember); }
+.tl-epoch.epoch-emb .dot { border-color: var(--ember-deep); }
+.tl-epoch.epoch-spa .dot { border-color: var(--water-teal); }
+.tl-epoch .name {
+  font-family: var(--serif-en); font-style: italic; font-weight: 400;
+  font-size: 12px; color: var(--dusk-deep); line-height: 1.35;
+}
+.tl-epoch .cn {
+  font-family: var(--serif-cn); font-size: 11px; color: #6a5e7a;
+  display: block; margin-top: 4px;
+}
+
+/* ══════════════════════════ CASES (建筑实例轴) ══════════════════════════ */
+section.cases {
+  background: linear-gradient(180deg, var(--paper-warm) 0%, #e0cee2 60%, var(--sky-lav) 100%);
+  padding: 110px 0 120px; position: relative; overflow: hidden;
+}
+.cases-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 50px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
+}
+.cases-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.cases-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+.cases-head .sub {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--water-deep); text-transform: uppercase;
+}
+
+.cases-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+}
+.case {
+  background: rgba(245,240,248,0.72); backdrop-filter: blur(6px);
+  border: 1px solid rgba(168,144,192,0.5);
+  padding: 26px 26px 24px; border-radius: 2px;
+  position: relative;
+}
+.case::before {
+  content: attr(data-year);
+  position: absolute; top: -12px; right: 20px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  background: var(--paper); padding: 2px 10px;
+  color: var(--ember-deep); text-transform: uppercase;
+  border: 1px solid rgba(200,122,150,0.4);
+}
+.case h4 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 18px;
+  line-height: 1.35; color: var(--dusk-deep); margin-bottom: 4px;
+}
+.case h4 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 300; font-size: 0.78em; opacity: 0.78;
+  margin-top: 4px; color: var(--water-deep);
+}
+.case .arch {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+  color: var(--ember-deep); text-transform: uppercase;
+  margin-top: 12px; opacity: 0.88;
+}
+.case p {
+  font-size: 14px; line-height: 1.7; color: #3a2e48; margin-top: 12px;
+}
+.case .sense {
+  display: inline-block; margin-top: 14px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  background: var(--dusk-deep); color: var(--gold-dust);
+  padding: 4px 10px; text-transform: uppercase;
+}
+
+/* ══════════════════════════ METHOD ══════════════════════════ */
+section.method {
+  background: linear-gradient(180deg, var(--sky-lav) 0%, var(--sky-mauve) 40%, #6a5a8a 100%);
+  color: var(--paper); padding: 130px 0 120px; position: relative; overflow: hidden;
+}
+.method::before {
+  content: ''; position: absolute; top: 10%; right: 8%;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, #ffa888 0%, #e86880 50%, rgba(180,60,80,0) 85%);
+  filter: blur(1px); opacity: 0.55;
+}
+.method .wrap { max-width: 940px; position: relative; z-index: 2; }
+.method .eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--gold-dust); margin-bottom: 22px;
+}
+.method h2 {
+  font-family: var(--serif-en); font-style: italic; font-weight: 400;
+  font-size: clamp(30px, 4vw, 50px); line-height: 1.15; margin-bottom: 20px;
+}
+.method h2 .cn {
+  display: block; font-family: var(--serif-cn); font-style: normal;
+  font-weight: 400; font-size: 0.54em; margin-top: 14px;
+  color: var(--sky-mist); letter-spacing: 0.03em;
+}
+.method-rules {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px;
+  margin-top: 56px;
+}
+.method-rule { position: relative; }
+.method-rule .num {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 48px; color: var(--gold-dust); opacity: 0.78; line-height: 1;
+}
+.method-rule h3 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 18px;
+  margin-top: 12px; color: var(--paper);
+}
+.method-rule h3 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 300; font-size: 0.82em; opacity: 0.82;
+  margin-top: 4px; color: var(--sky-mist);
+}
+.method-rule p {
+  font-size: 14.5px; line-height: 1.75; margin-top: 12px;
+  opacity: 0.9;
+}
+
+/* ══════════════════════════ BIBLIOGRAPHY ══════════════════════════ */
+section.biblio {
+  background: var(--paper); padding: 110px 0 100px;
+}
+.biblio .wrap { max-width: 1120px; }
+.biblio-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 50px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
+}
+.biblio-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.biblio-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+.biblio-head .count {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  color: var(--water-deep); text-transform: uppercase;
+}
+
+.biblio-cols {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+}
+.biblio-col h3 {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.26em;
+  color: var(--ember-deep); text-transform: uppercase;
+  margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(200,122,150,0.4);
+}
+.biblio-col ol {
+  list-style: none; counter-reset: bib;
+  font-family: var(--serif-en); font-size: 14.5px; line-height: 1.7;
+}
+.biblio-col ol li {
+  counter-increment: bib; padding-left: 32px; position: relative;
+  margin-bottom: 16px; color: #3a2e48;
+}
+.biblio-col ol li::before {
+  content: counter(bib, decimal-leading-zero);
+  position: absolute; left: 0; top: 2px;
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--water-deep); letter-spacing: 0.08em;
+}
+.biblio-col ol li b {
+  font-family: var(--serif-cn); font-weight: 500;
+  color: var(--dusk-deep);
+}
+.biblio-col ol li i {
+  font-family: var(--serif-en); font-style: italic;
+  color: var(--ember-deep); font-weight: 400;
+}
+.biblio-col ol li .meta {
+  display: block; font-family: var(--mono); font-size: 10.5px;
+  color: var(--water-deep); letter-spacing: 0.04em; margin-top: 2px;
+  opacity: 0.82;
+}
+
+/* ══════════════════════════ FOOTER ══════════════════════════ */
+section.colophon {
+  background: linear-gradient(180deg, #4a3868 0%, #2e1f44 100%);
+  color: var(--paper); padding: 100px 0 80px; position: relative; overflow: hidden;
+}
+.colophon::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 180px;
+  background: radial-gradient(ellipse at 50% 100%,
+    rgba(255,140,100,0.22) 0%, rgba(150,100,140,0.1) 45%, transparent 70%);
+}
+.colophon .wrap {
+  max-width: 780px; text-align: center; position: relative; z-index: 2;
+}
+.colophon .eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.3em;
+  text-transform: uppercase; opacity: 0.65; margin-bottom: 24px;
+}
+.colophon h2 {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: clamp(24px, 3vw, 36px); line-height: 1.32; margin-bottom: 20px;
+}
+.colophon p.cn {
+  font-family: var(--serif-cn); font-weight: 300;
+  font-size: 16.5px; line-height: 1.9; opacity: 0.9; margin-top: 20px;
+}
+.colophon .back {
+  display: inline-flex; align-items: center; gap: 12px; margin-top: 48px;
+  padding: 13px 22px; background: var(--paper); color: var(--dusk-deep);
+  text-decoration: none; font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  border-radius: 2px; box-shadow: 0 8px 22px -8px rgba(0,0,0,0.35);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.colophon .back:hover {
+  transform: translateY(-2px); box-shadow: 0 14px 32px -8px rgba(0,0,0,0.4);
+}
+.colophon .back svg { width: 14px; height: 14px; transform: scaleX(-1); }
+
+footer {
+  background: var(--ink); color: rgba(244,234,216,0.55);
+  padding: 36px 48px; display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; flex-wrap: wrap; gap: 12px;
+}
+footer .sig { color: var(--gold-dust); opacity: 0.85; }
+
+/* ══════════════════════════ RESPONSIVE ══════════════════════════ */
+@media (max-width: 1020px) {
+  .cases-grid { grid-template-columns: 1fr 1fr; }
+  .method-rules { grid-template-columns: 1fr; gap: 40px; }
+  .biblio-cols { grid-template-columns: 1fr; gap: 40px; }
+  .article-row { grid-template-columns: 80px 1fr; }
+  .article-row .meta { grid-column: 1 / -1; text-align: left; margin-top: 12px; }
+  .tl-track { grid-template-columns: repeat(7, 1fr); row-gap: 36px; }
+  .timeline-rail::before { display: none; }
+}
+@media (max-width: 680px) {
+  .wrap { padding: 0 24px; }
+  nav.top { padding: 18px 24px; }
+  nav.top ul { gap: 14px; }
+  .hero { padding-top: 100px; }
+  .cases-grid { grid-template-columns: 1fr; }
+  .tl-track { grid-template-columns: repeat(3, 1fr); }
+  footer { font-size: 9px; padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════ NAV ══════════════════════════ -->
+<nav class="top">
+  <div class="brand">四维空间感知实验室 · SFES LAB</div>
+  <ul>
+    <li><a href="../index.html#manifesto">Manifesto</a></li>
+    <li><a href="../index.html#works">Works</a></li>
+    <li><a href="../reading/">Reading</a></li>
+    <li><a href="../learning/">Learning</a></li>
+    <li><a href="./" class="current">Phenomenology</a></li>
+    <li><a href="../index.html#research">Research</a></li>
+    <li><a href="../index.html#about">About</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════ HERO ══════════════════════════ -->
+<header class="hero">
+  <div class="sun"></div>
+  <div class="moon-sm"></div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Research Column · 第五专题 · Est. 2026</div>
+    <h1>
+      时空现象学 · 具身架构设计
+      <span class="en">Phenomenology of Space-Time · Embodied Architectonics</span>
+    </h1>
+    <p class="lede">A column on the body, space, and dwelling — written at the seam where phenomenology, embodied cognition, and spatial AI still refuse to translate into one another.</p>
+    <p class="lede-cn">一个关于身体、空间与栖居的研究专题。在现象学、具身认知与空间智能这三条本应汇合却仍彼此缄默的脉络之间,写一组不急于给答案的札记 —— 从维特鲁威人到 affordance field,从梅洛-庞蒂到 World Labs。</p>
+    <div class="index-rail">
+      <a href="#manifesto">Manifesto</a>
+      <a href="#map">Field Map</a>
+      <a href="#articles">Articles</a>
+      <a href="#timeline">Genealogy</a>
+      <a href="#cases">Buildings</a>
+      <a href="#method">Method</a>
+      <a href="#biblio">Bibliography</a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════ MANIFESTO ══════════════════════════ -->
+<section class="manifesto" id="manifesto">
+  <div class="wrap">
+    <div class="eyebrow">Manifesto · 专题宣言</div>
+    <h2>
+      建筑史是一部身体的认识论史。
+      <span class="en">The history of architecture is a history of the body's epistemology.</span>
+    </h2>
+    <p>古典时期,身体以物质的比例直接铭刻在建筑形式上 —— 帕特农的柱式、万神殿的穹窿、维特鲁威人所确立的建筑模数,都是身体的尺度投射到世界之上。中世纪,身体被神学收编,成为通向天国的容器;文艺复兴重新赋予身体以人性的地位,巴洛克与启蒙又把它抬升为崇高与奇观的承载者。</p>
+    <p>到了现代主义,身体却被理性主义悄悄抽空 —— 建筑成为标准化、功能化、机器化的对象,人被换算成"居住的单元"。直到 20 世纪现象学重新把身体请回中央:Husserl 的"回到事物本身"、Merleau-Ponty 的"身体-主体"、Heidegger 的"栖居"(dwelling)、Bachelard 的"诗学空间"、Norberg-Schulz 的"场所精神"、Pallasmaa 的"肌肤之目" —— 它们合起来把一个简单的命题写回到建筑学:<b>空间不是被看的几何,而是被住进去的感知结构。</b></p>
+    <blockquote>
+      "The door handle is the handshake of the building."
+      <cite>— Juhani Pallasmaa, The Eyes of the Skin (1996)</cite>
+    </blockquote>
+    <p>而今天,AI 正在以一种几乎暴力的方式重新定义"空间"。World Labs 把 spatial intelligence 作为下一代 AI 的旗帜,JEPA / NeRF / Gaussian Splatting 在工程上重建出每一立方厘米的三维场景,Habitat / AI2-THOR 让 agent 在虚拟房子里走来走去。<b>但这些路径几乎全部默认:空间 = 几何。</b>他们重建的是一个从外部被看的世界,而不是一个从内部被住的世界。</p>
+    <p>这个专题站在这道缝的边上。它不反对 AI —— 相反,它认为具身 AI 是让身体现象学重新获得实验工具的最大一次机会。但它坚持:如果 spatial intelligence 不承认"被身体经验的空间" ≠ "几何空间",那我们造出来的机器就不是具身的,而是更精密地旁观的。</p>
+    <div class="rule"></div>
+    <p class="en">The question this column keeps returning to: <i>can the pre-reflective, already-inhabited spatiality that architecture knows how to design but cannot explain, be written into the inductive bias of an embodied agent?</i></p>
+    <p class="cn" style="font-size: 14.5px; opacity: 0.78; margin-top: 14px;">—— 戴诗琪 / DAI Shiqi &nbsp;·&nbsp; 专题主持</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════ FIELD MAP (Lavender Venn) ══════════════════════════ -->
+<section class="field-map" id="map">
+  <div class="wrap">
+    <div class="field-head">
+      <div class="title">
+        领域图谱 · 三圈与一道缝
+        <span class="en">The Field Map — Three Circles & the Crack Between</span>
+      </div>
+      <div class="count">30 &nbsp;Thinkers · 1 Seam</div>
+    </div>
+
+    <div class="venn-legend">
+      <span class="lg-phe">现象学 / 空间哲学 &nbsp; Phenomenology of Space</span>
+      <span class="lg-emb">具身 / 生成认知 &nbsp; Embodied · Enactive Cognition</span>
+      <span class="lg-spa">空间智能 / 世界模型 &nbsp; Spatial AI · World Models</span>
+      <span class="lg-you">未耕之地 &nbsp; The Crack</span>
+    </div>
+
+    <div class="venn-wrap">
+      <div class="venn-box">
+        <svg viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet">
+          <!-- three circles -->
+          <circle cx="340" cy="260" r="230" fill="#e89fb5" fill-opacity="0.12" stroke="#c87a96" stroke-opacity="0.55" stroke-width="1.1"/>
+          <circle cx="660" cy="260" r="230" fill="#c87a96" fill-opacity="0.12" stroke="#a05878" stroke-opacity="0.55" stroke-width="1.1"/>
+          <circle cx="500" cy="460" r="230" fill="#8fc4be" fill-opacity="0.13" stroke="#5a8e8a" stroke-opacity="0.55" stroke-width="1.1"/>
+
+          <!-- field labels -->
+          <text class="field-label" x="190" y="86" fill="#a05878">现象学 · 空间哲学</text>
+          <text class="field-sub"   x="190" y="102" fill="#a8678a">Phenomenology of Space</text>
+          <text class="field-label" x="712" y="86" fill="#8e4868">具身 · 生成认知</text>
+          <text class="field-sub"   x="712" y="102" fill="#a05878">Embodied · Enactive Cognition</text>
+          <text class="field-label" x="380" y="618" fill="#3d6a66">空间智能 · 世界模型</text>
+          <text class="field-sub"   x="380" y="634" fill="#4a7e78">Spatial AI · World Models</text>
+
+          <!-- phenomenology cluster -->
+          <g class="node" data-id="merleau">
+            <circle cx="220" cy="200" r="6" fill="#e89fb5"/>
+            <text x="220" y="186">Merleau-Ponty</text>
+          </g>
+          <g class="node" data-id="heidegger">
+            <circle cx="160" cy="270" r="6" fill="#e89fb5"/>
+            <text x="160" y="256">Heidegger</text>
+          </g>
+          <g class="node" data-id="husserl">
+            <circle cx="190" cy="340" r="6" fill="#e89fb5"/>
+            <text x="190" y="326">Husserl</text>
+          </g>
+          <g class="node" data-id="bachelard">
+            <circle cx="260" cy="395" r="6" fill="#e89fb5"/>
+            <text x="260" y="381">Bachelard</text>
+          </g>
+          <g class="node" data-id="casey">
+            <circle cx="155" cy="400" r="6" fill="#e89fb5"/>
+            <text x="155" y="386">Edward Casey</text>
+          </g>
+          <g class="node" data-id="zahavi">
+            <circle cx="280" cy="150" r="6" fill="#e89fb5"/>
+            <text x="280" y="136">Dan Zahavi</text>
+          </g>
+          <g class="node" data-id="pallasmaa">
+            <circle cx="110" cy="220" r="6" fill="#e89fb5"/>
+            <text x="110" y="206">Pallasmaa</text>
+          </g>
+          <g class="node" data-id="norberg">
+            <circle cx="115" cy="350" r="6" fill="#e89fb5"/>
+            <text x="115" y="336">Norberg-Schulz</text>
+          </g>
+
+          <!-- Phenomenology ∩ Embodied -->
+          <g class="node" data-id="dreyfus">
+            <circle cx="500" cy="140" r="7" fill="#b888b8"/>
+            <text x="500" y="125">Dreyfus</text>
+          </g>
+          <g class="node" data-id="varela">
+            <circle cx="450" cy="200" r="7" fill="#b888b8"/>
+            <text x="450" y="186">Varela / Thompson</text>
+          </g>
+          <g class="node" data-id="gallagher">
+            <circle cx="560" cy="200" r="7" fill="#b888b8"/>
+            <text x="560" y="186">Gallagher</text>
+          </g>
+          <g class="node" data-id="noe">
+            <circle cx="420" cy="270" r="7" fill="#b888b8"/>
+            <text x="420" y="256">Alva Noë</text>
+          </g>
+          <g class="node" data-id="fuchs">
+            <circle cx="540" cy="280" r="6" fill="#b888b8"/>
+            <text x="540" y="266">Thomas Fuchs</text>
+          </g>
+
+          <!-- Embodied cluster -->
+          <g class="node" data-id="brooks">
+            <circle cx="760" cy="200" r="6" fill="#c87a96"/>
+            <text x="760" y="186">Rodney Brooks</text>
+          </g>
+          <g class="node" data-id="clark">
+            <circle cx="830" cy="260" r="6" fill="#c87a96"/>
+            <text x="830" y="246">Andy Clark</text>
+          </g>
+          <g class="node" data-id="friston">
+            <circle cx="790" cy="335" r="6" fill="#c87a96"/>
+            <text x="790" y="321">Karl Friston</text>
+          </g>
+          <g class="node" data-id="seth">
+            <circle cx="840" cy="160" r="6" fill="#c87a96"/>
+            <text x="840" y="146">Anil Seth</text>
+          </g>
+          <g class="node" data-id="metzinger">
+            <circle cx="720" cy="400" r="6" fill="#c87a96"/>
+            <text x="720" y="386">Metzinger</text>
+          </g>
+
+          <!-- Embodied ∩ Spatial AI -->
+          <g class="node" data-id="tenenbaum">
+            <circle cx="670" cy="430" r="7" fill="#a89a88"/>
+            <text x="670" y="416">Josh Tenenbaum</text>
+          </g>
+          <g class="node" data-id="activeinf">
+            <circle cx="620" cy="500" r="6" fill="#a89a88"/>
+            <text x="620" y="486">Active Inference</text>
+          </g>
+          <g class="node" data-id="devrobo">
+            <circle cx="740" cy="490" r="6" fill="#a89a88"/>
+            <text x="740" y="476">Developmental Robotics</text>
+          </g>
+
+          <!-- Spatial AI cluster -->
+          <g class="node" data-id="feifei">
+            <circle cx="500" cy="560" r="7" fill="#8fc4be"/>
+            <text x="500" y="580">Fei-Fei Li / World Labs</text>
+          </g>
+          <g class="node" data-id="lecun">
+            <circle cx="380" cy="540" r="6" fill="#8fc4be"/>
+            <text x="380" y="560">LeCun · JEPA</text>
+          </g>
+          <g class="node" data-id="ha">
+            <circle cx="610" cy="560" r="6" fill="#8fc4be"/>
+            <text x="610" y="580">Ha / Schmidhuber</text>
+          </g>
+          <g class="node" data-id="nerf">
+            <circle cx="440" cy="585" r="6" fill="#8fc4be"/>
+            <text x="440" y="604">NeRF · 3D Scene</text>
+          </g>
+          <g class="node" data-id="habitat">
+            <circle cx="320" cy="475" r="6" fill="#8fc4be"/>
+            <text x="320" y="461">Habitat · Embodied AI</text>
+          </g>
+
+          <!-- Spatial AI ∩ Phenomenology (almost empty bridge) -->
+          <g class="node" data-id="gibson">
+            <circle cx="290" cy="450" r="7" fill="#9bb8b2"/>
+            <text x="290" y="436">J.J. Gibson</text>
+          </g>
+          <g class="node" data-id="tversky">
+            <circle cx="360" cy="510" r="6" fill="#9bb8b2"/>
+            <text x="360" y="526">Barbara Tversky</text>
+          </g>
+
+          <!-- The Crack (center) -->
+          <g class="crack-ring">
+            <circle cx="500" cy="355" r="42" fill="#e8c898" fill-opacity="0.14" stroke="#b88c5a" stroke-width="1.4" stroke-dasharray="3,3"/>
+            <circle cx="500" cy="355" r="20" fill="#e8c898" fill-opacity="0.28" stroke="#b88c5a" stroke-width="1"/>
+          </g>
+          <text class="you-are-here" x="500" y="350">你在这里 · You are here</text>
+          <text class="you-are-here" x="500" y="368" style="font-size:10.5px; font-weight:400;">This ground is not yet tilled.</text>
+        </svg>
+      </div>
+
+      <div class="node-panel" id="nodePanel">
+        <h3>Hover or click a node →</h3>
+        <p class="tag">Thinker Atlas</p>
+        <p class="hint">每一个点都代表一条可能的切入。中央那片闪着琥珀光的缝,就是这个专题要一篇一篇写进去的地方。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ ARTICLES ══════════════════════════ -->
+<section class="articles" id="articles">
+  <div class="wrap">
+    <div class="articles-head">
+      <div class="title">
+        专题札记
+        <span class="en">Articles in this Column</span>
+      </div>
+      <div class="count" style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; color: var(--water-deep); text-transform: uppercase;">01 &nbsp;Published · 04 &nbsp;Forthcoming</div>
+    </div>
+
+    <div class="article-grid">
+
+      <a class="article-row" href="00-空间的裂缝.html">
+        <div class="num">No. 00 &nbsp;·&nbsp; Founding</div>
+        <div class="body">
+          <h3>
+            空间的裂缝
+            <span class="en">Cracks in Space — Phenomenology · Embodied Cognition · Spatial AI</span>
+          </h3>
+          <p>三个学科都在逼近"空间",但没人把它们缝起来。这是本专题的奠基札记 —— 一张可交互的领域地图,给出 30 位学者作为可以钻进去的缝。中央那块亮着的地,是后面每一篇文章要去填的未耕之地。</p>
+          <div class="keywords">Merleau-Ponty · Heidegger · Casey · Noë · Varela · Friston · Fei-Fei Li · Tenenbaum · Gibson · Tversky</div>
+        </div>
+        <div class="meta">
+          <span>Apr · 2026</span>
+          <strong>Interactive Map</strong>
+        </div>
+      </a>
+
+      <div class="article-row pending">
+        <div class="num">No. 01 &nbsp;·&nbsp; 正在写</div>
+        <div class="body">
+          <h3>
+            从维特鲁威人到 Affordance Field
+            <span class="en">From Vitruvian Man to the Affordance Field — Two Millennia of Writing the Body into Space</span>
+          </h3>
+          <p>把 Inter-Arch 那条"身体认识论"的思想史线往下延伸 300 年:维特鲁威、Semper、Schmarsow、Loos、Bachelard、Gibson、Fei-Fei Li。问一个问题:如果我们把"上手"(ready-to-hand)和"可供性"(affordance)承认为同一件事,embodied agent 的空间表征就不该是 voxel grid,而应该是 affordance field。这一篇尝试写出这个命题的前两百页脚注。</p>
+          <div class="keywords">Vitruvius · Semper · Schmarsow · Loos · Gibson · World Labs · Affordance · Ready-to-hand</div>
+        </div>
+        <div class="meta">
+          <span>May · 2026</span>
+          <strong>Forthcoming</strong>
+        </div>
+      </div>
+
+      <div class="article-row pending">
+        <div class="num">No. 02 &nbsp;·&nbsp; 正在写</div>
+        <div class="body">
+          <h3>
+            肌肤之目的十个具身测试
+            <span class="en">Ten Embodied Tests for the Eyes of the Skin — Pallasmaa Meets Benchmarks</span>
+          </h3>
+          <p>把 Pallasmaa《肌肤之目》里反复出现的多感官命题(视觉-触觉-听觉-嗅觉-动觉)逐条翻成 embodied AI 可以被设计、被测量的具体任务。配合十个真实建筑案例(Therme Vals · Villa Mairea · Kiasma · Bregenz · Maggie's Centre · 瓦尔斯...)。从现象学到 benchmark 的一次正面翻译。</p>
+          <div class="keywords">Pallasmaa · Multisensory · Zumthor · Aalto · Holl · Benchmark · Embodied AI</div>
+        </div>
+        <div class="meta">
+          <span>Jun · 2026</span>
+          <strong>Forthcoming</strong>
+        </div>
+      </div>
+
+      <div class="article-row pending">
+        <div class="num">No. 03 &nbsp;·&nbsp; 正在写</div>
+        <div class="body">
+          <h3>
+            栖居的几何与可度量的空间
+            <span class="en">Lived Space vs. Measurable Space — Can Dwelling Be Written into a Loss Function?</span>
+          </h3>
+          <p>Merleau-Ponty 区分"被住进去的空间(lived space)"与"被度量的空间(measurable space)" —— 这道区分能不能写进世界模型的目标函数?本篇尝试用 Friston 自由能 / Active Inference 的语言重新陈述它,并检查它在 NeRF、JEPA、Habitat 三种当代架构上的缺席。</p>
+          <div class="keywords">Merleau-Ponty · Friston · Free Energy · JEPA · NeRF · Habitat · Loss Function</div>
+        </div>
+        <div class="meta">
+          <span>Jul · 2026</span>
+          <strong>Forthcoming</strong>
+        </div>
+      </div>
+
+      <div class="article-row pending">
+        <div class="num">No. 04 &nbsp;·&nbsp; 构思中</div>
+        <div class="body">
+          <h3>
+            权力、规训与被设计的身体运动
+            <span class="en">Discipline and the Choreography of Space — Foucault, Panopticon, and the Modern Floor Plan</span>
+          </h3>
+          <p>接上 Foucault《规训与惩罚》、Mauss《身体技术》与 Mary Douglas《洁净与危险》这一支 —— 空间如何通过约束身体的运动轨迹、行为方式、视线与边界,成为权力的物质体现。从古罗马广场到标准化写字楼,再到 Embodied AI 训练环境里被悄悄预设的"正确行为"。</p>
+          <div class="keywords">Foucault · Mauss · Mary Douglas · Panopticon · Agamben · Giddens · Body Politics</div>
+        </div>
+        <div class="meta">
+          <span>TBD</span>
+          <strong>In Sketch</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ TIMELINE · 思想史轴 ══════════════════════════ -->
+<section class="timeline" id="timeline">
+  <div class="wrap">
+    <div class="timeline-head">
+      <div class="title">
+        思想史轴 · 身体如何进入建筑
+        <span class="en">A Genealogy — How the Body Entered Architecture</span>
+      </div>
+      <p class="sub">A selective timeline — from the Vitruvian module through phenomenology's retrieval of the body, to today's embodied AI. Each node is a switch that reopens the question of what counts as "inhabiting" space.</p>
+    </div>
+
+    <div class="timeline-rail">
+      <div class="tl-track">
+        <div class="tl-epoch epoch-phe"><div class="year">-30 BCE</div><div class="dot"></div><div class="name">Vitruvius<span class="cn">维特鲁威人</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1452</div><div class="dot"></div><div class="name">Alberti<span class="cn">De re aedificatoria</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1851</div><div class="dot"></div><div class="name">Semper<span class="cn">建筑四要素</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1893</div><div class="dot"></div><div class="name">Schmarsow<span class="cn">空间创造论</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1907</div><div class="dot"></div><div class="name">Loos<span class="cn">Raumplan</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1927</div><div class="dot"></div><div class="name">Heidegger<span class="cn">存在与时间</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1945</div><div class="dot"></div><div class="name">Merleau-Ponty<span class="cn">知觉现象学</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1958</div><div class="dot"></div><div class="name">Bachelard<span class="cn">空间的诗学</span></div></div>
+        <div class="tl-epoch epoch-emb"><div class="year">1979</div><div class="dot"></div><div class="name">J.J. Gibson<span class="cn">Affordances</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1980</div><div class="dot"></div><div class="name">Norberg-Schulz<span class="cn">场所精神</span></div></div>
+        <div class="tl-epoch epoch-emb"><div class="year">1991</div><div class="dot"></div><div class="name">Varela &middot; Rosch<span class="cn">具身心智</span></div></div>
+        <div class="tl-epoch epoch-phe"><div class="year">1996</div><div class="dot"></div><div class="name">Pallasmaa<span class="cn">肌肤之目</span></div></div>
+        <div class="tl-epoch epoch-emb"><div class="year">2010</div><div class="dot"></div><div class="name">Friston / FEP<span class="cn">自由能原理</span></div></div>
+        <div class="tl-epoch epoch-spa"><div class="year">2024</div><div class="dot"></div><div class="name">Fei-Fei Li<span class="cn">World Labs</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ CASES · 建筑实例轴 ══════════════════════════ -->
+<section class="cases" id="cases">
+  <div class="wrap">
+    <div class="cases-head">
+      <div class="title">
+        建筑实例轴 · 身体的六个触点
+        <span class="en">Six Buildings Where the Body Is the Method</span>
+      </div>
+      <div class="sub">Six Touch-Points · Zumthor · Aalto · Holl · Pantheon · Therme · Bregenz</div>
+    </div>
+    <div class="cases-grid">
+
+      <div class="case" data-year="126 CE">
+        <h4>
+          万神殿 · Oculus
+          <span class="en">Pantheon — Rome</span>
+        </h4>
+        <p class="arch">帝国几何 · Hadrian's circle</p>
+        <p>穹顶正中直径 9 米的圆孔,把"身体之上的天"变成可以具体被注视、被光线击中的点。身体第一次在建筑里被迫仰望 —— 这是西方建筑史上最早的一次,把"朝向"(orientation)从象征写进物理。</p>
+        <span class="sense">视觉 · 朝向</span>
+      </div>
+
+      <div class="case" data-year="1996">
+        <h4>
+          瓦尔斯温泉浴场
+          <span class="en">Therme Vals — Peter Zumthor</span>
+        </h4>
+        <p class="arch">卒姆托 · 瑞士格劳宾登</p>
+        <p>当地切割的灰色石英岩砌筑成浴场的每一堵墙、每一块池底。赤足踩上凉岩、触摸粗糙砌缝、感受温泉的温热 —— 卒姆托在此把 Pallasmaa 所说的"多感官经验"具体写成了材料的几何。</p>
+        <span class="sense">触觉 · 温度 · 材料</span>
+      </div>
+
+      <div class="case" data-year="1939">
+        <h4>
+          玛丽亚别墅
+          <span class="en">Villa Mairea — Alvar Aalto</span>
+        </h4>
+        <p class="arch">阿尔瓦·阿尔托 · 芬兰诺尔马库</p>
+        <p>木材的温润、柱林的节奏、粗抹灰与细木表面的触觉对比 —— Aalto 把北欧森林"写"进室内。Pallasmaa 认为这是反视觉中心主义最成熟的建筑范例:身体不是看这间房子,而是被这间房子招待。</p>
+        <span class="sense">触觉 · 节奏 · 温情</span>
+      </div>
+
+      <div class="case" data-year="1998">
+        <h4>
+          奇亚斯玛当代艺术博物馆
+          <span class="en">Kiasma Museum — Steven Holl</span>
+        </h4>
+        <p class="arch">斯蒂文·霍尔 · 赫尔辛基</p>
+        <p>弧形屋顶与天窗把北欧的低角度日光引入展厅,光线每天、每季在墙面与地面上以不同的形态流动。Holl 把"光"当作材料来设计 —— 身体在空间里的每一次停顿,都是对一次光相位的注册。</p>
+        <span class="sense">视觉 · 光线 · 时间</span>
+      </div>
+
+      <div class="case" data-year="1997">
+        <h4>
+          布雷根茨美术馆
+          <span class="en">Kunsthaus Bregenz — Peter Zumthor</span>
+        </h4>
+        <p class="arch">卒姆托 · 奥地利</p>
+        <p>全玻璃幕墙漫反射出康斯坦茨湖、阿尔卑斯山与城市本身。外部的视觉即是内部的光源。身体站在近旁时,它不是一座建筑,而是湖面上一块结晶 —— 建筑即风景。</p>
+        <span class="sense">视觉 · 反射 · 场所</span>
+      </div>
+
+      <div class="case" data-year="2003">
+        <h4>
+          玛吉中心 · London
+          <span class="en">Maggie's Centre — Steven Holl</span>
+        </h4>
+        <p class="arch">斯蒂文·霍尔 · 伦敦</p>
+        <p>癌症疗养空间里的弧面墙与玻璃隔音结构,让声音在空间中经过柔和反射,消除尖锐回响。身体的听觉被整座建筑温柔地包住 —— 这是对现代医院标准化噪音环境的一次建筑学反抗。</p>
+        <span class="sense">听觉 · 声学 · 疗愈</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ METHOD ══════════════════════════ -->
+<section class="method" id="method">
+  <div class="wrap">
+    <div class="eyebrow">Method · 编辑方法论</div>
+    <h2>
+      Three rules for writing in this column.
+      <span class="cn">写这个专题的三条规矩。</span>
+    </h2>
+
+    <div class="method-rules">
+      <div class="method-rule">
+        <div class="num">01</div>
+        <h3>
+          思想史+建筑史 双轨并行
+          <span class="en">Two Rails · Ideas × Buildings</span>
+        </h3>
+        <p>每一篇札记都必须同时走两条轴:一条是哲学家/理论家的脉络(柏拉图→Merleau-Ponty→Pallasmaa→Casey),一条是具体建筑与城市(万神殿→Raumplan→Therme Vals→World Labs)。空谈理论或堆图纸都不过关。</p>
+      </div>
+      <div class="method-rule">
+        <div class="num">02</div>
+        <h3>
+          理论不能只停在美学
+          <span class="en">Theory Must Touch Code</span>
+        </h3>
+        <p>所有关于"身体如何感知空间"的现象学直觉,最终都要落到可被具身 AI/世界模型讨论的形式:是否能翻译成损失函数?是否能作为一个 benchmark?是否能写进 inductive bias?理论如果永远拒绝被形式化,就放弃了影响今天 AI 的机会。</p>
+      </div>
+      <div class="method-rule">
+        <div class="num">03</div>
+        <h3>
+          保留第一人称的观察
+          <span class="en">Keep the First-Person Witness</span>
+        </h3>
+        <p>建筑师的身体是这个专题最独特的工具 —— 它对"被住进去的空间"有第一手经验,这是计算机视觉做不出的感官资本。每一篇札记都可以在末尾留一段"我看到/我走过/我摸到",不要把它洗成无主体的学术声音。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ BIBLIOGRAPHY ══════════════════════════ -->
+<section class="biblio" id="biblio">
+  <div class="wrap">
+    <div class="biblio-head">
+      <div class="title">
+        推荐书目
+        <span class="en">Working Bibliography</span>
+      </div>
+      <div class="count">24 &nbsp;Titles &middot; Growing</div>
+    </div>
+
+    <div class="biblio-cols">
+      <div class="biblio-col">
+        <h3>Phenomenology &middot; Architecture &middot; 中文可得</h3>
+        <ol>
+          <li><b>柏拉图</b> <i>斐多篇 / Phaedo</i><br><span class="meta">Plato · 前 4 世纪 · 身心二元传统的起点</span></li>
+          <li><b>维特鲁威</b> <i>建筑十书 / The Ten Books on Architecture</i><br><span class="meta">Vitruvius · 前 30 · 身体模数的最早文本</span></li>
+          <li><b>Husserl</b> <i>Ideas: General Introduction to Pure Phenomenology</i><br><span class="meta">胡塞尔 · 1913 · 回到事物本身</span></li>
+          <li><b>Heidegger</b> <i>Being and Time</i> &middot; <i>Building, Dwelling, Thinking</i><br><span class="meta">海德格尔 · 1927, 1951 · 栖居与上手</span></li>
+          <li><b>Merleau-Ponty</b> <i>Phenomenology of Perception</i> (esp. Part II)<br><span class="meta">梅洛-庞蒂 · 1945 · 身体-主体 &middot; 姜志辉 译本</span></li>
+          <li><b>Bachelard</b> <i>The Poetics of Space</i><br><span class="meta">巴什拉 · 1958 · 张逸婧 译本</span></li>
+          <li><b>Norberg-Schulz</b> <i>Genius Loci: Towards a Phenomenology of Architecture</i><br><span class="meta">诺伯格-舒尔茨 · 1980 · 场所精神</span></li>
+          <li><b>Pallasmaa</b> <i>The Eyes of the Skin: Architecture and the Senses</i><br><span class="meta">帕拉斯玛 · 1996 &middot; 刘星 译本</span></li>
+          <li><b>Casey</b> <i>Getting Back into Place</i> &middot; <i>The Fate of Place</i><br><span class="meta">Edward Casey · 1993, 1997</span></li>
+          <li><b>理查德·桑内特</b> <i>肉体与石头 / Flesh and Stone</i><br><span class="meta">黄煜文 译 · 上海译文 · 西方文明中的身体与城市</span></li>
+          <li><b>McEwen</b> <i>Vitruvius: Writing the Body of Architecture</i><br><span class="meta">Indra Kagis McEwen · MIT Press · 2003</span></li>
+          <li><b>Dodds &amp; Tavernor (eds.)</b> <i>Body and Building</i><br><span class="meta">MIT Press · 2002 · 文集</span></li>
+        </ol>
+      </div>
+      <div class="biblio-col">
+        <h3>Embodied Cognition &middot; Spatial AI</h3>
+        <ol>
+          <li><b>Dreyfus</b> <i>What Computers Can't Do</i> · <i>Being-in-the-World</i><br><span class="meta">Hubert Dreyfus · 1972, 1991 · 现象学撞击 AI</span></li>
+          <li><b>Gibson</b> <i>The Ecological Approach to Visual Perception</i><br><span class="meta">J.J. Gibson · 1979 · Affordance 的奠基</span></li>
+          <li><b>Varela / Thompson / Rosch</b> <i>The Embodied Mind</i><br><span class="meta">MIT Press · 1991 · 生成认知开山</span></li>
+          <li><b>Brooks</b> <i>Intelligence Without Representation</i> · <i>Flesh and Machines</i><br><span class="meta">Rodney Brooks · 1991, 2002 · 具身机器人之父</span></li>
+          <li><b>Thompson</b> <i>Mind in Life</i><br><span class="meta">Evan Thompson · 2007 · 生物学 × 现象学</span></li>
+          <li><b>Noë</b> <i>Action in Perception</i><br><span class="meta">Alva Noë · 2004 · 感知即技能性的行动</span></li>
+          <li><b>Gallagher</b> <i>How the Body Shapes the Mind</i><br><span class="meta">Shaun Gallagher · 2005 · Body schema vs body image</span></li>
+          <li><b>Clark</b> <i>Surfing Uncertainty</i> · <i>Being There</i><br><span class="meta">Andy Clark · 2016, 1997 · 预测加工 &middot; 延展心智</span></li>
+          <li><b>Metzinger</b> <i>Being No One</i> · <i>The Ego Tunnel</i><br><span class="meta">Thomas Metzinger · 2003, 2009 · 自我模型</span></li>
+          <li><b>Seth</b> <i>Being You</i><br><span class="meta">Anil Seth · 2021 · 受控的幻觉</span></li>
+          <li><b>Tversky</b> <i>Mind in Motion</i><br><span class="meta">Barbara Tversky · 2019 · 空间认知四十年</span></li>
+          <li><b>LeCun</b> <i>A Path Towards Autonomous Machine Intelligence</i><br><span class="meta">2022 · JEPA 与世界模型架构</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ COLOPHON · FOOTER ══════════════════════════ -->
+<section class="colophon">
+  <div class="wrap">
+    <div class="eyebrow">Colophon · 专题附言</div>
+    <h2>"I just want to figure out space.<br>It's just that this field hasn't been invented yet."</h2>
+    <p class="cn">这个专题不急。它将每一两个月更新一篇札记,每一篇都必须同时欠哲学家、建筑师和工程师各一封邮件 —— 这是它的标准。如果你读到任何一篇有话要接上,请来信。</p>
+    <a class="back" href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      Back to the Lab &nbsp;·&nbsp; 返回实验室
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 &nbsp;·&nbsp; 四维空间感知实验室 · SFES Laboratory · Phenomenology Column</div>
+  <div class="sig">Built quietly · 于空间之外</div>
+</footer>
+
+<script>
+/* ── Thinker Atlas data ── */
+const DATA = {
+  merleau: {
+    name: "Maurice Merleau-Ponty (1908–1961)",
+    tag: "Phenomenology · France",
+    works: "<i>Phenomenology of Perception</i> (1945) · <i>The Visible and the Invisible</i>",
+    why: "空间现象学的核心人物。明确提出身体是知觉的主体,空间不是被心智表征的外部容器,而是身体向世界展开的结构。直接读 Part II, Ch. 2 'Space' 与 Ch. 3 'The Thing and the Natural World'。"
+  },
+  heidegger: {
+    name: "Martin Heidegger (1889–1976)",
+    tag: "Phenomenology · Ontology",
+    works: "<i>Being and Time</i> (1927) · <i>Building, Dwelling, Thinking</i> (1951)",
+    why: "提出 Being-in-the-world 与 ready-to-hand(上手)。空间首先是被使用的、被栖居的,而不是被测量的。Gibson 的 affordance 与之互通;Dreyfus 把他翻给了 AI。"
+  },
+  husserl: {
+    name: "Edmund Husserl (1859–1938)",
+    tag: "Phenomenology · Founder",
+    works: "<i>Logical Investigations</i> · <i>Ideas I</i> · <i>Ding und Raum</i> (手稿)",
+    why: "现象学的祖师爷。有专门关于空间构造的手稿,讨论运动感觉(kinesthesis)如何让空间经验得以可能 —— 今天具身 AI 用 self-supervised 在重新问这个问题。"
+  },
+  bachelard: {
+    name: "Gaston Bachelard (1884–1962)",
+    tag: "Phenomenology · Poetics",
+    works: "<i>The Poetics of Space</i> (1958)",
+    why: "把空间现象学写成关于家、壁橱、阁楼、贝壳的诗。给'被住进去的空间'提供最丰富的现象描述库。"
+  },
+  casey: {
+    name: "Edward Casey (b. 1939)",
+    tag: "Phenomenology · Place/Space",
+    works: "<i>The Fate of Place</i> · <i>Getting Back into Place</i>",
+    why: "当代空间现象学最系统的人。明确区分 place / space / body,写了一整部历史讲西方哲学如何把 place 简化为 space。"
+  },
+  zahavi: {
+    name: "Dan Zahavi (b. 1967)",
+    tag: "Contemporary Phenomenology",
+    works: "<i>Husserl's Phenomenology</i> · <i>Self-Awareness and Alterity</i>",
+    why: "哥本哈根学派,当代现象学最权威的解释者之一,和认知科学对话最多。把现象学精确化的最好入口。"
+  },
+  pallasmaa: {
+    name: "Juhani Pallasmaa (b. 1936)",
+    tag: "Architecture · Phenomenology",
+    works: "<i>The Eyes of the Skin</i> (1996) · <i>The Thinking Hand</i>",
+    why: "建筑现象学在当代最具影响力的代言人。批判视觉中心主义,主张触觉、听觉、嗅觉、动觉是建筑经验的共同主体。本专题的首要参考。"
+  },
+  norberg: {
+    name: "Christian Norberg-Schulz (1926–2000)",
+    tag: "Architecture · Phenomenology",
+    works: "<i>Genius Loci: Towards a Phenomenology of Architecture</i> (1980)",
+    why: "第一位把现象学系统翻给建筑学的人。提出场所精神,把 Heidegger 的栖居论嫁接到具体的城市、街道、广场。"
+  },
+  dreyfus: {
+    name: "Hubert Dreyfus (1929–2017)",
+    tag: "Phenomenology ∩ AI · Bridge",
+    works: "<i>What Computers Can't Do</i> (1972) · <i>Being-in-the-World</i>",
+    why: "直接用 Heidegger/Merleau-Ponty 怼 GOFAI,预言第一次 AI 寒冬,影响了 Rodney Brooks 的 subsumption architecture。'现象学可以指导 AI' 的活证据。"
+  },
+  varela: {
+    name: "Varela · Thompson · Rosch",
+    tag: "Enactivism · Bridge",
+    works: "<i>The Embodied Mind</i> (1991) · Thompson <i>Mind in Life</i>",
+    why: "把现象学、认知科学、佛教放进一本书的开山作。写'为什么 spatial intelligence 需要现象学',这是主力论证。"
+  },
+  gallagher: {
+    name: "Shaun Gallagher (b. 1948)",
+    tag: "Phenomenology ∩ Cognitive Science",
+    works: "<i>How the Body Shapes the Mind</i> · <i>Phenomenology</i>",
+    why: "提出并形式化了 body schema / body image 区分。当代最活跃的桥梁人物,参加的会议既有哲学也有脑科学。"
+  },
+  noe: {
+    name: "Alva Noë (b. 1964)",
+    tag: "Enactive Perception",
+    works: "<i>Action in Perception</i> (2004) · <i>Out of Our Heads</i>",
+    why: "把'感知是技能性的行动'这一现象学直觉翻成可与神经科学、机器人对话的理论。关于'空间如何在行动中显现'最清楚的论证者。"
+  },
+  fuchs: {
+    name: "Thomas Fuchs",
+    tag: "Phenomenological Psychiatry",
+    works: "<i>Ecology of the Brain</i>",
+    why: "从精神病学(自闭谱系、抑郁、精神分裂)切入身体-空间-世界的关系,另一种硬桥。"
+  },
+  brooks: {
+    name: "Rodney Brooks (b. 1954)",
+    tag: "Embodied Robotics · MIT",
+    works: "<i>Intelligence Without Representation</i> (1991) · <i>Flesh and Machines</i>",
+    why: "把 Dreyfus 的批判变成真机器人。Subsumption architecture 是'没有中央表征、只有和世界互动'的工程体现。具身 AI 的工程祖师。"
+  },
+  clark: {
+    name: "Andy Clark (b. 1957)",
+    tag: "Extended Mind · Predictive Processing",
+    works: "<i>Being There</i> · <i>Surfing Uncertainty</i> · <i>The Experience Machine</i>",
+    why: "把 predictive processing 写成一本本能被读懂的书。现象学直觉('世界先显现再被表征')在他这里被翻成神经计算语言。"
+  },
+  friston: {
+    name: "Karl Friston (b. 1959)",
+    tag: "Free Energy Principle · Active Inference",
+    works: "Free Energy Principle 系列 · Active Inference book",
+    why: "当代理论神经科学最野心的数学框架。主张具身主体用自己的世界模型最小化意外。要形式化空间经验,绕不过他。"
+  },
+  seth: {
+    name: "Anil Seth",
+    tag: "Consciousness · Predictive Processing",
+    works: "<i>Being You</i> (2021)",
+    why: "把预测加工写成可读的意识理论,强调'受控的幻觉'—— 我们感知的空间是大脑的最佳猜测。"
+  },
+  metzinger: {
+    name: "Thomas Metzinger",
+    tag: "Self-Model · Philosophy ∩ Neuroscience",
+    works: "<i>Being No One</i> · <i>The Ego Tunnel</i>",
+    why: "系统讲身体模型、自我模型、空间模型如何在大脑里构成经验的整体。关于'空间的第一人称视角'论证极其精细。"
+  },
+  tenenbaum: {
+    name: "Josh Tenenbaum (MIT)",
+    tag: "Cognitive AI · Bridge",
+    works: "直觉物理引擎 · probabilistic program induction 系列",
+    why: "MIT CoCoSci 实验室。把认知科学问题(人怎么推断物理、空间、因果)变成可跑的概率模型。'cog sci 如何约束 AI' 最成功的范式。"
+  },
+  activeinf: {
+    name: "Active Inference 机器人圈",
+    tag: "Theoretical Neuro ∩ Robotics",
+    works: "Pezzulo, Parr, Da Costa 等",
+    why: "把 Friston 的数学直接写到机器人上 —— 让 agent 通过最小化自由能探索空间。现象学气质最强的工程派。"
+  },
+  devrobo: {
+    name: "Developmental Robotics",
+    tag: "Robotics ∩ Developmental Psych",
+    works: "Asada, Oudeyer, Cangelosi 等",
+    why: "研究机器人能不能像婴儿一样,通过和世界的身体互动'长出'空间感。'空间是被经验出来的'在工程上的对应面。"
+  },
+  feifei: {
+    name: "Fei-Fei Li (b. 1976) · World Labs",
+    tag: "Spatial Intelligence · Flag-bearer",
+    works: "ImageNet · Embodied AI 综述 · World Labs (2024)",
+    why: "2024 年明确把 spatial intelligence 作为下一代 AI 的旗帜。但她的路径从 3D vision 上来,默认空间=几何。这恰恰是本专题要补的缝。"
+  },
+  lecun: {
+    name: "Yann LeCun · JEPA",
+    tag: "World Model · Architecture",
+    works: "<i>A Path Towards Autonomous Machine Intelligence</i> (2022)",
+    why: "主张 AI 必须学习世界模型才能真正'理解'。JEPA 是'用预测而非重建学空间',和 predictive processing/active inference 同源。"
+  },
+  ha: {
+    name: "David Ha / Jürgen Schmidhuber",
+    tag: "World Models",
+    works: "<i>World Models</i> (2018)",
+    why: "把'主体在内部维持一个可想象的世界模型'做成可跑的神经网络。世界模型这条线的工程起点。"
+  },
+  nerf: {
+    name: "NeRF / Gaussian Splatting",
+    tag: "3D Scene Representation",
+    works: "NeRF (2020) · 3DGS (2023)",
+    why: "让机器真正'重建'一个可走入的三维空间。技术极强,哲学上仍把空间当'从外部被看的几何'。本专题的问题是:身体从内部在其中是什么?"
+  },
+  habitat: {
+    name: "Meta Habitat · Embodied AI Platforms",
+    tag: "Embodied AI · Simulation",
+    works: "Habitat Sim · AI2-THOR · iGibson",
+    why: "让 agent 在模拟房子里走动、找东西、对话的标准平台。非常工程、目标导向,几乎没有现象学味道 —— 另一条可补的缝。"
+  },
+  gibson: {
+    name: "J.J. Gibson (1904–1979)",
+    tag: "Ecological Psychology · Almost a Bridge",
+    works: "<i>The Ecological Approach to Visual Perception</i> (1979)",
+    why: "提出 affordance:环境向身体显现的可能性。不是现象学家但气质完全一致,直接影响今日具身 AI 的 affordance learning。能引的最'科学'的桥。"
+  },
+  tversky: {
+    name: "Barbara Tversky",
+    tag: "Spatial Cognition",
+    works: "<i>Mind in Motion</i> (2019)",
+    why: "一辈子研究人如何思考空间。把现象学直觉('思想用空间来组织')做成几十年的心理学实验证据。写作极其清晰。"
+  }
+};
+
+const panel = document.getElementById('nodePanel');
+const nodes = document.querySelectorAll('.node');
+let activeNode = null;
+
+function renderDetail(d, isHover) {
+  const label = isHover ? `${d.tag} · Click to pin` : d.tag;
+  panel.innerHTML = `
+    <h3>${d.name}</h3>
+    <p class="tag">${label}</p>
+    <p class="works"><b>Works ·</b> ${d.works}</p>
+    <p class="why"><b>Why it matters ·</b> ${d.why}</p>
+  `;
+}
+
+nodes.forEach(n => {
+  n.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (activeNode) activeNode.classList.remove('active');
+    n.classList.add('active');
+    activeNode = n;
+    const id = n.getAttribute('data-id');
+    const d = DATA[id];
+    if (!d) {
+      panel.innerHTML = '<h3>Awaiting entry</h3><p class="tag">This node is still unwritten</p>';
+      return;
+    }
+    renderDetail(d, false);
+  });
+  n.addEventListener('mouseenter', () => {
+    if (activeNode) return;
+    const id = n.getAttribute('data-id');
+    const d = DATA[id];
+    if (!d) return;
+    renderDetail(d, true);
+  });
+});
+
+/* Scroll-reveal */
+(function(){
+  const els = document.querySelectorAll('section, .article-row, .case, .method-rule, .tl-epoch');
+  els.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(24px)'; el.style.transition = 'opacity 0.9s ease, transform 0.9s ease'; });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = 1;
+        e.target.style.transform = 'none';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+
+</body>
+</html>

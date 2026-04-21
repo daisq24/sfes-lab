@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>空间的裂缝 — 现象学 · 具身认知 · 空间智能</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    background: #0f1214;
+    color: #e6e2d9;
+    padding: 40px 20px 80px;
+    line-height: 1.65;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+  header { margin-bottom: 36px; }
+  h1 {
+    font-size: 34px; font-weight: 700; letter-spacing: 0.5px;
+    margin-bottom: 10px; color: #f2ede1;
+  }
+  h1 .ja { color: #d9a55c; font-weight: 400; font-size: 22px; margin-left: 10px; }
+  .sub { font-size: 15px; color: #938d82; max-width: 820px; }
+  .quote {
+    margin: 14px 0 0 0; padding: 10px 16px; border-left: 3px solid #d9a55c;
+    font-size: 14px; color: #c7bfb1; font-style: italic; max-width: 760px;
+  }
+
+  .venn-box {
+    position: relative; height: 640px; margin: 30px 0 10px; user-select: none;
+  }
+  svg.venn { width: 100%; height: 100%; display: block; }
+
+  .field-label {
+    font-size: 17px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .field-sub { font-size: 11.5px; font-weight: 400; letter-spacing: 0; }
+
+  .node {
+    cursor: pointer; transition: all 0.18s;
+  }
+  .node circle { transition: all 0.18s; }
+  .node text {
+    font-size: 12.5px; fill: #f2ede1; pointer-events: none;
+    text-anchor: middle; font-weight: 500;
+  }
+  .node:hover circle { r: 9; filter: brightness(1.4); }
+  .node.active circle { r: 10; filter: brightness(1.6); stroke: #fff; stroke-width: 1.5; }
+  .node.active text { fill: #fff; font-weight: 700; }
+
+  .crack {
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
+  .you-are-here {
+    font-size: 13px; fill: #d9a55c; font-weight: 700; text-anchor: middle;
+    letter-spacing: 0.5px;
+  }
+
+  .legend {
+    display: flex; gap: 20px; flex-wrap: wrap; margin: 6px 0 30px;
+    font-size: 12.5px; color: #938d82;
+  }
+  .legend span::before {
+    content: ""; display: inline-block; width: 10px; height: 10px;
+    border-radius: 50%; margin-right: 6px; vertical-align: middle;
+  }
+  .lg-p::before { background: #5a8ccf; }
+  .lg-c::before { background: #d96a5c; }
+  .lg-s::before { background: #6db09a; }
+  .lg-x::before { background: #d9a55c; }
+
+  .detail-panel {
+    background: #1a1e22; border: 1px solid #2b3036; border-radius: 10px;
+    padding: 22px 26px; margin: 20px 0 40px; min-height: 160px;
+    transition: all 0.2s;
+  }
+  .detail-panel h3 {
+    font-size: 20px; font-weight: 700; color: #f2ede1; margin-bottom: 4px;
+  }
+  .detail-panel .tag { font-size: 12px; color: #d9a55c; margin-bottom: 12px; letter-spacing: 0.5px; }
+  .detail-panel .works { font-size: 14px; color: #c7bfb1; margin-bottom: 10px; }
+  .detail-panel .why { font-size: 14px; color: #b8afa0; }
+  .detail-panel .empty { color: #6b6659; font-style: italic; font-size: 14px; }
+
+  .sections { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  @media (max-width: 860px) { .sections { grid-template-columns: 1fr; } }
+  .section {
+    background: #16191d; border: 1px solid #25292e; border-radius: 10px; padding: 24px 26px;
+  }
+  .section h2 {
+    font-size: 17px; font-weight: 700; color: #d9a55c; margin-bottom: 14px;
+    letter-spacing: 0.5px;
+  }
+  .section ol, .section ul { padding-left: 20px; }
+  .section li { margin-bottom: 12px; color: #c7bfb1; font-size: 14px; }
+  .section li b { color: #f2ede1; font-weight: 600; }
+  .section li em { color: #d9a55c; font-style: normal; }
+
+  .closing {
+    margin-top: 44px; padding: 22px 26px; background: #1a1e22;
+    border: 1px dashed #3a3f47; border-radius: 10px; color: #b8afa0; font-size: 14px;
+  }
+  .closing b { color: #f2ede1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>空间的裂缝 <span class="ja">— phenomenology · embodied cognition · spatial AI</span></h1>
+  <p class="sub">三个学科都在逼近"空间"，但没人把它们缝起来。下面这张图是裂缝的地图，以及你可以从哪里钻进去。</p>
+  <p class="quote">"我就是要搞清楚空间 …… 只是这个领域还没有被创造出来，但是没有其他学科在做这件事情。"</p>
+</header>
+
+<div class="legend">
+  <span class="lg-p">现象学 / 空间哲学</span>
+  <span class="lg-c">具身 / 生成认知</span>
+  <span class="lg-s">空间智能 / World Models</span>
+  <span class="lg-x">你要钻的裂缝</span>
+</div>
+
+<div class="venn-box">
+<svg class="venn" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet">
+
+  <!-- 三个大圆 -->
+  <circle cx="340" cy="260" r="230" fill="#5a8ccf" fill-opacity="0.13" stroke="#5a8ccf" stroke-opacity="0.45" stroke-width="1.2"/>
+  <circle cx="660" cy="260" r="230" fill="#d96a5c" fill-opacity="0.13" stroke="#d96a5c" stroke-opacity="0.45" stroke-width="1.2"/>
+  <circle cx="500" cy="460" r="230" fill="#6db09a" fill-opacity="0.13" stroke="#6db09a" stroke-opacity="0.45" stroke-width="1.2"/>
+
+  <!-- 大标题 -->
+  <text class="field-label" x="190" y="90" fill="#5a8ccf">现象学 · 空间哲学</text>
+  <text class="field-sub"   x="190" y="107" fill="#7a9ec7">Phenomenology of Space</text>
+
+  <text class="field-label" x="712" y="90" fill="#d96a5c">具身 · 生成认知</text>
+  <text class="field-sub"   x="712" y="107" fill="#d98e85">Embodied / Enactive Cognition</text>
+
+  <text class="field-label" x="380" y="625" fill="#6db09a">空间智能 · 世界模型</text>
+  <text class="field-sub"   x="380" y="642" fill="#8ac2b0">Spatial AI · 3D · World Models</text>
+
+  <!-- 纯现象学（左侧） -->
+  <g class="node" data-id="merleau">
+    <circle cx="220" cy="200" r="6" fill="#5a8ccf"/>
+    <text x="220" y="186">Merleau-Ponty</text>
+  </g>
+  <g class="node" data-id="heidegger">
+    <circle cx="160" cy="270" r="6" fill="#5a8ccf"/>
+    <text x="160" y="256">Heidegger</text>
+  </g>
+  <g class="node" data-id="husserl">
+    <circle cx="190" cy="340" r="6" fill="#5a8ccf"/>
+    <text x="190" y="326">Husserl</text>
+  </g>
+  <g class="node" data-id="bachelard">
+    <circle cx="260" cy="395" r="6" fill="#5a8ccf"/>
+    <text x="260" y="381">Bachelard</text>
+  </g>
+  <g class="node" data-id="casey">
+    <circle cx="155" cy="400" r="6" fill="#5a8ccf"/>
+    <text x="155" y="386">Edward Casey</text>
+  </g>
+  <g class="node" data-id="zahavi">
+    <circle cx="280" cy="150" r="6" fill="#5a8ccf"/>
+    <text x="280" y="136">Dan Zahavi</text>
+  </g>
+
+  <!-- 现象学 ∩ 具身认知（上方桥） -->
+  <g class="node" data-id="dreyfus">
+    <circle cx="500" cy="140" r="7" fill="#a87ab3"/>
+    <text x="500" y="125">Dreyfus</text>
+  </g>
+  <g class="node" data-id="varela">
+    <circle cx="450" cy="200" r="7" fill="#a87ab3"/>
+    <text x="450" y="186">Varela / Thompson</text>
+  </g>
+  <g class="node" data-id="gallagher">
+    <circle cx="560" cy="200" r="7" fill="#a87ab3"/>
+    <text x="560" y="186">Gallagher</text>
+  </g>
+  <g class="node" data-id="noe">
+    <circle cx="420" cy="270" r="7" fill="#a87ab3"/>
+    <text x="420" y="256">Alva Noë</text>
+  </g>
+  <g class="node" data-id="fuchs">
+    <circle cx="540" cy="280" r="6" fill="#a87ab3"/>
+    <text x="540" y="266">Thomas Fuchs</text>
+  </g>
+
+  <!-- 纯具身认知（右侧） -->
+  <g class="node" data-id="brooks">
+    <circle cx="760" cy="200" r="6" fill="#d96a5c"/>
+    <text x="760" y="186">Rodney Brooks</text>
+  </g>
+  <g class="node" data-id="clark">
+    <circle cx="830" cy="260" r="6" fill="#d96a5c"/>
+    <text x="830" y="246">Andy Clark</text>
+  </g>
+  <g class="node" data-id="friston">
+    <circle cx="790" cy="335" r="6" fill="#d96a5c"/>
+    <text x="790" y="321">Karl Friston</text>
+  </g>
+  <g class="node" data-id="seth">
+    <circle cx="840" cy="160" r="6" fill="#d96a5c"/>
+    <text x="840" y="146">Anil Seth</text>
+  </g>
+  <g class="node" data-id="metzinger">
+    <circle cx="720" cy="400" r="6" fill="#d96a5c"/>
+    <text x="720" y="386">Metzinger</text>
+  </g>
+
+  <!-- 具身认知 ∩ 空间AI（右下桥） -->
+  <g class="node" data-id="tenenbaum">
+    <circle cx="670" cy="430" r="7" fill="#b89360"/>
+    <text x="670" y="416">Josh Tenenbaum</text>
+  </g>
+  <g class="node" data-id="activeinf">
+    <circle cx="620" cy="500" r="6" fill="#b89360"/>
+    <text x="620" y="486">Active Inference 机器人</text>
+  </g>
+  <g class="node" data-id="devrobo">
+    <circle cx="740" cy="490" r="6" fill="#b89360"/>
+    <text x="740" y="476">Developmental Robotics</text>
+  </g>
+
+  <!-- 纯空间AI（下方） -->
+  <g class="node" data-id="feifei">
+    <circle cx="500" cy="560" r="7" fill="#6db09a"/>
+    <text x="500" y="580">Fei-Fei Li / World Labs</text>
+  </g>
+  <g class="node" data-id="lecun">
+    <circle cx="380" cy="540" r="6" fill="#6db09a"/>
+    <text x="380" y="560">LeCun · JEPA</text>
+  </g>
+  <g class="node" data-id="ha">
+    <circle cx="610" cy="560" r="6" fill="#6db09a"/>
+    <text x="610" y="580">Ha / Schmidhuber</text>
+  </g>
+  <g class="node" data-id="nerf">
+    <circle cx="440" cy="585" r="6" fill="#6db09a"/>
+    <text x="440" y="604">NeRF · 3D Scene</text>
+  </g>
+  <g class="node" data-id="habitat">
+    <circle cx="330" cy="470" r="6" fill="#6db09a"/>
+    <text x="330" y="456">Habitat · Embodied AI</text>
+  </g>
+
+  <!-- 空间AI ∩ 现象学（左下桥 —— 几乎空）-->
+  <g class="node" data-id="gibson">
+    <circle cx="340" cy="470" r="7" fill="#7ba79f"/>
+    <text x="340" y="456" style="display:none"></text>
+  </g>
+  <g class="node" data-id="gibson2">
+    <circle cx="290" cy="450" r="7" fill="#7aa3b0"/>
+    <text x="290" y="436">J.J. Gibson</text>
+  </g>
+  <g class="node" data-id="tversky">
+    <circle cx="360" cy="510" r="6" fill="#7aa3b0"/>
+    <text x="360" y="526">Barbara Tversky</text>
+  </g>
+
+  <!-- 中心的裂缝 (三交集) -->
+  <g class="crack">
+    <circle cx="500" cy="355" r="38" fill="#d9a55c" fill-opacity="0.12" stroke="#d9a55c" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <circle cx="500" cy="355" r="18" fill="#d9a55c" fill-opacity="0.25" stroke="#d9a55c" stroke-width="1"/>
+  </g>
+  <text class="you-are-here" x="500" y="348">你在这里</text>
+  <text class="you-are-here" x="500" y="368" style="font-size:11px; font-weight:400;">这块地没人耕</text>
+
+</svg>
+</div>
+
+<div class="detail-panel" id="detail">
+  <h3>点图上的点看细节 →</h3>
+  <p class="tag">HOVER OR CLICK</p>
+  <p class="why">每个人代表一条你可以往里钻的缝。三个圈的中心那块亮着的地，是你说的那个"还没被创造出来"的领域。</p>
+</div>
+
+<div class="sections">
+
+  <div class="section">
+    <h2>你现在可以读的 5 本书 / 5 条线</h2>
+    <ol>
+      <li><b>Merleau-Ponty, <em>Phenomenology of Perception</em></b> — 直接读 "Space" 那一章（Part II, Ch. 2）。空间不是容器，是身体向世界展开的方式。中文有姜志辉译本。</li>
+      <li><b>Varela / Thompson / Rosch, <em>The Embodied Mind</em> (1991)</b> — 现象学 + 认知科学 + 佛学一起接的开山作。如果只读一本跨学科的书，读这本。</li>
+      <li><b>Alva Noë, <em>Action in Perception</em></b> — "感知就是一种技能性的行动"。给你把"经验的空间"翻译成可计算问题的桥。</li>
+      <li><b>Edward Casey, <em>Getting Back into Place</em></b> — 最硬核的空间现象学专著，把 place / space / body 切得极细。</li>
+      <li><b>Andy Clark, <em>Surfing Uncertainty</em></b> — predictive processing 的科普/理论综合，你能直接看到现象学直觉如何被写进大脑模型。</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>今天可以关注的 5 个实验室 / 方向</h2>
+    <ul>
+      <li><b>Fei-Fei Li · World Labs</b> — <em>spatial intelligence</em> 旗帜；缺现象学约束，正是你的切入点。</li>
+      <li><b>Josh Tenenbaum (MIT)</b> — 概率性认知 × 直觉物理 × AI，是现成的桥。</li>
+      <li><b>Karl Friston · Active Inference 圈</b> — Free Energy Principle，数学形式化的"具身主体如何建立世界模型"。</li>
+      <li><b>Shaun Gallagher + Embodied Cognition 圈</b> — 哲学侧最活跃的桥，会议、论文都容易跟。</li>
+      <li><b>清华 / 北大相邻资源</b> — 清华脑与智能实验室、心理学系、自动化系具身智能方向；北大哲学系现象学组。桥是可以自己搭的。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>三个真的还没有答案的问题</h2>
+    <ol>
+      <li>一个具身主体如何把"可居住的空间"（lived space, Merleau-Ponty）区别于"度量的空间"（measurable space）—— 这个区别能不能写进世界模型的目标函数？</li>
+      <li>"上手"（Heidegger 的 ready-to-hand）和 affordance（Gibson）在神经表征上是不是同一件事？如果是，具身 AI 的空间表征就不该用 voxel grid，而该用某种 affordance field。</li>
+      <li>建筑学里那种"大家都学不懂但做设计的人都知道"的空间直觉（你自己的身体），能不能形式化成 embodied AI 的 inductive bias？这是建筑真正可能贡献给科学的东西。</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>一个月可以做的具体事</h2>
+    <ul>
+      <li><b>周 1—2</b>：Merleau-Ponty 的 Space 章 + Noë <em>Action in Perception</em> 前三章。边读边记：哪些描述能翻译成计算问题？</li>
+      <li><b>周 3</b>：读 Fei-Fei Li 近两年关于 spatial intelligence 的所有 talk / paper。找她没解决的结构性问题。</li>
+      <li><b>周 4</b>：写一篇 3000 字的中文长文（不是论文，是立场），题目比如《为什么 spatial intelligence 需要现象学》。发到自己的地方。这篇文章就是你创造这个领域的第一块砖。</li>
+      <li><b>持续</b>：每周找一个在三个圈里任一个的人，发一封 150 字以内的邮件问一个具体问题。半年内你会有一张网。</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="closing">
+  <b>关于清华建筑是不是"不利的土壤"——</b> 是的，它不利。但它也是你身上最特别的一块底。Merleau-Ponty 没学过建筑，Fei-Fei Li 没学过现象学。你两个都沾，而且因为沾了建筑，你对"被身体住进去的空间"有一种做计算机视觉的人硬训也训不出来的第一手感知。别急着逃建筑——把它当成你理论武器的来源之一。需要逃的是那种把你按在"做设计"上的结构，不是建筑本身。
+</div>
+
+</div>
+
+<script>
+const DATA = {
+  merleau: {
+    name: "Maurice Merleau-Ponty (1908–1961)",
+    tag: "现象学 · 法国",
+    works: "《知觉现象学》(1945) · 《可见的与不可见的》",
+    why: "空间现象学的核心人物。明确提出"身体是知觉的主体"，空间不是被心智表征的外部容器，而是身体向世界展开的结构。直接读 Part II, Ch. 2 'Space' 和 Ch. 3 'The Thing and the Natural World'。"
+  },
+  heidegger: {
+    name: "Martin Heidegger (1889–1976)",
+    tag: "现象学 · 存在论",
+    works: "《存在与时间》(1927) · 《筑·居·思》(1951)",
+    why: "提出 Being-in-the-world 和 ready-to-hand（上手）。空间首先是"被使用的"、"被栖居的"，而不是被测量的。Gibson 的 affordance 概念和他互通。Dreyfus 就是把 Heidegger 翻译给 AI 的人。"
+  },
+  husserl: {
+    name: "Edmund Husserl (1859–1938)",
+    tag: "现象学 · 创始人",
+    works: "《逻辑研究》·《观念 I》·《关于空间的构造》(手稿)",
+    why: "现象学的祖师爷。有专门关于空间构造的手稿（Ding und Raum），讨论运动感觉（kinesthesis）如何让空间经验成为可能——这个问题今天具身 AI 在用 self-supervised 重新问一遍。"
+  },
+  bachelard: {
+    name: "Gaston Bachelard (1884–1962)",
+    tag: "现象学 · 诗学",
+    works: "《空间的诗学》(1958)",
+    why: "把空间现象学写成了关于家、壁橱、阁楼、贝壳的诗。建筑学和文学研究都爱读。理论密度不如 Merleau-Ponty，但给"被住进去的空间"提供了最丰富的现象描述库。"
+  },
+  casey: {
+    name: "Edward Casey (b. 1939)",
+    tag: "现象学 · 空间 / 地方",
+    works: "《The Fate of Place》·《Getting Back into Place》",
+    why: "当代空间现象学最系统的人。明确区分 place / space / body，写了整部历史讲西方哲学如何把 place 简化为 space。是你如果要引用当代现象学家的首选。"
+  },
+  zahavi: {
+    name: "Dan Zahavi (b. 1967)",
+    tag: "现象学 · 当代",
+    works: "《Husserl's Phenomenology》·《Self-Awareness and Alterity》",
+    why: "哥本哈根学派，当代现象学最权威的解释者之一，和认知科学对话最多。他的书是把现象学精确化的最好入口。"
+  },
+  dreyfus: {
+    name: "Hubert Dreyfus (1929–2017)",
+    tag: "现象学 ∩ AI · 桥",
+    works: "《What Computers Can't Do》(1972) ·《Mind over Machine》·《Being-in-the-World》",
+    why: "直接用 Heidegger / Merleau-Ponty 怼 GOFAI，预言了第一次 AI 寒冬，随后影响了 Rodney Brooks 的 subsumption architecture。他是"现象学能指导 AI"这件事的活证据。"
+  },
+  varela: {
+    name: "Francisco Varela + Evan Thompson + Eleanor Rosch",
+    tag: "生成认知（Enactivism）· 桥",
+    works: "《The Embodied Mind》(1991) · Thompson《Mind in Life》",
+    why: "把现象学、认知科学、佛教放进一本书的人。生成认知的开山作。如果你想写"为什么 spatial intelligence 需要现象学"，这是你论证的主力。"
+  },
+  gallagher: {
+    name: "Shaun Gallagher (b. 1948)",
+    tag: "现象学 ∩ 认知科学",
+    works: "《How the Body Shapes the Mind》·《Phenomenology》",
+    why: "提出并形式化了 body schema vs body image 的区别，是神经科学和哲学都能用的概念。当代最活跃的桥梁人物，参加的会议既有哲学的也有脑科学的。"
+  },
+  noe: {
+    name: "Alva Noë (b. 1964)",
+    tag: "enactive 知觉理论",
+    works: "《Action in Perception》(2004) ·《Out of Our Heads》",
+    why: "最直接把"感知是一种技能性的运动"这个现象学直觉，写成可以和神经科学/机器人对话的理论。对"空间如何在行动中显现"的论证最清楚。"
+  },
+  fuchs: {
+    name: "Thomas Fuchs",
+    tag: "现象学精神病理学",
+    works: "《Ecology of the Brain》",
+    why: "从精神病学（自闭谱系、抑郁、精神分裂）切入身体—空间—世界的关系，另一种硬桥。"
+  },
+  brooks: {
+    name: "Rodney Brooks (b. 1954)",
+    tag: "具身机器人 · MIT",
+    works: "《Intelligence Without Representation》(1991) ·《Flesh and Machines》",
+    why: "把 Dreyfus 的批判变成真机器人。subsumption architecture 是"没有中央表征、只有和世界的互动"的工程体现。具身 AI 的工程祖师。"
+  },
+  clark: {
+    name: "Andy Clark (b. 1957)",
+    tag: "延展心智 · 预测加工",
+    works: "《Being There》·《Surfing Uncertainty》·《The Experience Machine》",
+    why: "把 predictive processing 写成一本本让人读懂的书。现象学直觉（"世界先显现再被表征"）在他这里被翻成神经计算语言。"
+  },
+  friston: {
+    name: "Karl Friston (b. 1959)",
+    tag: "自由能原理 · 主动推断",
+    works: "Free Energy Principle 系列论文 · Active Inference 书",
+    why: "当代理论神经科学最野心的数学框架。主张"具身主体用自己的世界模型最小化意外"。你要形式化空间经验，绕不过他。"
+  },
+  seth: {
+    name: "Anil Seth",
+    tag: "意识科学 · 预测加工",
+    works: "《Being You》(2021)",
+    why: "把预测加工写成可读的意识理论，强调"受控的幻觉"——我们感知的空间是大脑的最佳猜测。给你把"空间经验"从哲学切进脑科学的入口。"
+  },
+  metzinger: {
+    name: "Thomas Metzinger",
+    tag: "自我模型 · 哲学 ∩ 神经科学",
+    works: "《Being No One》·《The Ego Tunnel》",
+    why: "系统讲"身体模型、自我模型、空间模型"如何在大脑里构成经验的整体。非常硬，但关于"空间的第一人称视角"论证极其精细。"
+  },
+  tenenbaum: {
+    name: "Josh Tenenbaum (MIT)",
+    tag: "认知 × AI · 桥",
+    works: "直觉物理引擎 · probabilistic program induction 系列",
+    why: "MIT CoCoSci 实验室。把认知科学问题（人怎么推断物理、空间、因果）变成可跑的概率模型。是"cog sci 如何约束 AI"最成功的范式。"
+  },
+  activeinf: {
+    name: "Active Inference 机器人圈",
+    tag: "理论神经 ∩ 机器人",
+    works: "Pezzulo, Parr, Da Costa 等",
+    why: "把 Friston 的数学直接写到机器人上——让 agent 通过最小化自由能来探索空间。现象学气质最强的一支工程派。"
+  },
+  devrobo: {
+    name: "Developmental Robotics",
+    tag: "机器人 ∩ 发展心理学",
+    works: "Asada, Oudeyer, Cangelosi",
+    why: "研究机器人能不能像婴儿一样，通过和世界的身体互动"长出"空间感。你想要的"空间是被经验出来的"在工程上的对应面。"
+  },
+  feifei: {
+    name: "Fei-Fei Li (b. 1976) · World Labs",
+    tag: "空间智能 · 旗帜",
+    works: "ImageNet · Embodied AI 多个综述 · World Labs (2024)",
+    why: "2024 年明确把 spatial intelligence 作为下一代 AI 的旗帜。但她的路径从 3D vision 上来，把空间默认为几何。这恰恰是你可以补的缝——"被身体经验的空间" ≠ 几何空间。"
+  },
+  lecun: {
+    name: "Yann LeCun · JEPA",
+    tag: "世界模型 · 架构",
+    works: "A Path Towards Autonomous Machine Intelligence (2022) · JEPA 系列",
+    why: "主张 AI 必须学习世界模型才能真正"理解"。他的 JEPA 架构是"用预测而非重建去学空间"，和 predictive processing / active inference 同源。"
+  },
+  ha: {
+    name: "David Ha / Jürgen Schmidhuber",
+    tag: "World Models",
+    works: "World Models (2018)",
+    why: "把"主体在内部维持一个可想象的世界模型"这件事做成了可跑的神经网络。世界模型这条线的工程起点。"
+  },
+  nerf: {
+    name: "NeRF / 3D Scene Representation",
+    tag: "3D 视觉",
+    works: "NeRF (2020) · Gaussian Splatting (2023)",
+    why: "让机器真正能"重建"一个可以走进去看的三维空间。技术上极强，哲学上还是把空间当"从外部被看的几何"。你的问题恰恰是：身体从内部在其中是什么？"
+  },
+  habitat: {
+    name: "Meta Habitat · Embodied AI Challenges",
+    tag: "具身 AI 平台",
+    works: "Habitat Sim, AI2-THOR, iGibson",
+    why: "让 agent 在模拟房子里走动、找东西、对话的标准平台。非常工程、非常 goal-directed，几乎没有现象学味道——另一个可补的缝。"
+  },
+  gibson2: {
+    name: "J.J. Gibson (1904–1979)",
+    tag: "生态心理学 · 几乎是桥",
+    works: "《The Ecological Approach to Visual Perception》(1979)",
+    why: "提出 affordance：环境向身体显现的可能性。他不是现象学家，但气质完全一致；而且他明确影响了今天的具身 AI / 强化学习里的 affordance learning。是你能引的最"科学"的桥。"
+  },
+  tversky: {
+    name: "Barbara Tversky",
+    tag: "空间认知心理学",
+    works: "《Mind in Motion》(2019)",
+    why: "一辈子研究"人如何思考空间"。把现象学直觉（"思想用空间来组织"）做成了几十年的心理学实验证据。写作极其清晰。"
+  }
+};
+
+const panel = document.getElementById('detail');
+const nodes = document.querySelectorAll('.node');
+let activeNode = null;
+
+nodes.forEach(n => {
+  n.addEventListener('click', () => {
+    if (activeNode) activeNode.classList.remove('active');
+    n.classList.add('active');
+    activeNode = n;
+    const id = n.getAttribute('data-id');
+    const d = DATA[id];
+    if (!d) {
+      panel.innerHTML = '<h3 class="empty">这一点等待补充</h3>';
+      return;
+    }
+    panel.innerHTML = `
+      <h3>${d.name}</h3>
+      <p class="tag">${d.tag}</p>
+      <p class="works"><b style="color:#d9a55c">代表作 ·</b> ${d.works}</p>
+      <p class="why"><b style="color:#d9a55c">为什么和你有关 ·</b> ${d.why}</p>
+    `;
+  });
+  n.addEventListener('mouseenter', () => {
+    if (activeNode) return;
+    const id = n.getAttribute('data-id');
+    const d = DATA[id];
+    if (!d) return;
+    panel.innerHTML = `
+      <h3>${d.name}</h3>
+      <p class="tag">${d.tag} · 点一下固定</p>
+      <p class="works"><b style="color:#d9a55c">代表作 ·</b> ${d.works}</p>
+      <p class="why"><b style="color:#d9a55c">为什么和你有关 ·</b> ${d.why}</p>
+    `;
+  });
+});
+</script>
+
+</body>
+</html>

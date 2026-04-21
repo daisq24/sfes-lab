@@ -35,6 +35,12 @@ An architect's self-study plan toward AI research — live at [`/learning/`](./l
 
 一位建筑师通向 AI 研究的学习路径：从已完成的数学地基（线代 · 微积分 · 概率）到正在建造的楼层（机器学习 → 深度学习 → 强化学习 → 神经认知）。以建筑立面图的形式呈现。
 
+## Phenomenology Column · 时空现象学 · 具身架构设计
+
+A research column on the body, space, and dwelling — live at [`/phenomenology/`](./phenomenology/).
+
+在现象学、具身认知与空间智能三条学科的缝里写札记。Landing 页是一张交互式「领域图谱」—— 30 位思想家的韦恩图(Merleau-Ponty · Heidegger · Casey · Gibson · Varela · Friston · Fei-Fei Li...)+ 思想史轴(维特鲁威→Pallasmaa)+ 建筑实例轴(万神殿→Bregenz)+ 推荐书目。首篇《空间的裂缝》已归入此专题作为 No.00 奠基札记,后续四篇《从维特鲁威人到 Affordance Field》《肌肤之目的十个具身测试》《栖居的几何与可度量的空间》《规训与被设计的身体运动》陆续更新。
+
 ## Research · 在做的研究
 
 **Spatial Familiarity as an Emergent State (SFES)** — a benchmark for measuring how space acts on embodied AI agents, not just how agents act on space.
@@ -43,7 +49,7 @@ An architect's self-study plan toward AI research — live at [`/learning/`](./l
 
 ## Author · 作者
 
-**DAI Shiqi · 戴诗琦**
+**DAI Shiqi · 戴诗琪**
 EVA · M.Arch & Urban Studies
 Tsinghua University · 清华大学
 [daisq24@mails.tsinghua.edu.cn](mailto:daisq24@mails.tsinghua.edu.cn)
