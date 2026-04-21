@@ -3,38 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>时空现象学 · 具身架构设计 — Phenomenology of Space-Time · Embodied Architectonics</title>
-<meta name="description" content="一个关于身体、空间与栖居的研究专题。从维特鲁威人到 affordance field，从梅洛-庞蒂到 World Labs —— 在现象学、具身认知与空间智能三条脉络的交汇处写札记。">
+<title>时空现象学 · 具身架构设计 — Theory-of-Mind-style framework for World-Model architecture</title>
+<meta name="description" content="A Theory-of-Mind-style framework for choosing world-model architectures by making their embodied-cognition commitments explicit. 让具身 AI 论文里隐性的形而上学承诺变成显式的架构决策。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Noto+Serif+SC:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ========================================================================
-   Phenomenology of Space-Time · Embodied Architectonics
-   时空现象学 · 具身架构设计
-   Landing = 薰衣调子的「名人画廊」;单篇札记另切暗色书房。
-   ======================================================================== */
+/* ════════════════════════════════════════════════════════════════════════
+   时空现象学 · 具身架构设计 — Phenomenology of Space-Time · Embodied Architectonics
+   Goal: a Theory-of-Mind-style framework that makes implicit embodied-cognition
+   commitments inside world-model architectures explicit and choosable.
+   ════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --sky-peach:   #ffd8bc;
-  --sky-rose:    #f4b5bf;
-  --sky-coral:   #e89fb5;
-  --sky-lav:     #c8aadc;
-  --sky-mauve:   #a890c0;
-  --sky-mist:    #ded2ea;
-  --water-teal:  #8fc4be;
-  --water-deep:  #6884a8;
-  --water-pool:  #4a6a90;
-  --dusk:        #4a3868;
-  --dusk-deep:   #2e1f44;
-  --ink:         #2e1f44;
-  --ember:       #e89fb5;
-  --ember-deep:  #c87a96;
-  --gold-dust:   #e8c898;
-  --gold-deep:   #b88c5a;
-  --paper:       #f5f0f8;
-  --paper-warm:  #ede5f2;
-  --paper-soft:  #ddd0e8;
+  --sky-peach:   #ffd8bc;  --sky-rose:   #f4b5bf;  --sky-coral:  #e89fb5;
+  --sky-lav:     #c8aadc;  --sky-mauve:  #a890c0;  --sky-mist:   #ded2ea;
+  --water-teal:  #8fc4be;  --water-deep: #6884a8;  --water-pool: #4a6a90;
+  --dusk:        #4a3868;  --dusk-deep:  #2e1f44;  --ink:        #2e1f44;
+  --ember:       #e89fb5;  --ember-deep: #c87a96;
+  --gold-dust:   #e8c898;  --gold-deep:  #b88c5a;
+  --paper:       #f5f0f8;  --paper-warm: #ede5f2;  --paper-soft: #ddd0e8;
+
+  /* Domain accents */
+  --arch:        #c87a96;  /* architecture / built env  — rose */
+  --phil:        #8a7ab8;  /* philosophy / cognition    — lavender */
+  --comp:        #5a8e8a;  /* CS / AI                   — teal-deep */
+
   --serif-en: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
   --serif-cn: 'Noto Serif SC', 'Songti SC', serif;
   --mono:     'JetBrains Mono', ui-monospace, monospace;
@@ -42,22 +36,17 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--paper); color: var(--ink);
   font-family: var(--serif-cn), var(--serif-en);
-  font-size: 16px;
-  line-height: 1.75;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+  font-size: 16px; line-height: 1.75;
+  overflow-x: hidden; -webkit-font-smoothing: antialiased;
 }
 body::after {
   content: ''; position: fixed; inset: 0; pointer-events: none;
   z-index: 100; opacity: 0.22; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.12  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
-
 .wrap { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
 
 /* ── Top nav ── */
@@ -73,213 +62,633 @@ nav.top a { color: inherit; text-decoration: none; opacity: 0.82; transition: op
 nav.top a:hover, nav.top a.current { opacity: 1; }
 nav.top a.current { border-bottom: 1px solid currentColor; padding-bottom: 2px; }
 
-/* ══════════════════════════ HERO ══════════════════════════ */
+/* ════════════════════════════ HERO ════════════════════════════ */
 .hero {
-  position: relative; min-height: 88vh; overflow: hidden;
+  position: relative; min-height: 92vh; overflow: hidden;
   background: linear-gradient(180deg,
     #f4cfd9 0%, #e8b8d0 18%, #d8a8cc 38%,
     #c0a0cc 58%, #a088bc 78%, #7a6ea0 100%);
   padding-top: 120px;
 }
 .hero .sun {
-  position: absolute; top: 14%; right: 18%;
-  width: 140px; height: 140px; border-radius: 50%;
-  background: radial-gradient(circle,
-    #fff5e0 0%, #ffd8a8 22%, #f4a888 48%, rgba(180,120,140,0) 78%);
+  position: absolute; top: 12%; right: 16%;
+  width: 130px; height: 130px; border-radius: 50%;
+  background: radial-gradient(circle, #fff5e0 0%, #ffd8a8 22%, #f4a888 48%, rgba(180,120,140,0) 78%);
   filter: blur(1.5px); z-index: 1;
 }
-.hero .moon-sm {
-  position: absolute; top: 22%; left: 16%;
-  width: 36px; height: 36px; border-radius: 50%;
-  background: radial-gradient(circle, #f6ecd4 0%, #e8c898 70%, rgba(220,180,140,0) 100%);
-  opacity: 0.75; z-index: 1;
-}
-.hero-inner {
-  position: relative; z-index: 2; padding: 60px 0 100px;
-  color: var(--paper);
-}
+.hero-inner { position: relative; z-index: 2; padding: 56px 0 96px; color: var(--paper); }
 .hero .eyebrow {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.32em;
-  text-transform: uppercase; opacity: 0.8; margin-bottom: 22px;
-  color: var(--gold-dust);
+  text-transform: uppercase; opacity: 0.82; margin-bottom: 22px; color: var(--gold-dust);
 }
 .hero h1 {
   font-family: var(--serif-cn); font-weight: 400;
-  font-size: clamp(34px, 5.2vw, 68px); line-height: 1.08; letter-spacing: 0.015em;
+  font-size: clamp(34px, 5vw, 64px); line-height: 1.08; letter-spacing: 0.015em;
   margin-bottom: 16px; text-shadow: 0 2px 24px rgba(0,0,0,0.22);
 }
 .hero h1 .en {
   display: block; font-family: var(--serif-en); font-style: italic;
-  font-weight: 300; font-size: 0.42em; letter-spacing: 0.03em;
-  opacity: 0.86; margin-top: 14px; text-shadow: none;
+  font-weight: 300; font-size: 0.4em; letter-spacing: 0.03em;
+  opacity: 0.86; margin-top: 14px; text-shadow: none; max-width: 920px;
 }
 .hero .lede {
   font-family: var(--serif-en); font-style: italic; font-weight: 300;
-  font-size: 19px; line-height: 1.6; opacity: 0.92;
-  max-width: 680px; margin-top: 22px;
+  font-size: 19px; line-height: 1.6; opacity: 0.94;
+  max-width: 720px; margin-top: 24px;
 }
 .hero .lede-cn {
   font-family: var(--serif-cn); font-weight: 300;
-  font-size: 16px; line-height: 1.85; opacity: 0.88;
-  max-width: 680px; margin-top: 18px;
+  font-size: 16px; line-height: 1.85; opacity: 0.9;
+  max-width: 720px; margin-top: 16px;
 }
+.hero .thesis-card {
+  display: inline-block; margin-top: 42px;
+  background: rgba(46,31,68,0.35); border: 1px solid rgba(232,200,152,0.32);
+  backdrop-filter: blur(6px); padding: 18px 26px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+  color: var(--gold-dust); max-width: 720px; line-height: 1.7;
+  border-left: 3px solid var(--gold-dust);
+}
+.hero .thesis-card b { color: var(--paper); font-weight: 500; }
 .hero .index-rail {
-  margin-top: 56px; display: flex; gap: 28px; flex-wrap: wrap;
+  margin-top: 48px; display: flex; gap: 24px; flex-wrap: wrap;
   font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.24em;
-  text-transform: uppercase; opacity: 0.74;
+  text-transform: uppercase; opacity: 0.72;
 }
 .hero .index-rail a {
-  color: var(--paper); text-decoration: none; border-bottom: 1px dashed rgba(244,234,216,0.4);
-  padding-bottom: 3px; transition: color 0.2s, border-color 0.2s;
+  color: var(--paper); text-decoration: none;
+  border-bottom: 1px dashed rgba(244,234,216,0.4); padding-bottom: 3px;
+  transition: color 0.2s, border-color 0.2s;
 }
 .hero .index-rail a:hover { color: var(--gold-dust); border-color: var(--gold-dust); }
 
-/* ══════════════════════════ MANIFESTO ══════════════════════════ */
-section.manifesto {
-  background: var(--paper); padding: 120px 0 90px;
-}
-.manifesto .wrap { max-width: 880px; }
-.manifesto .eyebrow {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
-  text-transform: uppercase; color: var(--ember-deep); margin-bottom: 22px;
-}
-.manifesto h2 {
-  font-family: var(--serif-cn); font-weight: 400;
-  font-size: clamp(28px, 3.4vw, 42px); line-height: 1.3;
-  color: var(--dusk-deep); margin-bottom: 18px;
-}
-.manifesto h2 .en {
-  display: block; font-family: var(--serif-en); font-style: italic;
-  font-weight: 300; font-size: 0.56em; margin-top: 12px;
-  color: var(--water-deep); letter-spacing: 0.01em;
-}
-.manifesto p {
-  font-size: 16.5px; line-height: 1.9; margin-top: 22px;
-  color: #2a2438;
-}
-.manifesto p.en {
-  font-family: var(--serif-en); font-style: italic; font-weight: 300;
-  color: #4a4258; font-size: 15px; line-height: 1.75;
-}
-.manifesto .rule { width: 52px; height: 1px; background: var(--ember-deep);
-  margin: 32px 0 10px; opacity: 0.55; }
-.manifesto blockquote {
-  font-family: var(--serif-en); font-style: italic; font-weight: 300;
-  font-size: 17px; line-height: 1.7; color: #3a2e48;
-  border-left: 2px solid var(--ember-deep);
-  padding: 4px 0 4px 22px; margin: 28px 0;
-  max-width: 620px;
-}
-.manifesto blockquote cite {
-  display: block; font-family: var(--mono); font-style: normal;
-  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--water-deep); margin-top: 10px;
-}
-
-/* ══════════════════════════ FIELD MAP ══════════════════════════ */
-section.field-map {
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 40%, #d8c4e0 100%);
-  padding: 100px 0 120px; position: relative;
-}
-.field-head {
+/* ════════════════════════════ PROBLEM ════════════════════════════ */
+section.problem { background: var(--paper); padding: 110px 0 90px; }
+.problem .wrap { max-width: 1100px; }
+.problem .head {
   display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 48px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
+  margin-bottom: 44px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
 }
-.field-head .title {
+.problem .head .title {
   font-family: var(--serif-cn); font-weight: 400;
   font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
 }
-.field-head .title .en {
+.problem .head .title .en {
   display: block; font-family: var(--serif-en); font-style: italic;
   font-size: 0.5em; font-weight: 300; opacity: 0.72;
   margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
 }
-.field-head .count {
+.problem .head .tag {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
   color: var(--water-deep); text-transform: uppercase;
 }
+.problem .lede {
+  font-size: 16.5px; line-height: 1.85; color: #2a2438;
+  max-width: 800px; padding: 0 8px; margin-bottom: 50px;
+}
+.problem .lede b { color: var(--ember-deep); font-weight: 500; }
+.q-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 0 8px;
+}
+.q-card {
+  background: var(--paper-warm); border: 1px solid var(--paper-soft);
+  border-left: 3px solid var(--ember-deep);
+  padding: 26px 28px; border-radius: 2px; position: relative;
+}
+.q-card .label {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--ember-deep); text-transform: uppercase; margin-bottom: 8px;
+}
+.q-card .q {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 19px;
+  color: var(--dusk-deep); margin-bottom: 10px; line-height: 1.4;
+}
+.q-card .opts {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 14.5px; line-height: 1.7; color: #4a3e58;
+}
+.q-card .opts span {
+  display: inline-block; padding: 2px 6px; margin: 2px 4px 2px 0;
+  background: rgba(200,122,150,0.1); color: #5a3e6c;
+  border-radius: 2px; font-style: normal; font-family: var(--mono); font-size: 11px;
+}
 
-.venn-wrap { position: relative; }
-.venn-legend {
-  display: flex; gap: 22px; flex-wrap: wrap; margin-bottom: 18px;
+/* ════════════════════════════ FRAMEWORK (4-axis) ════════════════════════════ */
+section.framework {
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 40%, #d8c4e0 100%);
+  padding: 100px 0 110px;
+}
+.fw-head { margin-bottom: 36px; padding: 0 8px; }
+.fw-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.fw-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+.fw-head .sub {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 15px; color: #4a3e58; max-width: 740px; margin-top: 14px;
+  line-height: 1.7;
+}
+.fw-legend {
+  display: flex; gap: 22px; flex-wrap: wrap; padding: 0 8px;
+  margin: 18px 0 22px;
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
   color: var(--dusk); text-transform: uppercase;
 }
-.venn-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.venn-legend span::before {
+.fw-legend span { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.fw-legend span::before {
   content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%;
 }
-.lg-phe::before { background: var(--ember); }
-.lg-emb::before { background: var(--ember-deep); }
-.lg-spa::before { background: var(--water-teal); }
-.lg-you::before { background: var(--gold-dust); }
+.lg-arch::before { background: var(--arch); }
+.lg-phil::before { background: var(--phil); }
 
-.venn-box {
-  position: relative; aspect-ratio: 1000/640;
-  background: linear-gradient(180deg, #efe4f0 0%, #e8d8e8 100%);
+.fw-svg-box {
+  position: relative; aspect-ratio: 1100/520;
+  background: linear-gradient(180deg, #ece0e8 0%, #e0d2e2 100%);
   border-radius: 3px; overflow: hidden;
   box-shadow: 0 22px 60px -20px rgba(60,40,80,0.3),
               inset 0 0 0 1px rgba(255,255,255,0.5);
 }
-.venn-box svg { width: 100%; height: 100%; display: block; }
+.fw-svg-box svg { width: 100%; height: 100%; display: block; }
+.axis-label-top, .axis-label-bot, .axis-name {
+  font-family: var(--mono); fill: var(--dusk-deep);
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.axis-name { font-size: 13px; font-weight: 500; fill: var(--ember-deep); letter-spacing: 0.18em; }
+.axis-line { stroke: rgba(74,56,104,0.45); stroke-width: 1; }
+.axis-tick { stroke: rgba(74,56,104,0.3); stroke-width: 0.5; }
 
-.field-label {
-  font-family: var(--serif-cn); font-size: 15px; font-weight: 500;
-  letter-spacing: 0.3px;
-}
-.field-sub {
-  font-family: var(--serif-en); font-style: italic; font-weight: 300;
-  font-size: 10.5px;
-}
+.school-line { fill: none; stroke-width: 1.4; opacity: 0.45; cursor: pointer; transition: all 0.2s; }
+.school-line.arch { stroke: var(--arch); }
+.school-line.phil { stroke: var(--phil); }
+.school-line:hover { opacity: 1; stroke-width: 2.2; }
+.school-line.active { opacity: 1; stroke-width: 2.6; }
+.school-line.dim { opacity: 0.08; }
+.school-dot { cursor: pointer; transition: r 0.18s; }
 
-.node { cursor: pointer; transition: all 0.18s; }
-.node circle { transition: all 0.18s; }
-.node text {
-  font-family: var(--serif-en); font-size: 11.5px;
-  fill: var(--dusk-deep); pointer-events: none;
-  text-anchor: middle; font-weight: 400;
+.fw-detail {
+  display: grid; grid-template-columns: 2fr 1fr; gap: 28px;
+  margin-top: 22px; padding: 0 8px;
 }
-.node:hover circle { r: 9; filter: brightness(1.1); }
-.node.active circle { r: 10; filter: brightness(1.15); stroke: var(--dusk-deep); stroke-width: 1.5; }
-.node.active text { font-weight: 600; }
-
-.crack-ring { animation: pulse 2.8s ease-in-out infinite; }
-@keyframes pulse {
-  0%,100% { opacity: 0.5; }
-  50%     { opacity: 1; }
-}
-.you-are-here {
-  font-family: var(--serif-cn); font-size: 12.5px;
-  fill: var(--gold-deep); font-weight: 500; text-anchor: middle;
-  letter-spacing: 0.4px;
-}
-
-.node-panel {
+.fw-panel {
   background: rgba(46,31,68,0.94); color: var(--paper);
   border: 1px solid rgba(232,200,152,0.22); border-radius: 3px;
-  padding: 24px 28px; margin-top: 24px; min-height: 148px;
+  padding: 24px 28px; min-height: 200px;
   backdrop-filter: blur(8px); box-shadow: 0 18px 48px -16px rgba(40,24,60,0.4);
-  transition: all 0.2s;
 }
-.node-panel h3 {
-  font-family: var(--serif-en); font-style: italic; font-weight: 400;
+.fw-panel h3 {
+  font-family: var(--serif-cn); font-weight: 500;
   font-size: 20px; color: var(--paper); margin-bottom: 4px;
 }
-.node-panel .tag {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
-  color: var(--gold-dust); text-transform: uppercase; margin-bottom: 14px;
+.fw-panel h3 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 0.7em; color: var(--gold-dust);
+  margin-top: 4px; letter-spacing: 0.04em;
 }
-.node-panel .works { font-size: 14px; color: #e4d8ea; margin-bottom: 10px; line-height: 1.6; }
-.node-panel .why { font-size: 14px; color: #c8b8d4; line-height: 1.7; }
-.node-panel .works b, .node-panel .why b { color: var(--gold-dust); font-weight: 500; }
-.node-panel .hint {
-  font-family: var(--serif-en); font-style: italic; color: #a898b8;
-  font-size: 14px; margin-top: 6px;
+.fw-panel .badge {
+  display: inline-block; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.22em; padding: 3px 8px; margin: 12px 8px 12px 0;
+  background: rgba(232,200,152,0.18); color: var(--gold-dust);
+  text-transform: uppercase; border-radius: 2px;
+}
+.fw-panel .badge.arch { background: rgba(232,159,181,0.22); color: #f4c0d0; }
+.fw-panel .badge.phil { background: rgba(200,170,220,0.22); color: #d8c0e8; }
+.fw-panel .pos {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  margin: 14px 0 16px;
+}
+.fw-panel .pos .axis-mini {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+  color: var(--sky-mist); text-transform: uppercase;
+}
+.fw-panel .pos .axis-mini b {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 14px; color: var(--gold-dust);
+  margin-top: 4px; letter-spacing: 0.04em; text-transform: none;
+}
+.fw-panel p { font-size: 13.5px; line-height: 1.65; color: #c8b8d4; margin-top: 8px; }
+.fw-panel .cs {
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px dashed rgba(232,200,152,0.25);
+  font-size: 13px; color: #d8c8e0;
+}
+.fw-panel .cs b { color: var(--gold-dust); font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+
+.fw-side {
+  background: var(--paper-warm); border: 1px solid var(--paper-soft);
+  padding: 22px 24px; border-radius: 2px;
+}
+.fw-side h4 {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  color: var(--ember-deep); text-transform: uppercase; margin-bottom: 12px;
+}
+.fw-side p {
+  font-size: 13.5px; line-height: 1.7; color: #3a2e48; margin-bottom: 10px;
+}
+.fw-side p b { color: var(--dusk-deep); font-weight: 500; }
+.fw-side .hint {
+  font-family: var(--serif-en); font-style: italic; font-size: 13px;
+  color: var(--water-deep); margin-top: 10px;
 }
 
-/* ══════════════════════════ ARTICLES ══════════════════════════ */
+/* ════════════════════════════ MAPPING TABLE ════════════════════════════ */
+section.mapping {
+  background: linear-gradient(180deg, #d8c4e0 0%, var(--paper-warm) 50%, var(--paper) 100%);
+  padding: 110px 0 110px;
+}
+.map-head { margin-bottom: 14px; padding: 0 8px; }
+.map-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.map-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+.map-head .lede {
+  font-size: 15.5px; line-height: 1.85; color: #2a2438;
+  max-width: 820px; margin-top: 18px;
+}
+.map-head .lede b { color: var(--ember-deep); font-weight: 500; }
+
+.map-table-wrap { padding: 0 8px; margin-top: 36px; overflow-x: auto; }
+.map-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14.5px; line-height: 1.55;
+  background: var(--paper);
+}
+.map-table thead th {
+  text-align: left; padding: 16px 18px; vertical-align: bottom;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper);
+  background: var(--dusk-deep);
+}
+.map-table thead th:nth-child(2) { background: var(--arch); }
+.map-table thead th:nth-child(3) { background: var(--phil); }
+.map-table thead th:nth-child(4) { background: var(--comp); }
+.map-table thead th .cn {
+  display: block; font-family: var(--serif-cn); font-weight: 400;
+  font-size: 13px; letter-spacing: 0.04em; opacity: 0.88;
+  text-transform: none; margin-top: 4px;
+}
+
+.map-table tbody tr {
+  border-bottom: 1px solid var(--paper-soft);
+  transition: background 0.2s;
+}
+.map-table tbody tr:hover { background: var(--paper-warm); }
+.map-table tbody td { padding: 18px 18px; vertical-align: top; }
+.map-table tbody td.school {
+  font-family: var(--serif-cn); font-weight: 500; color: var(--dusk-deep);
+  width: 18%;
+}
+.map-table tbody td.school .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 12.5px; color: var(--water-deep);
+  margin-top: 4px;
+}
+.map-table tbody td.school .ref {
+  display: block; font-family: var(--mono); font-size: 10px;
+  color: var(--ember-deep); letter-spacing: 0.08em; margin-top: 6px;
+  text-transform: uppercase;
+}
+.map-table tbody td.phil {
+  font-family: var(--serif-cn); color: #3a2e48; width: 28%;
+}
+.map-table tbody td.phil .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 12.5px; color: var(--phil); margin-top: 4px;
+}
+.map-table tbody td.cs {
+  font-family: var(--serif-cn); color: #3a2e48; width: 32%;
+}
+.map-table tbody td.cs .stack {
+  display: block; font-family: var(--mono); font-size: 11px;
+  color: var(--comp); letter-spacing: 0.04em;
+  margin-top: 4px; line-height: 1.6;
+}
+.map-table tbody td.commit {
+  font-family: var(--serif-en); font-style: italic; font-size: 13px;
+  color: var(--ember-deep); width: 22%;
+}
+
+/* ════════════════════════════ THEORY OF SPACE ladder ════════════════════════════ */
+section.tos {
+  background: linear-gradient(180deg, var(--paper) 0%, #efe0e8 60%, var(--sky-lav) 100%);
+  padding: 110px 0 110px;
+}
+.tos .wrap { max-width: 1180px; }
+.tos-head { margin-bottom: 38px; padding: 0 8px; }
+.tos-head .eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--ember-deep); margin-bottom: 18px;
+}
+.tos-head .title {
+  font-family: var(--serif-en); font-style: italic; font-weight: 400;
+  font-size: clamp(28px, 3.6vw, 44px); color: var(--dusk-deep); line-height: 1.2;
+}
+.tos-head .title .cn {
+  display: block; font-family: var(--serif-cn); font-style: normal;
+  font-weight: 400; font-size: 0.6em; color: var(--water-deep);
+  margin-top: 10px; letter-spacing: 0.02em;
+}
+.tos-head .lede {
+  font-size: 15.5px; line-height: 1.85; color: #2a2438;
+  max-width: 820px; margin-top: 18px;
+}
+.tos-head .lede b { color: var(--ember-deep); font-weight: 500; }
+
+.tos-ladder {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
+  padding: 8px;
+  position: relative;
+}
+.tos-ladder::before {
+  content: ''; position: absolute;
+  top: 32px; left: 6%; right: 6%;
+  height: 2px; background: linear-gradient(90deg,
+    var(--gold-dust) 0%, var(--ember) 33%, var(--ember-deep) 66%, var(--phil) 100%);
+  opacity: 0.6; z-index: 1;
+}
+.tos-rung {
+  background: var(--paper); border: 1px solid var(--paper-soft);
+  padding: 24px 22px 22px; border-radius: 2px;
+  position: relative; z-index: 2;
+}
+.tos-rung .step {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 36px; color: var(--gold-dust); line-height: 1; margin-bottom: 8px;
+}
+.tos-rung h4 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 18px;
+  color: var(--dusk-deep); margin-bottom: 4px;
+}
+.tos-rung h4 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 0.78em; color: var(--water-deep); margin-top: 4px;
+}
+.tos-rung .axes {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px;
+}
+.tos-rung .axes span {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  padding: 2px 7px; background: rgba(232,159,181,0.18);
+  color: var(--ember-deep); border-radius: 2px;
+}
+.tos-rung p {
+  font-size: 13.5px; line-height: 1.7; color: #3a2e48; margin-top: 14px;
+}
+.tos-rung .anchor {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px dashed rgba(200,122,150,0.4);
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--water-deep);
+}
+.tos-rung .anchor b { color: var(--dusk-deep); font-weight: 500; display: block; margin-top: 4px; font-family: var(--serif-cn); font-size: 13px; letter-spacing: 0.02em; text-transform: none; }
+
+/* ════════════════════════════ PRACTICE · 人-环-机 ════════════════════════════ */
+section.practice {
+  background: linear-gradient(180deg, var(--sky-lav) 0%, #c0a4d0 35%, #b89cb8 70%, #a890c0 100%);
+  padding: 110px 0 110px; position: relative; overflow: hidden;
+  color: var(--dusk-deep);
+}
+.practice .wrap { max-width: 1180px; }
+.practice-head { margin-bottom: 36px; padding: 0 8px; }
+.practice-head .eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--ember-deep); margin-bottom: 18px;
+}
+.practice-head .title {
+  font-family: var(--serif-cn); font-weight: 400;
+  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+}
+.practice-head .title .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+}
+.practice-head .lede {
+  font-size: 15.5px; line-height: 1.85; color: #2a2438;
+  max-width: 880px; margin-top: 18px;
+}
+.practice-head .lede b { color: var(--ember-deep); font-weight: 500; }
+.practice-head .lede u { text-decoration: none; background: linear-gradient(transparent 60%, rgba(232,200,152,0.55) 60%); padding: 0 2px; }
+
+/* triad SVG box */
+.triad-row {
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 36px;
+  align-items: center; padding: 0 8px; margin-bottom: 56px;
+}
+.triad-svg-box {
+  background: rgba(245,240,248,0.82); backdrop-filter: blur(6px);
+  border: 1px solid rgba(168,144,192,0.5); border-radius: 3px;
+  padding: 18px; aspect-ratio: 1/1; max-width: 460px; margin: 0 auto;
+  box-shadow: 0 18px 48px -16px rgba(60,40,80,0.25);
+}
+.triad-svg-box svg { width: 100%; height: 100%; display: block; }
+.triad-arrows {
+  display: grid; grid-template-columns: 1fr; gap: 10px;
+}
+.triad-arrow-row {
+  display: grid; grid-template-columns: 90px 1fr 130px;
+  gap: 14px; padding: 11px 14px; align-items: center;
+  background: rgba(245,240,248,0.55); border-left: 3px solid var(--dusk);
+  border-radius: 2px;
+}
+.triad-arrow-row.gold {
+  border-left-color: var(--gold-deep);
+  background: rgba(232,200,152,0.18);
+}
+.triad-arrow-row .pair {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 16px;
+  color: var(--dusk-deep);
+}
+.triad-arrow-row .pair .arrow {
+  display: inline-block; margin: 0 6px; color: var(--ember-deep); font-weight: 400;
+}
+.triad-arrow-row.gold .pair .arrow { color: var(--gold-deep); font-weight: 700; }
+.triad-arrow-row .desc {
+  font-size: 13px; line-height: 1.5; color: #3a2e48;
+}
+.triad-arrow-row .status {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; text-align: right; color: var(--water-deep);
+}
+.triad-arrow-row.gold .status {
+  color: var(--gold-deep); font-weight: 500;
+}
+
+/* Eight Dimensions */
+.dims-section, .principles-section { margin-top: 56px; padding: 0 8px; }
+.dims-section h3, .principles-section h3 {
+  font-family: var(--serif-cn); font-weight: 500;
+  font-size: 22px; color: var(--dusk-deep); margin-bottom: 6px;
+}
+.dims-section h3 .en, .principles-section h3 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 300; font-size: 0.66em; color: var(--water-deep);
+  margin-top: 4px; opacity: 0.85; letter-spacing: 0.02em;
+}
+.dims-section .sub, .principles-section .sub {
+  font-family: var(--serif-en); font-style: italic; font-size: 14px;
+  color: #4a3e58; margin-top: 8px; margin-bottom: 24px; max-width: 760px;
+}
+
+.dims-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+}
+.dim-card {
+  background: rgba(245,240,248,0.86); border: 1px solid rgba(168,144,192,0.5);
+  padding: 18px 18px 16px; border-radius: 2px; position: relative;
+}
+.dim-card .dnum {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  color: var(--ember-deep); text-transform: uppercase; margin-bottom: 6px;
+}
+.dim-card h4 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 15px;
+  color: var(--dusk-deep); margin-bottom: 4px; line-height: 1.35;
+}
+.dim-card h4 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 0.78em; color: var(--water-deep); margin-top: 3px;
+}
+.dim-card p {
+  font-size: 12.5px; line-height: 1.62; color: #3a2e48; margin-top: 10px;
+}
+.dim-card .metric {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px dashed rgba(200,122,150,0.4);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  color: var(--comp); line-height: 1.5;
+}
+
+.principles-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+}
+.princ-card {
+  background: var(--dusk-deep); color: var(--paper);
+  padding: 22px 22px 20px; border-radius: 2px;
+  border-top: 3px solid var(--gold-deep);
+}
+.princ-card .pnum {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 32px; color: var(--gold-dust); line-height: 1; margin-bottom: 6px;
+}
+.princ-card h4 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 16px;
+  color: var(--paper); margin-bottom: 4px; line-height: 1.35;
+}
+.princ-card h4 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 0.78em; color: var(--gold-dust); margin-top: 3px;
+}
+.princ-card p {
+  font-size: 12.5px; line-height: 1.65; color: #d8c8e0; margin-top: 12px;
+}
+.princ-card .formal {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px dashed rgba(232,200,152,0.25);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
+  color: var(--gold-dust); line-height: 1.5;
+}
+
+/* SFES anchor */
+.sfes-anchor {
+  margin-top: 56px; padding: 32px 36px;
+  background: linear-gradient(135deg, var(--dusk-deep) 0%, #3e2858 100%);
+  color: var(--paper); border-radius: 3px;
+  border-left: 4px solid var(--gold-deep);
+  display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: center;
+}
+.sfes-anchor .label {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.26em;
+  color: var(--gold-dust); text-transform: uppercase; margin-bottom: 10px;
+}
+.sfes-anchor h4 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 19px;
+  color: var(--paper); margin-bottom: 10px; line-height: 1.4;
+}
+.sfes-anchor h4 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 0.74em; color: var(--sky-mist); margin-top: 4px;
+}
+.sfes-anchor p {
+  font-size: 14px; line-height: 1.7; color: #d8c8e0; max-width: 680px;
+}
+.sfes-anchor .cta {
+  display: inline-flex; align-items: center; gap: 12px; padding: 14px 22px;
+  background: var(--gold-dust); color: var(--dusk-deep); text-decoration: none;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; border-radius: 2px; white-space: nowrap;
+  transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 8px 22px -8px rgba(0,0,0,0.4);
+}
+.sfes-anchor .cta:hover {
+  transform: translateY(-2px); box-shadow: 0 14px 32px -8px rgba(0,0,0,0.45);
+}
+
+/* ════════════════════════════ THREE RULES ════════════════════════════ */
+section.rules {
+  background: linear-gradient(180deg, var(--sky-lav) 0%, var(--sky-mauve) 40%, #6a5a8a 100%);
+  color: var(--paper); padding: 130px 0 120px; position: relative; overflow: hidden;
+}
+.rules::before {
+  content: ''; position: absolute; top: 8%; right: 6%;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, #ffa888 0%, #e86880 50%, rgba(180,60,80,0) 85%);
+  filter: blur(1px); opacity: 0.55;
+}
+.rules .wrap { max-width: 1080px; position: relative; z-index: 2; }
+.rules .eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--gold-dust); margin-bottom: 22px;
+}
+.rules h2 {
+  font-family: var(--serif-en); font-style: italic; font-weight: 400;
+  font-size: clamp(30px, 4vw, 50px); line-height: 1.15; margin-bottom: 18px;
+}
+.rules h2 .cn {
+  display: block; font-family: var(--serif-cn); font-style: normal;
+  font-weight: 400; font-size: 0.54em; margin-top: 14px;
+  color: var(--sky-mist); letter-spacing: 0.03em;
+}
+.rules-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; margin-top: 56px;
+}
+.rule { position: relative; }
+.rule .num {
+  font-family: var(--serif-en); font-style: italic; font-weight: 300;
+  font-size: 56px; color: var(--gold-dust); opacity: 0.78; line-height: 1;
+}
+.rule h3 {
+  font-family: var(--serif-cn); font-weight: 500; font-size: 19px;
+  margin-top: 12px; color: var(--paper);
+}
+.rule h3 .en {
+  display: block; font-family: var(--serif-en); font-style: italic;
+  font-weight: 400; font-size: 0.78em; opacity: 0.84;
+  margin-top: 4px; color: var(--sky-mist);
+}
+.rule p {
+  font-size: 14.5px; line-height: 1.78; margin-top: 14px; opacity: 0.92;
+}
+.rule p b { color: var(--gold-dust); font-weight: 500; }
+.rule .quote {
+  margin-top: 14px; padding: 10px 14px;
+  background: rgba(46,31,68,0.32); border-left: 2px solid var(--gold-dust);
+  font-family: var(--serif-en); font-style: italic; font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ════════════════════════════ ARTICLES ════════════════════════════ */
 section.articles {
-  background: linear-gradient(180deg, #d8c4e0 0%, var(--paper-warm) 40%, var(--paper) 100%);
+  background: linear-gradient(180deg, #6a5a8a 0%, #8e7aaa 30%, var(--paper-warm) 80%, var(--paper) 100%);
   padding: 110px 0 110px;
 }
 .articles-head {
@@ -288,53 +697,61 @@ section.articles {
 }
 .articles-head .title {
   font-family: var(--serif-cn); font-weight: 400;
-  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+  font-size: clamp(26px, 3vw, 38px); color: var(--paper);
 }
 .articles-head .title .en {
   display: block; font-family: var(--serif-en); font-style: italic;
-  font-size: 0.5em; font-weight: 300; opacity: 0.72;
-  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
+  font-size: 0.5em; font-weight: 300; opacity: 0.78;
+  margin-top: 6px; letter-spacing: 0.02em; color: var(--sky-mist);
 }
-
+.articles-head .count {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  color: var(--sky-mist); text-transform: uppercase;
+}
 .article-grid {
   display: grid; grid-template-columns: 1fr; gap: 0;
-  border-top: 1px solid var(--sky-lav);
+  border-top: 1px solid rgba(168,144,192,0.5);
+  background: var(--paper);
 }
 .article-row {
-  display: grid; grid-template-columns: 96px 1fr 180px;
-  gap: 36px; padding: 28px 8px 28px 8px;
+  display: grid; grid-template-columns: 110px 1fr 200px;
+  gap: 36px; padding: 28px 22px;
   border-bottom: 1px solid rgba(168,144,192,0.4);
   text-decoration: none; color: inherit;
-  transition: background 0.3s;
-  align-items: start;
+  transition: background 0.3s; align-items: start;
 }
 .article-row:hover { background: rgba(244,181,191,0.12); }
-.article-row.pending { opacity: 0.56; cursor: default; }
+.article-row.pending { opacity: 0.62; cursor: default; }
 .article-row.pending:hover { background: transparent; }
-
 .article-row .num {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em;
-  color: var(--ember-deep); text-transform: uppercase;
-  padding-top: 6px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  color: var(--ember-deep); text-transform: uppercase; padding-top: 6px;
+}
+.article-row .num .applies {
+  display: block; margin-top: 6px; font-size: 9.5px;
+  color: var(--water-deep); letter-spacing: 0.14em;
 }
 .article-row .body h3 {
-  font-family: var(--serif-cn); font-weight: 500; font-size: 22px;
-  line-height: 1.35; color: var(--dusk-deep);
+  font-family: var(--serif-cn); font-weight: 500; font-size: 21px;
+  line-height: 1.4; color: var(--dusk-deep);
 }
 .article-row .body h3 .en {
   display: block; font-family: var(--serif-en); font-style: italic;
-  font-weight: 300; font-size: 0.72em; opacity: 0.78;
+  font-weight: 300; font-size: 0.7em; opacity: 0.78;
   margin-top: 6px; color: var(--water-deep);
 }
 .article-row .body p {
   font-family: var(--serif-en); font-style: italic; font-weight: 300;
   font-size: 14px; line-height: 1.68; color: #4a3e58;
-  margin-top: 12px; max-width: 620px;
+  margin-top: 12px; max-width: 680px;
 }
-.article-row .body .keywords {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
-  color: var(--water-deep); margin-top: 14px; text-transform: uppercase;
-  opacity: 0.82;
+.article-row .body .axes-tag {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+}
+.article-row .body .axes-tag span {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  padding: 2px 8px; background: rgba(138,122,184,0.15);
+  color: var(--phil); border-radius: 2px;
 }
 .article-row .meta {
   font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em;
@@ -347,278 +764,93 @@ section.articles {
 }
 .article-row.pending .meta strong { color: var(--ember-deep); }
 
-/* ══════════════════════════ TIMELINE (思想史轴) ══════════════════════════ */
-section.timeline {
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
-  padding: 110px 0; position: relative; overflow: hidden;
+/* ════════════════════════════ READING LIST ════════════════════════════ */
+section.reading {
+  background: var(--paper); padding: 100px 0 100px;
 }
-.timeline-head {
-  margin-bottom: 56px; padding: 0 8px;
-}
-.timeline-head .title {
-  font-family: var(--serif-cn); font-weight: 400;
-  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
-}
-.timeline-head .title .en {
-  display: block; font-family: var(--serif-en); font-style: italic;
-  font-size: 0.5em; font-weight: 300; opacity: 0.72;
-  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
-}
-.timeline-head .sub {
-  font-family: var(--serif-en); font-style: italic; font-weight: 300;
-  font-size: 15px; color: #4a3e58; max-width: 720px; margin-top: 16px;
-  line-height: 1.7;
-}
-
-.timeline-rail {
-  position: relative; padding: 40px 0 20px;
-}
-.timeline-rail::before {
-  content: ''; position: absolute;
-  top: 64px; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, var(--ember-deep) 0%, var(--sky-lav) 50%, var(--water-teal) 100%);
-  opacity: 0.55;
-}
-.tl-track {
-  display: grid; grid-template-columns: repeat(14, 1fr);
-  gap: 12px; position: relative;
-}
-.tl-epoch {
-  text-align: center; padding: 0 4px;
-  grid-column: span 1;
-}
-.tl-epoch .year {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
-  color: var(--water-deep); text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.tl-epoch .dot {
-  width: 13px; height: 13px; border-radius: 50%;
-  background: var(--paper); border: 1.5px solid var(--ember-deep);
-  margin: 0 auto 16px; box-shadow: 0 0 0 4px rgba(244,234,216,0.6);
-  position: relative; z-index: 2;
-}
-.tl-epoch.epoch-phe .dot { border-color: var(--ember); }
-.tl-epoch.epoch-emb .dot { border-color: var(--ember-deep); }
-.tl-epoch.epoch-spa .dot { border-color: var(--water-teal); }
-.tl-epoch .name {
-  font-family: var(--serif-en); font-style: italic; font-weight: 400;
-  font-size: 12px; color: var(--dusk-deep); line-height: 1.35;
-}
-.tl-epoch .cn {
-  font-family: var(--serif-cn); font-size: 11px; color: #6a5e7a;
-  display: block; margin-top: 4px;
-}
-
-/* ══════════════════════════ CASES (建筑实例轴) ══════════════════════════ */
-section.cases {
-  background: linear-gradient(180deg, var(--paper-warm) 0%, #e0cee2 60%, var(--sky-lav) 100%);
-  padding: 110px 0 120px; position: relative; overflow: hidden;
-}
-.cases-head {
+.reading .wrap { max-width: 1100px; }
+.reading-head {
   display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 50px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
+  margin-bottom: 44px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
 }
-.cases-head .title {
+.reading-head .title {
   font-family: var(--serif-cn); font-weight: 400;
-  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
+  font-size: clamp(24px, 2.6vw, 32px); color: var(--dusk-deep);
 }
-.cases-head .title .en {
+.reading-head .title .en {
   display: block; font-family: var(--serif-en); font-style: italic;
-  font-size: 0.5em; font-weight: 300; opacity: 0.72;
+  font-size: 0.55em; font-weight: 300; opacity: 0.72;
   margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
 }
-.cases-head .sub {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
-  color: var(--water-deep); text-transform: uppercase;
-}
-
-.cases-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
-}
-.case {
-  background: rgba(245,240,248,0.72); backdrop-filter: blur(6px);
-  border: 1px solid rgba(168,144,192,0.5);
-  padding: 26px 26px 24px; border-radius: 2px;
-  position: relative;
-}
-.case::before {
-  content: attr(data-year);
-  position: absolute; top: -12px; right: 20px;
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
-  background: var(--paper); padding: 2px 10px;
-  color: var(--ember-deep); text-transform: uppercase;
-  border: 1px solid rgba(200,122,150,0.4);
-}
-.case h4 {
-  font-family: var(--serif-cn); font-weight: 500; font-size: 18px;
-  line-height: 1.35; color: var(--dusk-deep); margin-bottom: 4px;
-}
-.case h4 .en {
-  display: block; font-family: var(--serif-en); font-style: italic;
-  font-weight: 300; font-size: 0.78em; opacity: 0.78;
-  margin-top: 4px; color: var(--water-deep);
-}
-.case .arch {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
-  color: var(--ember-deep); text-transform: uppercase;
-  margin-top: 12px; opacity: 0.88;
-}
-.case p {
-  font-size: 14px; line-height: 1.7; color: #3a2e48; margin-top: 12px;
-}
-.case .sense {
-  display: inline-block; margin-top: 14px;
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
-  background: var(--dusk-deep); color: var(--gold-dust);
-  padding: 4px 10px; text-transform: uppercase;
-}
-
-/* ══════════════════════════ METHOD ══════════════════════════ */
-section.method {
-  background: linear-gradient(180deg, var(--sky-lav) 0%, var(--sky-mauve) 40%, #6a5a8a 100%);
-  color: var(--paper); padding: 130px 0 120px; position: relative; overflow: hidden;
-}
-.method::before {
-  content: ''; position: absolute; top: 10%; right: 8%;
-  width: 180px; height: 180px; border-radius: 50%;
-  background: radial-gradient(circle, #ffa888 0%, #e86880 50%, rgba(180,60,80,0) 85%);
-  filter: blur(1px); opacity: 0.55;
-}
-.method .wrap { max-width: 940px; position: relative; z-index: 2; }
-.method .eyebrow {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
-  text-transform: uppercase; color: var(--gold-dust); margin-bottom: 22px;
-}
-.method h2 {
-  font-family: var(--serif-en); font-style: italic; font-weight: 400;
-  font-size: clamp(30px, 4vw, 50px); line-height: 1.15; margin-bottom: 20px;
-}
-.method h2 .cn {
-  display: block; font-family: var(--serif-cn); font-style: normal;
-  font-weight: 400; font-size: 0.54em; margin-top: 14px;
-  color: var(--sky-mist); letter-spacing: 0.03em;
-}
-.method-rules {
+.reading-cols {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px;
-  margin-top: 56px;
+  padding: 0 8px;
 }
-.method-rule { position: relative; }
-.method-rule .num {
-  font-family: var(--serif-en); font-style: italic; font-weight: 300;
-  font-size: 48px; color: var(--gold-dust); opacity: 0.78; line-height: 1;
-}
-.method-rule h3 {
-  font-family: var(--serif-cn); font-weight: 500; font-size: 18px;
-  margin-top: 12px; color: var(--paper);
-}
-.method-rule h3 .en {
-  display: block; font-family: var(--serif-en); font-style: italic;
-  font-weight: 300; font-size: 0.82em; opacity: 0.82;
-  margin-top: 4px; color: var(--sky-mist);
-}
-.method-rule p {
-  font-size: 14.5px; line-height: 1.75; margin-top: 12px;
-  opacity: 0.9;
-}
-
-/* ══════════════════════════ BIBLIOGRAPHY ══════════════════════════ */
-section.biblio {
-  background: var(--paper); padding: 110px 0 100px;
-}
-.biblio .wrap { max-width: 1120px; }
-.biblio-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 50px; padding: 0 8px; flex-wrap: wrap; gap: 16px;
-}
-.biblio-head .title {
-  font-family: var(--serif-cn); font-weight: 400;
-  font-size: clamp(26px, 3vw, 38px); color: var(--dusk-deep);
-}
-.biblio-head .title .en {
-  display: block; font-family: var(--serif-en); font-style: italic;
-  font-size: 0.5em; font-weight: 300; opacity: 0.72;
-  margin-top: 6px; letter-spacing: 0.02em; color: var(--water-deep);
-}
-.biblio-head .count {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
-  color: var(--water-deep); text-transform: uppercase;
-}
-
-.biblio-cols {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-}
-.biblio-col h3 {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.26em;
+.r-col h4 {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em;
   color: var(--ember-deep); text-transform: uppercase;
-  margin-bottom: 24px; padding-bottom: 12px;
+  margin-bottom: 18px; padding-bottom: 10px;
   border-bottom: 1px solid rgba(200,122,150,0.4);
 }
-.biblio-col ol {
-  list-style: none; counter-reset: bib;
-  font-family: var(--serif-en); font-size: 14.5px; line-height: 1.7;
+.r-col ol {
+  list-style: none; counter-reset: r;
+  font-family: var(--serif-en); font-size: 14px; line-height: 1.65;
 }
-.biblio-col ol li {
-  counter-increment: bib; padding-left: 32px; position: relative;
-  margin-bottom: 16px; color: #3a2e48;
+.r-col ol li {
+  counter-increment: r; padding-left: 26px; position: relative;
+  margin-bottom: 14px; color: #3a2e48;
 }
-.biblio-col ol li::before {
-  content: counter(bib, decimal-leading-zero);
+.r-col ol li::before {
+  content: counter(r, decimal-leading-zero);
   position: absolute; left: 0; top: 2px;
-  font-family: var(--mono); font-size: 10.5px;
+  font-family: var(--mono); font-size: 10px;
   color: var(--water-deep); letter-spacing: 0.08em;
 }
-.biblio-col ol li b {
-  font-family: var(--serif-cn); font-weight: 500;
-  color: var(--dusk-deep);
+.r-col ol li b {
+  font-family: var(--serif-cn); font-weight: 500; color: var(--dusk-deep);
 }
-.biblio-col ol li i {
+.r-col ol li i {
   font-family: var(--serif-en); font-style: italic;
   color: var(--ember-deep); font-weight: 400;
 }
-.biblio-col ol li .meta {
-  display: block; font-family: var(--mono); font-size: 10.5px;
+.r-col ol li .meta {
+  display: block; font-family: var(--mono); font-size: 10px;
   color: var(--water-deep); letter-spacing: 0.04em; margin-top: 2px;
-  opacity: 0.82;
+  opacity: 0.85;
 }
 
-/* ══════════════════════════ FOOTER ══════════════════════════ */
+/* ════════════════════════════ COLOPHON ════════════════════════════ */
 section.colophon {
   background: linear-gradient(180deg, #4a3868 0%, #2e1f44 100%);
   color: var(--paper); padding: 100px 0 80px; position: relative; overflow: hidden;
 }
 .colophon::before {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 180px;
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
   background: radial-gradient(ellipse at 50% 100%,
     rgba(255,140,100,0.22) 0%, rgba(150,100,140,0.1) 45%, transparent 70%);
 }
-.colophon .wrap {
-  max-width: 780px; text-align: center; position: relative; z-index: 2;
-}
+.colophon .wrap { max-width: 820px; text-align: center; position: relative; z-index: 2; }
 .colophon .eyebrow {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.3em;
-  text-transform: uppercase; opacity: 0.65; margin-bottom: 24px;
+  text-transform: uppercase; opacity: 0.68; margin-bottom: 24px;
 }
 .colophon h2 {
   font-family: var(--serif-en); font-style: italic; font-weight: 300;
-  font-size: clamp(24px, 3vw, 36px); line-height: 1.32; margin-bottom: 20px;
+  font-size: clamp(22px, 2.6vw, 32px); line-height: 1.4; margin-bottom: 18px;
 }
 .colophon p.cn {
   font-family: var(--serif-cn); font-weight: 300;
-  font-size: 16.5px; line-height: 1.9; opacity: 0.9; margin-top: 20px;
+  font-size: 16px; line-height: 1.9; opacity: 0.9; margin-top: 18px;
 }
 .colophon .back {
-  display: inline-flex; align-items: center; gap: 12px; margin-top: 48px;
+  display: inline-flex; align-items: center; gap: 12px; margin-top: 44px;
   padding: 13px 22px; background: var(--paper); color: var(--dusk-deep);
   text-decoration: none; font-family: var(--mono);
   font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
   border-radius: 2px; box-shadow: 0 8px 22px -8px rgba(0,0,0,0.35);
   transition: transform 0.25s, box-shadow 0.25s;
 }
-.colophon .back:hover {
-  transform: translateY(-2px); box-shadow: 0 14px 32px -8px rgba(0,0,0,0.4);
-}
+.colophon .back:hover { transform: translateY(-2px); box-shadow: 0 14px 32px -8px rgba(0,0,0,0.4); }
 .colophon .back svg { width: 14px; height: 14px; transform: scaleX(-1); }
 
 footer {
@@ -629,30 +861,37 @@ footer {
 }
 footer .sig { color: var(--gold-dust); opacity: 0.85; }
 
-/* ══════════════════════════ RESPONSIVE ══════════════════════════ */
+/* ════════════════════════════ RESPONSIVE ════════════════════════════ */
 @media (max-width: 1020px) {
-  .cases-grid { grid-template-columns: 1fr 1fr; }
-  .method-rules { grid-template-columns: 1fr; gap: 40px; }
-  .biblio-cols { grid-template-columns: 1fr; gap: 40px; }
-  .article-row { grid-template-columns: 80px 1fr; }
+  .q-grid { grid-template-columns: 1fr; }
+  .rules-grid { grid-template-columns: 1fr; gap: 36px; }
+  .reading-cols { grid-template-columns: 1fr; gap: 30px; }
+  .article-row { grid-template-columns: 100px 1fr; }
   .article-row .meta { grid-column: 1 / -1; text-align: left; margin-top: 12px; }
-  .tl-track { grid-template-columns: repeat(7, 1fr); row-gap: 36px; }
-  .timeline-rail::before { display: none; }
+  .tos-ladder { grid-template-columns: 1fr 1fr; }
+  .tos-ladder::before { display: none; }
+  .fw-detail { grid-template-columns: 1fr; }
+  .map-table { font-size: 13.5px; }
+  .triad-row { grid-template-columns: 1fr; }
+  .dims-grid { grid-template-columns: 1fr 1fr; }
+  .principles-grid { grid-template-columns: 1fr 1fr; }
+  .sfes-anchor { grid-template-columns: 1fr; }
 }
 @media (max-width: 680px) {
   .wrap { padding: 0 24px; }
   nav.top { padding: 18px 24px; }
   nav.top ul { gap: 14px; }
   .hero { padding-top: 100px; }
-  .cases-grid { grid-template-columns: 1fr; }
-  .tl-track { grid-template-columns: repeat(3, 1fr); }
+  .tos-ladder { grid-template-columns: 1fr; }
+  .map-table thead th { padding: 12px 10px; font-size: 10px; letter-spacing: 0.14em; }
+  .map-table tbody td { padding: 14px 10px; }
   footer { font-size: 9px; padding: 28px 24px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════ NAV ══════════════════════════ -->
+<!-- ════════════════════════════ NAV ════════════════════════════ -->
 <nav class="top">
   <div class="brand">四维空间感知实验室 · SFES LAB</div>
   <ul>
@@ -666,251 +905,577 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
   </ul>
 </nav>
 
-<!-- ══════════════════════════ HERO ══════════════════════════ -->
+<!-- ════════════════════════════ HERO ════════════════════════════ -->
 <header class="hero">
   <div class="sun"></div>
-  <div class="moon-sm"></div>
   <div class="wrap hero-inner">
-    <div class="eyebrow">Research Column · 第五专题 · Est. 2026</div>
+    <div class="eyebrow">Research Programme · 第五专题 · Est. 2026</div>
     <h1>
       时空现象学 · 具身架构设计
-      <span class="en">Phenomenology of Space-Time · Embodied Architectonics</span>
+      <span class="en">A Theory-of-Mind-style framework for choosing world-model architectures by making their embodied-cognition commitments explicit.</span>
     </h1>
-    <p class="lede">A column on the body, space, and dwelling — written at the seam where phenomenology, embodied cognition, and spatial AI still refuse to translate into one another.</p>
-    <p class="lede-cn">一个关于身体、空间与栖居的研究专题。在现象学、具身认知与空间智能这三条本应汇合却仍彼此缄默的脉络之间,写一组不急于给答案的札记 —— 从维特鲁威人到 affordance field,从梅洛-庞蒂到 World Labs。</p>
+    <p class="lede">When you say "my agent is embodied," you have already committed — silently — to one corner of a four-dimensional design space. Different commitments imply different architectures: voxel grid vs. affordance field, world model vs. reactive policy, single-agent vs. socio-physical system.</p>
+    <p class="lede-cn">这个专题做一件具体的事:把那些藏在"具身"这个词下面的形而上学选择搬到桌面上,变成可以被论文 abstract 写出来、可以被架构图标明的显式承诺 —— 类似 Theory of Mind 之于 social cognition 那样,做 embodied spatial cognition 的对应物。</p>
+    <div class="thesis-card">
+      <b>专题论点(Thesis):</b> 当下大多数关于 spatial intelligence / world model 的论文,都在不知情的情况下,从过去一百年的具身认知谱系里挑了一个立场。本专题提供一张 4 轴判别图与一份建筑×哲学×CS 三栏映射表,让这个挑选变成有意识的架构决策。
+    </div>
     <div class="index-rail">
-      <a href="#manifesto">Manifesto</a>
-      <a href="#map">Field Map</a>
+      <a href="#problem">Problem</a>
+      <a href="#framework">4-Axis Framework</a>
+      <a href="#mapping">Mapping</a>
+      <a href="#tos">Theory of Space</a>
+      <a href="#practice">Practice · 人-环-机</a>
+      <a href="#rules">Rules</a>
       <a href="#articles">Articles</a>
-      <a href="#timeline">Genealogy</a>
-      <a href="#cases">Buildings</a>
-      <a href="#method">Method</a>
-      <a href="#biblio">Bibliography</a>
+      <a href="#reading">Reading</a>
     </div>
   </div>
 </header>
 
-<!-- ══════════════════════════ MANIFESTO ══════════════════════════ -->
-<section class="manifesto" id="manifesto">
+<!-- ════════════════════════════ PROBLEM ════════════════════════════ -->
+<section class="problem" id="problem">
   <div class="wrap">
-    <div class="eyebrow">Manifesto · 专题宣言</div>
-    <h2>
-      建筑史是一部身体的认识论史。
-      <span class="en">The history of architecture is a history of the body's epistemology.</span>
-    </h2>
-    <p>古典时期,身体以物质的比例直接铭刻在建筑形式上 —— 帕特农的柱式、万神殿的穹窿、维特鲁威人所确立的建筑模数,都是身体的尺度投射到世界之上。中世纪,身体被神学收编,成为通向天国的容器;文艺复兴重新赋予身体以人性的地位,巴洛克与启蒙又把它抬升为崇高与奇观的承载者。</p>
-    <p>到了现代主义,身体却被理性主义悄悄抽空 —— 建筑成为标准化、功能化、机器化的对象,人被换算成"居住的单元"。直到 20 世纪现象学重新把身体请回中央:Husserl 的"回到事物本身"、Merleau-Ponty 的"身体-主体"、Heidegger 的"栖居"(dwelling)、Bachelard 的"诗学空间"、Norberg-Schulz 的"场所精神"、Pallasmaa 的"肌肤之目" —— 它们合起来把一个简单的命题写回到建筑学:<b>空间不是被看的几何,而是被住进去的感知结构。</b></p>
-    <blockquote>
-      "The door handle is the handshake of the building."
-      <cite>— Juhani Pallasmaa, The Eyes of the Skin (1996)</cite>
-    </blockquote>
-    <p>而今天,AI 正在以一种几乎暴力的方式重新定义"空间"。World Labs 把 spatial intelligence 作为下一代 AI 的旗帜,JEPA / NeRF / Gaussian Splatting 在工程上重建出每一立方厘米的三维场景,Habitat / AI2-THOR 让 agent 在虚拟房子里走来走去。<b>但这些路径几乎全部默认:空间 = 几何。</b>他们重建的是一个从外部被看的世界,而不是一个从内部被住的世界。</p>
-    <p>这个专题站在这道缝的边上。它不反对 AI —— 相反,它认为具身 AI 是让身体现象学重新获得实验工具的最大一次机会。但它坚持:如果 spatial intelligence 不承认"被身体经验的空间" ≠ "几何空间",那我们造出来的机器就不是具身的,而是更精密地旁观的。</p>
-    <div class="rule"></div>
-    <p class="en">The question this column keeps returning to: <i>can the pre-reflective, already-inhabited spatiality that architecture knows how to design but cannot explain, be written into the inductive bias of an embodied agent?</i></p>
-    <p class="cn" style="font-size: 14.5px; opacity: 0.78; margin-top: 14px;">—— 戴诗琪 / DAI Shiqi &nbsp;·&nbsp; 专题主持</p>
+    <div class="head">
+      <div class="title">
+        问题重述 · 四个被混在一起的问题
+        <span class="en">Restating the Problem — Four Questions Hidden Inside One Word</span>
+      </div>
+      <div class="tag">§ 0</div>
+    </div>
+    <p class="lede">"建筑是具身的"与"AI 是具身的"听起来像同一句话,实际上指向<b>四个不同的问题</b>。把它们分开,是这个专题做所有事情的前提。下面每一个问题都不是修辞,而是一个真正分流过的认识论分歧 —— 不同学派给出的不同答案,会径直映射到不同的世界模型架构上。</p>
+    <div class="q-grid">
+      <div class="q-card">
+        <div class="label">Q1 · Locus</div>
+        <div class="q">认识在哪里发生?</div>
+        <div class="opts">In the head? <span>internalist</span> In the body? <span>embodied</span> In the environment? <span>extended</span> In practice? <span>enactive</span></div>
+      </div>
+      <div class="q-card">
+        <div class="label">Q2 · Form</div>
+        <div class="q">认识是什么形式?</div>
+        <div class="opts">Internal representations? <span>world model</span> Body-environment coupling? <span>dynamical</span> Social construction? <span>distributed</span></div>
+      </div>
+      <div class="q-card">
+        <div class="label">Q3 · Subject</div>
+        <div class="q">谁在认识?</div>
+        <div class="opts">A single body? <span>individual</span> A human-tool system? <span>extended</span> A collective? <span>social-material</span></div>
+      </div>
+      <div class="q-card">
+        <div class="label">Q4 · Time</div>
+        <div class="q">时间性如何?</div>
+        <div class="opts">Instantaneous perception? <span>snapshot</span> Developmental? <span>process</span> Structural configuration? <span>standing</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ══════════════════════════ FIELD MAP (Lavender Venn) ══════════════════════════ -->
-<section class="field-map" id="map">
+<!-- ════════════════════════════ FRAMEWORK · 4-AXIS ════════════════════════════ -->
+<section class="framework" id="framework">
   <div class="wrap">
-    <div class="field-head">
+    <div class="fw-head">
       <div class="title">
-        领域图谱 · 三圈与一道缝
-        <span class="en">The Field Map — Three Circles & the Crack Between</span>
+        四轴判别框架 · 19 个学派被压到同一张图上
+        <span class="en">The 4-Axis Discriminant Framework — 19 schools projected onto the same coordinate system</span>
       </div>
-      <div class="count">30 &nbsp;Thinkers · 1 Seam</div>
+      <p class="sub">A parallel-coordinates view. Each line is one school's typical position on four orthogonal axes. Hover or click any line to inspect its commitments and the architecture it implies.</p>
     </div>
 
-    <div class="venn-legend">
-      <span class="lg-phe">现象学 / 空间哲学 &nbsp; Phenomenology of Space</span>
-      <span class="lg-emb">具身 / 生成认知 &nbsp; Embodied · Enactive Cognition</span>
-      <span class="lg-spa">空间智能 / 世界模型 &nbsp; Spatial AI · World Models</span>
-      <span class="lg-you">未耕之地 &nbsp; The Crack</span>
+    <div class="fw-legend">
+      <span class="lg-arch" data-domain="arch">Architecture &middot; 建筑 / 城市行为学</span>
+      <span class="lg-phil" data-domain="phil">Philosophy &middot; 哲学具身认知</span>
+      <span style="opacity: 0.62;">click to filter &middot; click again to clear</span>
     </div>
 
-    <div class="venn-wrap">
-      <div class="venn-box">
-        <svg viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet">
-          <!-- three circles -->
-          <circle cx="340" cy="260" r="230" fill="#e89fb5" fill-opacity="0.12" stroke="#c87a96" stroke-opacity="0.55" stroke-width="1.1"/>
-          <circle cx="660" cy="260" r="230" fill="#c87a96" fill-opacity="0.12" stroke="#a05878" stroke-opacity="0.55" stroke-width="1.1"/>
-          <circle cx="500" cy="460" r="230" fill="#8fc4be" fill-opacity="0.13" stroke="#5a8e8a" stroke-opacity="0.55" stroke-width="1.1"/>
+    <div class="fw-svg-box">
+      <svg id="fwSvg" viewBox="0 0 1100 520" preserveAspectRatio="xMidYMid meet">
+        <!-- 4 axes at x = 130, 410, 690, 970, from y=80 to y=440 -->
+        <!-- Axis A: Representational ↔ Anti-representational -->
+        <line class="axis-line" x1="130" y1="80" x2="130" y2="440"/>
+        <line class="axis-tick" x1="120" y1="260" x2="140" y2="260"/>
+        <text class="axis-name" x="130" y="56" text-anchor="middle">A</text>
+        <text class="axis-label-top" x="130" y="74" text-anchor="middle">Representational</text>
+        <text class="axis-label-bot" x="130" y="460" text-anchor="middle">Anti-representational</text>
 
-          <!-- field labels -->
-          <text class="field-label" x="190" y="86" fill="#a05878">现象学 · 空间哲学</text>
-          <text class="field-sub"   x="190" y="102" fill="#a8678a">Phenomenology of Space</text>
-          <text class="field-label" x="712" y="86" fill="#8e4868">具身 · 生成认知</text>
-          <text class="field-sub"   x="712" y="102" fill="#a05878">Embodied · Enactive Cognition</text>
-          <text class="field-label" x="380" y="618" fill="#3d6a66">空间智能 · 世界模型</text>
-          <text class="field-sub"   x="380" y="634" fill="#4a7e78">Spatial AI · World Models</text>
+        <line class="axis-line" x1="410" y1="80" x2="410" y2="440"/>
+        <line class="axis-tick" x1="400" y1="260" x2="420" y2="260"/>
+        <text class="axis-name" x="410" y="56" text-anchor="middle">B</text>
+        <text class="axis-label-top" x="410" y="74" text-anchor="middle">Individual</text>
+        <text class="axis-label-bot" x="410" y="460" text-anchor="middle">System / Distributed</text>
 
-          <!-- phenomenology cluster -->
-          <g class="node" data-id="merleau">
-            <circle cx="220" cy="200" r="6" fill="#e89fb5"/>
-            <text x="220" y="186">Merleau-Ponty</text>
-          </g>
-          <g class="node" data-id="heidegger">
-            <circle cx="160" cy="270" r="6" fill="#e89fb5"/>
-            <text x="160" y="256">Heidegger</text>
-          </g>
-          <g class="node" data-id="husserl">
-            <circle cx="190" cy="340" r="6" fill="#e89fb5"/>
-            <text x="190" y="326">Husserl</text>
-          </g>
-          <g class="node" data-id="bachelard">
-            <circle cx="260" cy="395" r="6" fill="#e89fb5"/>
-            <text x="260" y="381">Bachelard</text>
-          </g>
-          <g class="node" data-id="casey">
-            <circle cx="155" cy="400" r="6" fill="#e89fb5"/>
-            <text x="155" y="386">Edward Casey</text>
-          </g>
-          <g class="node" data-id="zahavi">
-            <circle cx="280" cy="150" r="6" fill="#e89fb5"/>
-            <text x="280" y="136">Dan Zahavi</text>
-          </g>
-          <g class="node" data-id="pallasmaa">
-            <circle cx="110" cy="220" r="6" fill="#e89fb5"/>
-            <text x="110" y="206">Pallasmaa</text>
-          </g>
-          <g class="node" data-id="norberg">
-            <circle cx="115" cy="350" r="6" fill="#e89fb5"/>
-            <text x="115" y="336">Norberg-Schulz</text>
-          </g>
+        <line class="axis-line" x1="690" y1="80" x2="690" y2="440"/>
+        <line class="axis-tick" x1="680" y1="260" x2="700" y2="260"/>
+        <text class="axis-name" x="690" y="56" text-anchor="middle">C</text>
+        <text class="axis-label-top" x="690" y="74" text-anchor="middle">Structural</text>
+        <text class="axis-label-bot" x="690" y="460" text-anchor="middle">Process / Dynamical</text>
 
-          <!-- Phenomenology ∩ Embodied -->
-          <g class="node" data-id="dreyfus">
-            <circle cx="500" cy="140" r="7" fill="#b888b8"/>
-            <text x="500" y="125">Dreyfus</text>
-          </g>
-          <g class="node" data-id="varela">
-            <circle cx="450" cy="200" r="7" fill="#b888b8"/>
-            <text x="450" y="186">Varela / Thompson</text>
-          </g>
-          <g class="node" data-id="gallagher">
-            <circle cx="560" cy="200" r="7" fill="#b888b8"/>
-            <text x="560" y="186">Gallagher</text>
-          </g>
-          <g class="node" data-id="noe">
-            <circle cx="420" cy="270" r="7" fill="#b888b8"/>
-            <text x="420" y="256">Alva Noë</text>
-          </g>
-          <g class="node" data-id="fuchs">
-            <circle cx="540" cy="280" r="6" fill="#b888b8"/>
-            <text x="540" y="266">Thomas Fuchs</text>
-          </g>
+        <line class="axis-line" x1="970" y1="80" x2="970" y2="440"/>
+        <line class="axis-tick" x1="960" y1="260" x2="980" y2="260"/>
+        <text class="axis-name" x="970" y="56" text-anchor="middle">D</text>
+        <text class="axis-label-top" x="970" y="74" text-anchor="middle">Descriptive</text>
+        <text class="axis-label-bot" x="970" y="460" text-anchor="middle">Normative</text>
 
-          <!-- Embodied cluster -->
-          <g class="node" data-id="brooks">
-            <circle cx="760" cy="200" r="6" fill="#c87a96"/>
-            <text x="760" y="186">Rodney Brooks</text>
-          </g>
-          <g class="node" data-id="clark">
-            <circle cx="830" cy="260" r="6" fill="#c87a96"/>
-            <text x="830" y="246">Andy Clark</text>
-          </g>
-          <g class="node" data-id="friston">
-            <circle cx="790" cy="335" r="6" fill="#c87a96"/>
-            <text x="790" y="321">Karl Friston</text>
-          </g>
-          <g class="node" data-id="seth">
-            <circle cx="840" cy="160" r="6" fill="#c87a96"/>
-            <text x="840" y="146">Anil Seth</text>
-          </g>
-          <g class="node" data-id="metzinger">
-            <circle cx="720" cy="400" r="6" fill="#c87a96"/>
-            <text x="720" y="386">Metzinger</text>
-          </g>
+        <g id="schoolLines"></g>
+        <g id="schoolDots"></g>
+        <g id="schoolLabels"></g>
+      </svg>
+    </div>
 
-          <!-- Embodied ∩ Spatial AI -->
-          <g class="node" data-id="tenenbaum">
-            <circle cx="670" cy="430" r="7" fill="#a89a88"/>
-            <text x="670" y="416">Josh Tenenbaum</text>
-          </g>
-          <g class="node" data-id="activeinf">
-            <circle cx="620" cy="500" r="6" fill="#a89a88"/>
-            <text x="620" y="486">Active Inference</text>
-          </g>
-          <g class="node" data-id="devrobo">
-            <circle cx="740" cy="490" r="6" fill="#a89a88"/>
-            <text x="740" y="476">Developmental Robotics</text>
-          </g>
+    <div class="fw-detail">
+      <div class="fw-panel" id="fwPanel">
+        <h3>悬停或点击一条线 →
+          <span class="en">Hover or click any line to inspect a school</span>
+        </h3>
+        <p style="color: var(--sky-mist); margin-top: 14px;">每一条线都是一个学派在四个轴上的典型位置。**警告**:同一个学派在内部仍有分歧,这里给出的是该学派"主干立场"的概略 —— 用来比较,不用来定罪。</p>
+      </div>
+      <aside class="fw-side">
+        <h4>How to read · 读法</h4>
+        <p><b>线越靠左/上端</b> = 该学派靠表征主义、个体、结构性、描述性立场。<b>线越靠右/下端</b> = 反表征、系统、过程、规范性。</p>
+        <p>真正有意思的不是"谁在哪",而是<b>对角线上的张力</b>:做世界模型的人(Friston/林奇)和做无世界模型派的人(Gibson/Hillier),在 A 轴上正好站在两端 —— 这条裂缝至今没有被工程上的统一架构弥合。</p>
+        <p class="hint">Click any line to see the architecture it implies. ↓</p>
+      </aside>
+    </div>
+  </div>
+</section>
 
-          <!-- Spatial AI cluster -->
-          <g class="node" data-id="feifei">
-            <circle cx="500" cy="560" r="7" fill="#8fc4be"/>
-            <text x="500" y="580">Fei-Fei Li / World Labs</text>
-          </g>
-          <g class="node" data-id="lecun">
-            <circle cx="380" cy="540" r="6" fill="#8fc4be"/>
-            <text x="380" y="560">LeCun · JEPA</text>
-          </g>
-          <g class="node" data-id="ha">
-            <circle cx="610" cy="560" r="6" fill="#8fc4be"/>
-            <text x="610" y="580">Ha / Schmidhuber</text>
-          </g>
-          <g class="node" data-id="nerf">
-            <circle cx="440" cy="585" r="6" fill="#8fc4be"/>
-            <text x="440" y="604">NeRF · 3D Scene</text>
-          </g>
-          <g class="node" data-id="habitat">
-            <circle cx="320" cy="475" r="6" fill="#8fc4be"/>
-            <text x="320" y="461">Habitat · Embodied AI</text>
-          </g>
+<!-- ════════════════════════════ MAPPING TABLE ════════════════════════════ -->
+<section class="mapping" id="mapping">
+  <div class="wrap">
+    <div class="map-head">
+      <div class="title">
+        三栏映射 · 建筑 × 哲学 × CS
+        <span class="en">The Mapping — Architecture × Philosophy × Computational Concept</span>
+      </div>
+      <p class="lede">这是整个专题最操作性的一张表。每一行都说同一件事:<b>如果你信这一派,你的世界模型应该长这样</b>。读它的方法不是"挑一行",而是承认你已经在某一行里,然后把那一行的 CS 结论说清楚。</p>
+    </div>
 
-          <!-- Spatial AI ∩ Phenomenology (almost empty bridge) -->
-          <g class="node" data-id="gibson">
-            <circle cx="290" cy="450" r="7" fill="#9bb8b2"/>
-            <text x="290" y="436">J.J. Gibson</text>
-          </g>
-          <g class="node" data-id="tversky">
-            <circle cx="360" cy="510" r="6" fill="#9bb8b2"/>
-            <text x="360" y="526">Barbara Tversky</text>
-          </g>
+    <div class="map-table-wrap">
+      <table class="map-table">
+        <thead>
+          <tr>
+            <th>School<span class="cn">建筑/城市行为学派</span></th>
+            <th>Philosophy<span class="cn">最近哲学谱系</span></th>
+            <th>Computational Concept<span class="cn">CS / AI 对应概念</span></th>
+            <th>Architectural Commitment<span class="cn">隐含架构选择</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="school">林奇 · 认知地图<span class="en">Lynch — Image of the City</span><span class="ref">1960 · MIT</span></td>
+            <td class="phil">Tolman 表征主义 · 概念隐喻<span class="en">Tolman cognitive map · Lakoff schemas</span></td>
+            <td class="cs">SLAM · neural cognitive map · 海马体启发的 grid/place cell 模型<span class="stack">SLAM · NeRF · NeuralMap · DeepMind grid cells (2018)</span></td>
+            <td class="commit">"Agent carries a map." 你接受表征主义,你的模型有一个可被读出的内部空间表征。</td>
+          </tr>
+          <tr>
+            <td class="school">空间句法<span class="en">Hillier — Space Syntax</span><span class="ref">1984 · Bartlett UCL</span></td>
+            <td class="phil">生态心理 · 结构化 affordance<span class="en">Gibsonian ecology · structural affordance</span></td>
+            <td class="cs">图神经网络在建筑平面上 · axial map 上的 graph analytics<span class="stack">GNN on floor plans · isovist · integration / choice metrics</span></td>
+            <td class="commit">"Configuration is cognition." 你不要中央表征,空间的拓扑就是模型本身。</td>
+          </tr>
+          <tr>
+            <td class="school">可供性理论<span class="en">Affordance — Heft / Norman</span><span class="ref">Gibson 1979 → Heft 1989</span></td>
+            <td class="phil">Gibson 直接知觉 · enactivism<span class="en">direct perception · enactive</span></td>
+            <td class="cs">Affordance learning · action-conditioned policy · HCI affordance<span class="stack">SAPIEN · Where2Act · ManiSkill · action-conditioned RL</span></td>
+            <td class="commit">"Perception is for action." 你的视觉模块直接输出可能动作,而不是几何重建。</td>
+          </tr>
+          <tr>
+            <td class="school">行为情境<span class="en">Behavior Settings — Barker</span><span class="ref">Midwest Field Station 1947+</span></td>
+            <td class="phil">Dewey 实用主义 · 分布式认知<span class="en">pragmatism · distributed cognition</span></td>
+            <td class="cs">多智能体仿真 (ABM) · scenario simulation · 社会模拟<span class="stack">NetLogo · Mesa · MARL with social context</span></td>
+            <td class="commit">"Setting determines behavior." 单 agent 不够,需要把"场景配置"作为一等公民。</td>
+          </tr>
+          <tr>
+            <td class="school">空间关系学 · Proxemics<span class="en">Hall — The Hidden Dimension</span><span class="ref">1966</span></td>
+            <td class="phil">社会具身 · 镜像神经元<span class="en">social embodiment · mirror systems</span></td>
+            <td class="cs">社交机器人的 personal space · 人群动力学 · social force model<span class="stack">Helbing social force · social-LSTM · trajectory prediction</span></td>
+            <td class="commit">"Distance is meaning." 你的多智能体策略必须有距离-语义的耦合,且文化可调。</td>
+          </tr>
+          <tr>
+            <td class="school">空间生产<span class="en">Lefebvre — Production of Space</span><span class="ref">1974</span></td>
+            <td class="phil">批判理论 · ANT<span class="en">critical theory · actor-network</span></td>
+            <td class="cs">算法公平 · critical AI · 数据集偏置研究<span class="stack">FAccT · dataset audits · spatial fairness · power-aware ML</span></td>
+            <td class="commit">"Space is produced, not given." 你的训练数据本身是某种社会-政治产物,不是中性输入。</td>
+          </tr>
+          <tr>
+            <td class="school">模式语言<span class="en">Alexander — A Pattern Language</span><span class="ref">1977</span></td>
+            <td class="phil">图式理论 · 概念隐喻<span class="en">image-schema theory · Lakoff</span></td>
+            <td class="cs">设计模式 (GoF) · shape grammar · PCG · 生成式设计<span class="stack">GoF · Stiny shape grammar · WaveFunctionCollapse · diffusion-for-design</span></td>
+            <td class="commit">"Buildings are recursively composed." 你的生成模型用语法/模式,而非端到端 latent。</td>
+          </tr>
+          <tr>
+            <td class="school">Gehl 公共生活<span class="en">Gehl — Life Between Buildings</span><span class="ref">1971 · "12 Quality Criteria"</span></td>
+            <td class="phil">实用主义 · 行为情境<span class="en">pragmatism · behavior settings</span></td>
+            <td class="cs">CV-based urban analytics · 行人轨迹分析<span class="stack">YOLO + DeepSORT · trajectory mining · TrajNet · MOT</span></td>
+            <td class="commit">"What we measure shapes what we design." 你的 benchmark 决定了下一代城市的样子。</td>
+          </tr>
+          <tr>
+            <td class="school">行动者网络 · 建筑版<span class="en">ANT — Latour / Yaneva</span><span class="ref">Yaneva 2012</span></td>
+            <td class="phil">物质参与 · 延展心智<span class="en">material engagement · extended mind</span></td>
+            <td class="cs">分布式多智能体 · tool-use agent · MCP 架构哲学<span class="stack">tool-use LLM · MCP · LangGraph · multi-agent orchestration</span></td>
+            <td class="commit">"Buildings are actors." 工具/环境/AI 在你的系统里是平等节点,不是被使用的对象。</td>
+          </tr>
+          <tr>
+            <td class="school">环境行为学 · POE<span class="en">EBS — Proshansky / Rapoport</span><span class="ref">CUNY 1970+</span></td>
+            <td class="phil">描述性社会科学<span class="en">empirical social science</span></td>
+            <td class="cs">用户研究 · A/B 测试的空间版 · POE 数字化<span class="stack">post-occupancy eval · BIM-integrated UX · sensor-based occupancy</span></td>
+            <td class="commit">"Space causes behavior." 你接受刺激-反应的简化模型,代价是把空间当 IV。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-          <!-- The Crack (center) -->
-          <g class="crack-ring">
-            <circle cx="500" cy="355" r="42" fill="#e8c898" fill-opacity="0.14" stroke="#b88c5a" stroke-width="1.4" stroke-dasharray="3,3"/>
-            <circle cx="500" cy="355" r="20" fill="#e8c898" fill-opacity="0.28" stroke="#b88c5a" stroke-width="1"/>
-          </g>
-          <text class="you-are-here" x="500" y="350">你在这里 · You are here</text>
-          <text class="you-are-here" x="500" y="368" style="font-size:10.5px; font-weight:400;">This ground is not yet tilled.</text>
+<!-- ════════════════════════════ THEORY OF SPACE ════════════════════════════ -->
+<section class="tos" id="tos">
+  <div class="wrap">
+    <div class="tos-head">
+      <div class="eyebrow">Programme · 基准纲领</div>
+      <h2>
+        Theory of Space.
+        <span class="cn">空间认知的基准纲领 —— 对标 Theory of Mind 的 Sally-Anne</span>
+      </h2>
+      <p class="lede">Theory of Mind 之所以成为研究方向,是因为它有一个能让架构决策落地的基准(Sally-Anne)。Theory of Space 还没有自己的 Sally-Anne。这个专题主张它应该是一组按四轴展开的<b>阶梯式基准谱系</b> —— 从单智能体到跨文化,每一档都对应不同的架构承诺。</p>
+    </div>
+
+    <div class="tos-ladder">
+      <div class="tos-rung">
+        <div class="step">L1</div>
+        <h4>
+          单智能体熟悉度
+          <span class="en">Single-Agent Familiarity</span>
+        </h4>
+        <div class="axes"><span>B: 个体</span><span>C: 过程</span><span>D: 描述</span></div>
+        <p>一个具身体在反复访问同一空间时,内部状态如何转变?注意力分配、行为效率、异常敏感度、情感效价——可被测量的"熟悉感涌现"。</p>
+        <div class="anchor">
+          <span>Anchor benchmark</span>
+          <b>SFES &middot; Spatial Familiarity as Emergent State</b>
+        </div>
+      </div>
+
+      <div class="tos-rung">
+        <div class="step">L2</div>
+        <h4>
+          多智能体集体行为
+          <span class="en">Multi-Agent Collective</span>
+        </h4>
+        <div class="axes"><span>B: 系统</span><span>C: 过程</span><span>D: 描述+规范</span></div>
+        <p>多个具身体如何在同一空间中协调流动、协商私密界限、形成行为情境(behavior settings)?Hall 的 proxemics + Barker 的情境理论作为基准维度。</p>
+        <div class="anchor">
+          <span>Forthcoming</span>
+          <b>Multi-Agent Proxemics Benchmark</b>
+        </div>
+      </div>
+
+      <div class="tos-rung">
+        <div class="step">L3</div>
+        <h4>
+          社会-物质分布
+          <span class="en">Socio-Material Distribution</span>
+        </h4>
+        <div class="axes"><span>B: 分布</span><span>C: 过程</span><span>D: 强规范</span></div>
+        <p>把 Lefebvre 的三元辩证(实践/表征/表征空间)与 ANT 的人-物对称性写进基准 —— 测量 agent 是否能识别一个空间的"被生产"性质,而不只是几何。</p>
+        <div class="anchor">
+          <span>Forthcoming</span>
+          <b>Production-of-Space Probe</b>
+        </div>
+      </div>
+
+      <div class="tos-rung">
+        <div class="step">L4</div>
+        <h4>
+          跨文化空间认知
+          <span class="en">Cross-Cultural Spatial Cognition</span>
+        </h4>
+        <div class="axes"><span>B: 集体</span><span>C: 结构</span><span>D: 描述+规范</span></div>
+        <p>同一种空间配置在不同文化下产生不同的可供性与边界感(中式院落 vs. 巴西公共广场 vs. 北欧 hygge)。下一代 spatial-AI 基准必须承认空间认知是<b>文化差异的</b>。</p>
+        <div class="anchor">
+          <span>Sketch</span>
+          <b>Cross-Cultural Affordance Suite</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ PRACTICE · 人-环-机三角双向塑造 ════════════════════════════ -->
+<section class="practice" id="practice">
+  <div class="wrap">
+    <div class="practice-head">
+      <div class="eyebrow">Practice · 实践落地</div>
+      <div class="title">
+        人-环-机三角的双向塑造
+        <span class="en">Bidirectional Shaping in the Human-Environment-Machine Triad</span>
+      </div>
+      <p class="lede">前面所有的理论都最终要在这里落地:让 agent 不只是<b>读</b>世界,而要<b>改</b>世界。当下所有 spatial AI 把"主动性"窄化为"选择观察什么",这是一个数学上清晰但哲学上不足的定义。<u>真正缺失的能力是:选择改造什么</u>。从建筑学的空间生产、生态学的生态位构造、延展心智与物质参与,到 Vygotsky 的认知脚手架与 Grassé 的斯蒂格梅尔吉,都汇聚到同一个命题:<b>认知是通过改造环境而形成的,不是在静态环境中形成的</b>。</p>
+    </div>
+
+    <!-- ── Triad SVG + 6 Arrows ── -->
+    <div class="triad-row">
+      <div class="triad-svg-box">
+        <svg viewBox="0 0 600 540" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="arrowDusk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#4a3868"/>
+            </marker>
+            <marker id="arrowGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#b88c5a"/>
+            </marker>
+          </defs>
+
+          <!-- Edge: 人 ↔ 环 (left side, two parallel curves) -->
+          <path d="M 285,140 Q 150,260 145,375" fill="none" stroke="#4a3868" stroke-width="1.5" opacity="0.55" marker-end="url(#arrowDusk)"/>
+          <path d="M 175,395 Q 200,260 270,160" fill="none" stroke="#4a3868" stroke-width="1.5" opacity="0.55" marker-end="url(#arrowDusk)"/>
+
+          <!-- Edge: 人 ↔ 机 (right side) -->
+          <path d="M 315,140 Q 450,260 455,375" fill="none" stroke="#4a3868" stroke-width="1.5" opacity="0.55" marker-end="url(#arrowDusk)"/>
+          <path d="M 425,395 Q 400,260 330,160" fill="none" stroke="#4a3868" stroke-width="1.5" opacity="0.55" marker-end="url(#arrowDusk)"/>
+
+          <!-- Edge: 环 ↔ 机 (bottom) -->
+          <!-- 环→机: dusk (this is the SFES "space → agent" current direction) -->
+          <path d="M 195,420 Q 300,460 405,420" fill="none" stroke="#4a3868" stroke-width="1.5" opacity="0.55" marker-end="url(#arrowDusk)"/>
+          <!-- 机→环: GOLD (the missing arrow this section addresses) -->
+          <path d="M 405,395 Q 300,355 195,395" fill="none" stroke="#b88c5a" stroke-width="2.4" stroke-dasharray="5,4" marker-end="url(#arrowGold)"/>
+
+          <!-- Nodes (drawn on top) -->
+          <!-- 人 (top) -->
+          <circle cx="300" cy="100" r="48" fill="#e89fb5" stroke="#c87a96" stroke-width="2"/>
+          <text x="300" y="110" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="34" font-weight="500" fill="#2e1f44">人</text>
+
+          <!-- 环 (bottom-left) -->
+          <circle cx="160" cy="408" r="48" fill="#c8aadc" stroke="#a890c0" stroke-width="2"/>
+          <text x="160" y="418" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="34" font-weight="500" fill="#2e1f44">环</text>
+
+          <!-- 机 (bottom-right) -->
+          <circle cx="440" cy="408" r="48" fill="#8fc4be" stroke="#5a8e8a" stroke-width="2"/>
+          <text x="440" y="418" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="34" font-weight="500" fill="#2e1f44">机</text>
+
+          <!-- Node labels -->
+          <text x="300" y="68" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#4a3868" opacity="0.78">Human</text>
+          <text x="160" y="478" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#4a3868" opacity="0.78">Environment</text>
+          <text x="440" y="478" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#4a3868" opacity="0.78">Machine</text>
+
+          <!-- The missing-arrow callout -->
+          <text x="300" y="338" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.2em" fill="#b88c5a" font-weight="500">THE MISSING ARM</text>
+          <text x="300" y="354" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="11" fill="#b88c5a">机 → 环 · 主动干预</text>
         </svg>
       </div>
 
-      <div class="node-panel" id="nodePanel">
-        <h3>Hover or click a node →</h3>
-        <p class="tag">Thinker Atlas</p>
-        <p class="hint">每一个点都代表一条可能的切入。中央那片闪着琥珀光的缝,就是这个专题要一篇一篇写进去的地方。</p>
+      <div class="triad-arrows">
+        <div class="triad-arrow-row">
+          <div class="pair">人<span class="arrow">→</span>环</div>
+          <div class="desc">建筑学、城市设计、规划:人主动塑造空间。</div>
+          <div class="status">Architecture</div>
+        </div>
+        <div class="triad-arrow-row">
+          <div class="pair">环<span class="arrow">→</span>人</div>
+          <div class="desc">现象学、环境心理学、Pallasmaa 多感官:空间塑造人。</div>
+          <div class="status">Phenomenology</div>
+        </div>
+        <div class="triad-arrow-row">
+          <div class="pair">人<span class="arrow">→</span>机</div>
+          <div class="desc">数据集、训练目标、RLHF、alignment:人塑造机器。</div>
+          <div class="status">Alignment / RLHF</div>
+        </div>
+        <div class="triad-arrow-row">
+          <div class="pair">机<span class="arrow">→</span>人</div>
+          <div class="desc">HCI、技术中介、Stiegler 第三记忆:机器反向塑造人的认知。</div>
+          <div class="status">HCI / Mediation</div>
+        </div>
+        <div class="triad-arrow-row">
+          <div class="pair">环<span class="arrow">→</span>机</div>
+          <div class="desc">SFES Phase 1-2(空间作用于智能体)、Theory of Space。</div>
+          <div class="status">SFES &middot; Done</div>
+        </div>
+        <div class="triad-arrow-row gold">
+          <div class="pair">机<span class="arrow">→</span>环</div>
+          <div class="desc"><b>Active Intervention 框架</b>—— 智能体主动改造空间。这条箭头被系统性低估,本节的全部目的就是把它补上。</div>
+          <div class="status">The Missing Arm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Eight Intervention Capability Dimensions ── -->
+    <div class="dims-section">
+      <h3>八项干预能力评估维度
+        <span class="en">Eight Intervention Capability Dimensions — extending Theory of Space</span>
+      </h3>
+      <p class="sub">扩展 Zhang et al. (ICLR 2026) 的 Theory of Space 评估框架。每一项都是一个可被 benchmark 化的能力,把"主动性"从认知闭合扩展到认知-物质闭合。</p>
+      <div class="dims-grid">
+        <div class="dim-card">
+          <div class="dnum">D 01</div>
+          <h4>干预效能<span class="en">Intervention Efficacy</span></h4>
+          <p>智能体的环境改造是否降低后续任务的不确定性或代价?这对应 Kirsh & Maglio (1994) 的"认知行动"。</p>
+          <div class="metric">METRIC · 干预前后完成同一任务的信息增量 / 步数差</div>
+        </div>
+        <div class="dim-card">
+          <div class="dnum">D 02</div>
+          <h4>可逆性判别<span class="en">Reversibility Awareness</span></h4>
+          <p>智能体是否区分可逆干预(移动可回置物体)与不可逆干预(推倒墙体)?</p>
+          <div class="metric">METRIC · 允许/禁止不可逆干预两条件下,策略是否稳健调整</div>
+        </div>
+        <div class="dim-card">
+          <div class="dnum">D 03</div>
+          <h4>最小干预偏好<span class="en">Minimal Intervention Preference</span></h4>
+          <p>多种干预均可达成目标时,智能体是否倾向最小改动?对应建筑学的适应性再利用理念。</p>
+          <div class="metric">METRIC · 干预幅度分布的 entropy / 改动量与目标达成度的比</div>
+        </div>
+        <div class="dim-card">
+          <div class="dnum">D 04</div>
+          <h4>斯蒂格梅尔吉标记<span class="en">Stigmergic Marking</span></h4>
+          <p>智能体是否主动留下持久标记以服务未来认知(自身或他者)?Grassé (1959) 蚁群通信原理。</p>
+          <div class="metric">METRIC · 重复访问中"路径记号"复用率;多智能体场景标记可读性</div>
+        </div>
+        <div class="dim-card">
+          <div class="dnum">D 05</div>
+          <h4>生态位构造<span class="en">Niche Construction</span></h4>
+          <p>跨回合(cross-episode)尺度上,智能体是否改造环境以更好地适配其策略?Odling-Smee 等 (2003) 进化第三支柱。</p>
+          <div class="metric">METRIC · 允许持久改造的重复任务,后续回合的"环境累积优势"性能曲线</div>
+        </div>
+        <div class="dim-card">
+          <div class="dnum">D 06</div>
+          <h4>工具创造<span class="en">Tool Creation</span></h4>
+          <p>智能体是否从环境中构造新的中介物(而非仅使用既有工具)?</p>
+          <div class="metric">METRIC · 借鉴 ToolCraft 类基准,原始材料组合为新功能物的成功率</div>
+        </div>
+        <div class="dim-card">
+          <div class="dnum">D 07</div>
+          <h4>反事实干预建模<span class="en">Counterfactual Intervention Modeling</span></h4>
+          <p>智能体是否能预测"若我改造 X 则世界变成 Y"?对应 Pearl (2009) do-calculus 层级。</p>
+          <div class="metric">METRIC · 多个候选干预下,后果预测的准确率</div>
+        </div>
+        <div class="dim-card">
+          <div class="dnum">D 08</div>
+          <h4>社会-物质协作<span class="en">Socio-material Coordination</span></h4>
+          <p>多智能体设定中,智能体是否通过共同可读的环境改造实现去中心化协作?</p>
+          <div class="metric">METRIC · 第二个 agent 仅凭第一个留下的物理状态推断下一步的成功率</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Six Architecture Design Principles ── -->
+    <div class="principles-section">
+      <h3>六项世界模型架构设计原则
+        <span class="en">Six Architecture Design Principles for Intervention-Aware World Models</span>
+      </h3>
+      <p class="sub">评估维度的扩展需要架构层面的配合。这六条不是建议,是约束 —— 缺任何一条,世界模型在干预型任务上都会有结构性缺陷。</p>
+      <div class="principles-grid">
+        <div class="princ-card">
+          <div class="pnum">01</div>
+          <h4>可改变与不可改变状态的分解<span class="en">Factored Mutability</span></h4>
+          <p>世界状态显式分解为 S = (S_fixed, S_mutable)。在不同子空间使用不同信念更新规则:对 S_fixed 用贝叶斯更新,对 S_mutable 用因果干预更新。</p>
+          <div class="formal">基于 Pearl (2009) do-calculus + Friston (2010) active inference</div>
+        </div>
+        <div class="princ-card">
+          <div class="pnum">02</div>
+          <h4>观察与干预通道的分离<span class="en">Separable Observation–Intervention Channels</span></h4>
+          <p>动作空间显式拆分为 A = A_obs ∪ A_int,世界模型对二者的后果预测使用不同模块。避免当前 Transformer-based agent 把"看"与"做"混为一谈。</p>
+          <div class="formal">允许在训练中对两类动作引入不同 inductive bias</div>
+        </div>
+        <div class="princ-card">
+          <div class="pnum">03</div>
+          <h4>持久化 · 位置化的外部记忆<span class="en">Persistent · Place-Indexed Memory</span></h4>
+          <p>记忆不仅存在于激活值或上下文窗口,还有一个由空间坐标索引的外部记忆层 —— 对应 Malafouris 物质参与与海马体-皮层对偶。</p>
+          <div class="formal">工程参考:Neural SLAM (Parisotto & Salakhutdinov 2018)</div>
+        </div>
+        <div class="princ-card">
+          <div class="pnum">04</div>
+          <h4>脚手架可识别性<span class="en">Scaffold Recognition</span></h4>
+          <p>模型能识别环境中"他者留下的认知脚手架"—— 路标、扶手、UI 提示。这是具身智能进入人造环境的前提。</p>
+          <div class="formal">训练:模仿学习 + 自监督路径预测</div>
+        </div>
+        <div class="princ-card">
+          <div class="pnum">05</div>
+          <h4>生态位构造策略<span class="en">Niche-Constructive Policy</span></h4>
+          <p>奖励塑造显式鼓励跨回合的环境改造,只要这些改造在后续任务上体现收益。可通过 meta-learning 或双层优化实现。</p>
+          <div class="formal">内层最大化当前回报,外层最大化对未来任务的边际效用</div>
+        </div>
+        <div class="princ-card">
+          <div class="pnum">06</div>
+          <h4>反事实干预模拟器<span class="en">Counterfactual Intervention Simulator</span></h4>
+          <p>世界模型必须能在干预条件下生成反事实轨迹,而不仅在观察条件下生成。对应因果图神经网络 + 可控生成式世界模型(Genie)的干预化扩展。</p>
+          <div class="formal">理论基础:Schölkopf et al. (2021) causal representation learning</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SFES anchor ── -->
+    <div class="sfes-anchor">
+      <div>
+        <div class="label">Operational anchor · 操作锚点</div>
+        <h4>这套实践框架不悬空 —— 直接接入 SFES Proposal v2 作为 Phase 6
+          <span class="en">SFES v2 now includes Section 10: Active Intervention Extension</span>
+        </h4>
+        <p>原 SFES 五阶段基准只覆盖了"环→机"与"机↔环 在身体尺度上"。本节的人-环-机三角把"机→环"这条被系统性低估的箭头补上,在 SFES Proposal v2 末尾扩出 Section 10:Active Intervention Extension(含 10.1-10.5 五小节,落地为 SFES Phase 6 草案)。</p>
+      </div>
+      <a class="cta" href="../SFES_Research_Proposal_v2.docx" download>
+        Download v2 (with §10) ↓
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ THREE RULES ════════════════════════════ -->
+<section class="rules" id="rules">
+  <div class="wrap">
+    <div class="eyebrow">Operational rules · 三条硬指令</div>
+    <h2>
+      Three rules for anyone calling their model "embodied".
+      <span class="cn">如果你的论文要用"具身"二字,请先过这三关。</span>
+    </h2>
+
+    <div class="rules-grid">
+      <div class="rule">
+        <div class="num">01</div>
+        <h3>
+          先声明你站在光谱的哪一端
+          <span class="en">Declare your spectrum position.</span>
+        </h3>
+        <p>当你说"我的 agent 具身了",请立刻回答:它是<b>有内部世界模型</b>(林奇 / Friston 系)还是<b>直接耦合动作-感知</b>(Gibson / Hillier 系)?这两条路在建筑学与哲学里都有一百年的争论,你不能回避。</p>
+        <div class="quote">"World model" and "no world model" are not synonyms for "embodied".</div>
+      </div>
+      <div class="rule">
+        <div class="num">02</div>
+        <h3>
+          区分描述与规范
+          <span class="en">Distinguish descriptive from normative.</span>
+        </h3>
+        <p>一个能复现人类空间认知的系统,不等于一个应该按人类方式设计城市的系统。从 *is* 推到 *ought* 是<b>两次跳跃</b>—— 先到描述,再到规范 —— 中间要过伦理关。最常见的失败:"大脑是贝叶斯的,所以城市应该是贝叶斯的"。</p>
+        <div class="quote">The naturalistic fallacy in architectural form.</div>
+      </div>
+      <div class="rule">
+        <div class="num">03</div>
+        <h3>
+          小心"个体具身"的默认预设
+          <span class="en">Beware the individual-embodiment default.</span>
+        </h3>
+        <p>当下大多数具身 AI 基准(包括早期版本的 Theory of Space)都是单智能体的。但建筑/城市学派告诉你:<b>空间认识本质上是集体性的、物质性的、政治性的</b>。下一代基准必须走向 multi-agent / social-physical / 跨文化 —— 这是 EBS 与 Lefebvre 早就说过的事。</p>
+        <div class="quote">A single body does not exhaust embodiment.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════ ARTICLES ══════════════════════════ -->
+<!-- ════════════════════════════ ARTICLES ════════════════════════════ -->
 <section class="articles" id="articles">
   <div class="wrap">
     <div class="articles-head">
       <div class="title">
-        专题札记
-        <span class="en">Articles in this Column</span>
+        专题札记 · 应用框架的具体案例
+        <span class="en">Articles — applying the framework, one architecture decision at a time</span>
       </div>
-      <div class="count" style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; color: var(--water-deep); text-transform: uppercase;">01 &nbsp;Published · 04 &nbsp;Forthcoming</div>
+      <div class="count">01 &nbsp;Published · 04 &nbsp;Forthcoming</div>
     </div>
 
     <div class="article-grid">
 
       <a class="article-row" href="00-空间的裂缝.html">
-        <div class="num">No. 00 &nbsp;·&nbsp; Founding</div>
+        <div class="num">No. 00 &nbsp;·&nbsp; Founding<span class="applies">Pre-framework atlas</span></div>
         <div class="body">
           <h3>
             空间的裂缝
-            <span class="en">Cracks in Space — Phenomenology · Embodied Cognition · Spatial AI</span>
+            <span class="en">Cracks in Space — A Researcher's Initial Map of the Three Fields</span>
           </h3>
-          <p>三个学科都在逼近"空间",但没人把它们缝起来。这是本专题的奠基札记 —— 一张可交互的领域地图,给出 30 位学者作为可以钻进去的缝。中央那块亮着的地,是后面每一篇文章要去填的未耕之地。</p>
-          <div class="keywords">Merleau-Ponty · Heidegger · Casey · Noë · Varela · Friston · Fei-Fei Li · Tenenbaum · Gibson · Tversky</div>
+          <p>本专题最早的一张草图。在 4 轴框架成形之前,先用三圈韦恩(现象学 / 具身认知 / 空间智能 + 30 位思想家)定位"我在哪"。它仍然有用 —— 但它是<b>地图</b>,后面这套框架才是<b>指南针</b>。</p>
+          <div class="axes-tag"><span>Atlas</span><span>30 Thinkers</span><span>Pre-Framework</span></div>
         </div>
         <div class="meta">
           <span>Apr · 2026</span>
@@ -919,14 +1484,14 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
       </a>
 
       <div class="article-row pending">
-        <div class="num">No. 01 &nbsp;·&nbsp; 正在写</div>
+        <div class="num">No. 01 &nbsp;·&nbsp; 正在写<span class="applies">Applies Rule 01</span></div>
         <div class="body">
           <h3>
-            从维特鲁威人到 Affordance Field
-            <span class="en">From Vitruvian Man to the Affordance Field — Two Millennia of Writing the Body into Space</span>
+            当你说 embodied,你说的是哪种 embodied?
+            <span class="en">"Embodied", but Which Embodied? — Decoding the Implicit Metaphysical Commitments of 12 Recent Spatial-AI Papers</span>
           </h3>
-          <p>把 Inter-Arch 那条"身体认识论"的思想史线往下延伸 300 年:维特鲁威、Semper、Schmarsow、Loos、Bachelard、Gibson、Fei-Fei Li。问一个问题:如果我们把"上手"(ready-to-hand)和"可供性"(affordance)承认为同一件事,embodied agent 的空间表征就不该是 voxel grid,而应该是 affordance field。这一篇尝试写出这个命题的前两百页脚注。</p>
-          <div class="keywords">Vitruvius · Semper · Schmarsow · Loos · Gibson · World Labs · Affordance · Ready-to-hand</div>
+          <p>选 12 篇 2023-2026 的 spatial intelligence / world model / embodied AI 论文(World Labs, JEPA, NeRF embodied,Habitat, OpenVLA, RT-2, VoxPoser...),逐篇判定它们在 4 轴框架里的位置。结论:大多数论文实际上把"表征主义+个体+结构+描述"当默认,而它们没说出口。</p>
+          <div class="axes-tag"><span>Rule 01</span><span>Spectrum Audit</span><span>12 Papers</span></div>
         </div>
         <div class="meta">
           <span>May · 2026</span>
@@ -935,14 +1500,14 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
       </div>
 
       <div class="article-row pending">
-        <div class="num">No. 02 &nbsp;·&nbsp; 正在写</div>
+        <div class="num">No. 02 &nbsp;·&nbsp; 正在写<span class="applies">Applies Mapping Row 1-2</span></div>
         <div class="body">
           <h3>
-            肌肤之目的十个具身测试
-            <span class="en">Ten Embodied Tests for the Eyes of the Skin — Pallasmaa Meets Benchmarks</span>
+            从林奇的认知地图到神经地图
+            <span class="en">From Lynch's Cognitive Map to the Neural Map — A CS Reader's Guide to Architecture's Hundred-Year Debate Over Whether Minds Carry Maps</span>
           </h3>
-          <p>把 Pallasmaa《肌肤之目》里反复出现的多感官命题(视觉-触觉-听觉-嗅觉-动觉)逐条翻成 embodied AI 可以被设计、被测量的具体任务。配合十个真实建筑案例(Therme Vals · Villa Mairea · Kiasma · Bregenz · Maggie's Centre · 瓦尔斯...)。从现象学到 benchmark 的一次正面翻译。</p>
-          <div class="keywords">Pallasmaa · Multisensory · Zumthor · Aalto · Holl · Benchmark · Embodied AI</div>
+          <p>把表 1-2 行(Lynch 表征 vs. Hillier 反表征)摊开成一篇札记。讲清楚为什么 DeepMind 2018 年那篇 grid cells 论文在概念上承接的是 Lynch/Tolman 这一支,而不是 Hillier;以及为什么这种谱系自觉对实验设计有具体影响。</p>
+          <div class="axes-tag"><span>Axis A</span><span>Lynch ↔ Hillier</span><span>Grid Cells</span></div>
         </div>
         <div class="meta">
           <span>Jun · 2026</span>
@@ -951,14 +1516,14 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
       </div>
 
       <div class="article-row pending">
-        <div class="num">No. 03 &nbsp;·&nbsp; 正在写</div>
+        <div class="num">No. 03 &nbsp;·&nbsp; 正在写<span class="applies">Applies Theory of Space L1-L2</span></div>
         <div class="body">
           <h3>
-            栖居的几何与可度量的空间
-            <span class="en">Lived Space vs. Measurable Space — Can Dwelling Be Written into a Loss Function?</span>
+            从 SFES 到多智能体 proxemics
+            <span class="en">From SFES to Multi-Agent Proxemics — Designing the L1-to-L2 Rung of the Theory-of-Space Ladder</span>
           </h3>
-          <p>Merleau-Ponty 区分"被住进去的空间(lived space)"与"被度量的空间(measurable space)" —— 这道区分能不能写进世界模型的目标函数?本篇尝试用 Friston 自由能 / Active Inference 的语言重新陈述它,并检查它在 NeRF、JEPA、Habitat 三种当代架构上的缺席。</p>
-          <div class="keywords">Merleau-Ponty · Friston · Free Energy · JEPA · NeRF · Habitat · Loss Function</div>
+          <p>把 SFES 单智能体熟悉度基准,扩展为一个 Hall-proxemics-aware 的多智能体基准设计。落到具体的环境构造、任务定义、metric 设计。这一篇是 SFES 研究方向与本专题框架第一次明确接合。</p>
+          <div class="axes-tag"><span>SFES</span><span>L1 → L2</span><span>Benchmark Design</span></div>
         </div>
         <div class="meta">
           <span>Jul · 2026</span>
@@ -967,14 +1532,14 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
       </div>
 
       <div class="article-row pending">
-        <div class="num">No. 04 &nbsp;·&nbsp; 构思中</div>
+        <div class="num">No. 04 &nbsp;·&nbsp; 构思中<span class="applies">Applies Rule 02-03</span></div>
         <div class="body">
           <h3>
-            权力、规训与被设计的身体运动
-            <span class="en">Discipline and the Choreography of Space — Foucault, Panopticon, and the Modern Floor Plan</span>
+            当我们用 AI 改造城市时,我们在重新生产空间
+            <span class="en">When AI Redesigns the City, It Re-Produces Space — Reading Lefebvre Against Generative Urbanism</span>
           </h3>
-          <p>接上 Foucault《规训与惩罚》、Mauss《身体技术》与 Mary Douglas《洁净与危险》这一支 —— 空间如何通过约束身体的运动轨迹、行为方式、视线与边界,成为权力的物质体现。从古罗马广场到标准化写字楼,再到 Embodied AI 训练环境里被悄悄预设的"正确行为"。</p>
-          <div class="keywords">Foucault · Mauss · Mary Douglas · Panopticon · Agamben · Giddens · Body Politics</div>
+          <p>把 Lefebvre 的"空间生产"三元辩证压在生成式城市设计(generative urbanism / diffusion-for-design)的实践上。问一个具体的问题:当 LLM 在为城市生成方案时,它生产的是哪一种空间(实践 / 表征 / 表征空间)? 这一篇是 Rule 02 与 Rule 03 联手的应用。</p>
+          <div class="axes-tag"><span>Rule 02+03</span><span>Lefebvre</span><span>Generative Urbanism</span></div>
         </div>
         <div class="meta">
           <span>TBD</span>
@@ -986,208 +1551,58 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
   </div>
 </section>
 
-<!-- ══════════════════════════ TIMELINE · 思想史轴 ══════════════════════════ -->
-<section class="timeline" id="timeline">
+<!-- ════════════════════════════ READING LIST ════════════════════════════ -->
+<section class="reading" id="reading">
   <div class="wrap">
-    <div class="timeline-head">
+    <div class="reading-head">
       <div class="title">
-        思想史轴 · 身体如何进入建筑
-        <span class="en">A Genealogy — How the Body Entered Architecture</span>
-      </div>
-      <p class="sub">A selective timeline — from the Vitruvian module through phenomenology's retrieval of the body, to today's embodied AI. Each node is a switch that reopens the question of what counts as "inhabiting" space.</p>
-    </div>
-
-    <div class="timeline-rail">
-      <div class="tl-track">
-        <div class="tl-epoch epoch-phe"><div class="year">-30 BCE</div><div class="dot"></div><div class="name">Vitruvius<span class="cn">维特鲁威人</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1452</div><div class="dot"></div><div class="name">Alberti<span class="cn">De re aedificatoria</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1851</div><div class="dot"></div><div class="name">Semper<span class="cn">建筑四要素</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1893</div><div class="dot"></div><div class="name">Schmarsow<span class="cn">空间创造论</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1907</div><div class="dot"></div><div class="name">Loos<span class="cn">Raumplan</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1927</div><div class="dot"></div><div class="name">Heidegger<span class="cn">存在与时间</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1945</div><div class="dot"></div><div class="name">Merleau-Ponty<span class="cn">知觉现象学</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1958</div><div class="dot"></div><div class="name">Bachelard<span class="cn">空间的诗学</span></div></div>
-        <div class="tl-epoch epoch-emb"><div class="year">1979</div><div class="dot"></div><div class="name">J.J. Gibson<span class="cn">Affordances</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1980</div><div class="dot"></div><div class="name">Norberg-Schulz<span class="cn">场所精神</span></div></div>
-        <div class="tl-epoch epoch-emb"><div class="year">1991</div><div class="dot"></div><div class="name">Varela &middot; Rosch<span class="cn">具身心智</span></div></div>
-        <div class="tl-epoch epoch-phe"><div class="year">1996</div><div class="dot"></div><div class="name">Pallasmaa<span class="cn">肌肤之目</span></div></div>
-        <div class="tl-epoch epoch-emb"><div class="year">2010</div><div class="dot"></div><div class="name">Friston / FEP<span class="cn">自由能原理</span></div></div>
-        <div class="tl-epoch epoch-spa"><div class="year">2024</div><div class="dot"></div><div class="name">Fei-Fei Li<span class="cn">World Labs</span></div></div>
+        推荐读物 · 三档进阶
+        <span class="en">Reading List — Three Tiers</span>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════ CASES · 建筑实例轴 ══════════════════════════ -->
-<section class="cases" id="cases">
-  <div class="wrap">
-    <div class="cases-head">
-      <div class="title">
-        建筑实例轴 · 身体的六个触点
-        <span class="en">Six Buildings Where the Body Is the Method</span>
-      </div>
-      <div class="sub">Six Touch-Points · Zumthor · Aalto · Holl · Pantheon · Therme · Bregenz</div>
-    </div>
-    <div class="cases-grid">
-
-      <div class="case" data-year="126 CE">
-        <h4>
-          万神殿 · Oculus
-          <span class="en">Pantheon — Rome</span>
-        </h4>
-        <p class="arch">帝国几何 · Hadrian's circle</p>
-        <p>穹顶正中直径 9 米的圆孔,把"身体之上的天"变成可以具体被注视、被光线击中的点。身体第一次在建筑里被迫仰望 —— 这是西方建筑史上最早的一次,把"朝向"(orientation)从象征写进物理。</p>
-        <span class="sense">视觉 · 朝向</span>
-      </div>
-
-      <div class="case" data-year="1996">
-        <h4>
-          瓦尔斯温泉浴场
-          <span class="en">Therme Vals — Peter Zumthor</span>
-        </h4>
-        <p class="arch">卒姆托 · 瑞士格劳宾登</p>
-        <p>当地切割的灰色石英岩砌筑成浴场的每一堵墙、每一块池底。赤足踩上凉岩、触摸粗糙砌缝、感受温泉的温热 —— 卒姆托在此把 Pallasmaa 所说的"多感官经验"具体写成了材料的几何。</p>
-        <span class="sense">触觉 · 温度 · 材料</span>
-      </div>
-
-      <div class="case" data-year="1939">
-        <h4>
-          玛丽亚别墅
-          <span class="en">Villa Mairea — Alvar Aalto</span>
-        </h4>
-        <p class="arch">阿尔瓦·阿尔托 · 芬兰诺尔马库</p>
-        <p>木材的温润、柱林的节奏、粗抹灰与细木表面的触觉对比 —— Aalto 把北欧森林"写"进室内。Pallasmaa 认为这是反视觉中心主义最成熟的建筑范例:身体不是看这间房子,而是被这间房子招待。</p>
-        <span class="sense">触觉 · 节奏 · 温情</span>
-      </div>
-
-      <div class="case" data-year="1998">
-        <h4>
-          奇亚斯玛当代艺术博物馆
-          <span class="en">Kiasma Museum — Steven Holl</span>
-        </h4>
-        <p class="arch">斯蒂文·霍尔 · 赫尔辛基</p>
-        <p>弧形屋顶与天窗把北欧的低角度日光引入展厅,光线每天、每季在墙面与地面上以不同的形态流动。Holl 把"光"当作材料来设计 —— 身体在空间里的每一次停顿,都是对一次光相位的注册。</p>
-        <span class="sense">视觉 · 光线 · 时间</span>
-      </div>
-
-      <div class="case" data-year="1997">
-        <h4>
-          布雷根茨美术馆
-          <span class="en">Kunsthaus Bregenz — Peter Zumthor</span>
-        </h4>
-        <p class="arch">卒姆托 · 奥地利</p>
-        <p>全玻璃幕墙漫反射出康斯坦茨湖、阿尔卑斯山与城市本身。外部的视觉即是内部的光源。身体站在近旁时,它不是一座建筑,而是湖面上一块结晶 —— 建筑即风景。</p>
-        <span class="sense">视觉 · 反射 · 场所</span>
-      </div>
-
-      <div class="case" data-year="2003">
-        <h4>
-          玛吉中心 · London
-          <span class="en">Maggie's Centre — Steven Holl</span>
-        </h4>
-        <p class="arch">斯蒂文·霍尔 · 伦敦</p>
-        <p>癌症疗养空间里的弧面墙与玻璃隔音结构,让声音在空间中经过柔和反射,消除尖锐回响。身体的听觉被整座建筑温柔地包住 —— 这是对现代医院标准化噪音环境的一次建筑学反抗。</p>
-        <span class="sense">听觉 · 声学 · 疗愈</span>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════ METHOD ══════════════════════════ -->
-<section class="method" id="method">
-  <div class="wrap">
-    <div class="eyebrow">Method · 编辑方法论</div>
-    <h2>
-      Three rules for writing in this column.
-      <span class="cn">写这个专题的三条规矩。</span>
-    </h2>
-
-    <div class="method-rules">
-      <div class="method-rule">
-        <div class="num">01</div>
-        <h3>
-          思想史+建筑史 双轨并行
-          <span class="en">Two Rails · Ideas × Buildings</span>
-        </h3>
-        <p>每一篇札记都必须同时走两条轴:一条是哲学家/理论家的脉络(柏拉图→Merleau-Ponty→Pallasmaa→Casey),一条是具体建筑与城市(万神殿→Raumplan→Therme Vals→World Labs)。空谈理论或堆图纸都不过关。</p>
-      </div>
-      <div class="method-rule">
-        <div class="num">02</div>
-        <h3>
-          理论不能只停在美学
-          <span class="en">Theory Must Touch Code</span>
-        </h3>
-        <p>所有关于"身体如何感知空间"的现象学直觉,最终都要落到可被具身 AI/世界模型讨论的形式:是否能翻译成损失函数?是否能作为一个 benchmark?是否能写进 inductive bias?理论如果永远拒绝被形式化,就放弃了影响今天 AI 的机会。</p>
-      </div>
-      <div class="method-rule">
-        <div class="num">03</div>
-        <h3>
-          保留第一人称的观察
-          <span class="en">Keep the First-Person Witness</span>
-        </h3>
-        <p>建筑师的身体是这个专题最独特的工具 —— 它对"被住进去的空间"有第一手经验,这是计算机视觉做不出的感官资本。每一篇札记都可以在末尾留一段"我看到/我走过/我摸到",不要把它洗成无主体的学术声音。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════ BIBLIOGRAPHY ══════════════════════════ -->
-<section class="biblio" id="biblio">
-  <div class="wrap">
-    <div class="biblio-head">
-      <div class="title">
-        推荐书目
-        <span class="en">Working Bibliography</span>
-      </div>
-      <div class="count">24 &nbsp;Titles &middot; Growing</div>
-    </div>
-
-    <div class="biblio-cols">
-      <div class="biblio-col">
-        <h3>Phenomenology &middot; Architecture &middot; 中文可得</h3>
+    <div class="reading-cols">
+      <div class="r-col">
+        <h4>入门 · 都是薄书</h4>
         <ol>
-          <li><b>柏拉图</b> <i>斐多篇 / Phaedo</i><br><span class="meta">Plato · 前 4 世纪 · 身心二元传统的起点</span></li>
-          <li><b>维特鲁威</b> <i>建筑十书 / The Ten Books on Architecture</i><br><span class="meta">Vitruvius · 前 30 · 身体模数的最早文本</span></li>
-          <li><b>Husserl</b> <i>Ideas: General Introduction to Pure Phenomenology</i><br><span class="meta">胡塞尔 · 1913 · 回到事物本身</span></li>
-          <li><b>Heidegger</b> <i>Being and Time</i> &middot; <i>Building, Dwelling, Thinking</i><br><span class="meta">海德格尔 · 1927, 1951 · 栖居与上手</span></li>
-          <li><b>Merleau-Ponty</b> <i>Phenomenology of Perception</i> (esp. Part II)<br><span class="meta">梅洛-庞蒂 · 1945 · 身体-主体 &middot; 姜志辉 译本</span></li>
-          <li><b>Bachelard</b> <i>The Poetics of Space</i><br><span class="meta">巴什拉 · 1958 · 张逸婧 译本</span></li>
-          <li><b>Norberg-Schulz</b> <i>Genius Loci: Towards a Phenomenology of Architecture</i><br><span class="meta">诺伯格-舒尔茨 · 1980 · 场所精神</span></li>
-          <li><b>Pallasmaa</b> <i>The Eyes of the Skin: Architecture and the Senses</i><br><span class="meta">帕拉斯玛 · 1996 &middot; 刘星 译本</span></li>
-          <li><b>Casey</b> <i>Getting Back into Place</i> &middot; <i>The Fate of Place</i><br><span class="meta">Edward Casey · 1993, 1997</span></li>
-          <li><b>理查德·桑内特</b> <i>肉体与石头 / Flesh and Stone</i><br><span class="meta">黄煜文 译 · 上海译文 · 西方文明中的身体与城市</span></li>
-          <li><b>McEwen</b> <i>Vitruvius: Writing the Body of Architecture</i><br><span class="meta">Indra Kagis McEwen · MIT Press · 2003</span></li>
-          <li><b>Dodds &amp; Tavernor (eds.)</b> <i>Body and Building</i><br><span class="meta">MIT Press · 2002 · 文集</span></li>
+          <li><b>Gibson</b> <i>The Ecological Approach to Visual Perception</i><br><span class="meta">1979 · 选读 Ch.8 affordance</span></li>
+          <li><b>Clark &amp; Chalmers</b> <i>The Extended Mind</i><br><span class="meta">1998 · 论文 15 页</span></li>
+          <li><b>Lynch</b> <i>The Image of the City</i><br><span class="meta">1960 · Ch. 1-2</span></li>
+          <li><b>Lakoff &amp; Johnson</b> <i>Metaphors We Live By</i><br><span class="meta">1980 · 任意三章</span></li>
+          <li><b>Pallasmaa</b> <i>The Eyes of the Skin</i><br><span class="meta">1996 · 反视觉中心主义入门</span></li>
         </ol>
       </div>
-      <div class="biblio-col">
-        <h3>Embodied Cognition &middot; Spatial AI</h3>
+      <div class="r-col">
+        <h4>中阶 · 主干</h4>
         <ol>
-          <li><b>Dreyfus</b> <i>What Computers Can't Do</i> · <i>Being-in-the-World</i><br><span class="meta">Hubert Dreyfus · 1972, 1991 · 现象学撞击 AI</span></li>
-          <li><b>Gibson</b> <i>The Ecological Approach to Visual Perception</i><br><span class="meta">J.J. Gibson · 1979 · Affordance 的奠基</span></li>
-          <li><b>Varela / Thompson / Rosch</b> <i>The Embodied Mind</i><br><span class="meta">MIT Press · 1991 · 生成认知开山</span></li>
-          <li><b>Brooks</b> <i>Intelligence Without Representation</i> · <i>Flesh and Machines</i><br><span class="meta">Rodney Brooks · 1991, 2002 · 具身机器人之父</span></li>
-          <li><b>Thompson</b> <i>Mind in Life</i><br><span class="meta">Evan Thompson · 2007 · 生物学 × 现象学</span></li>
-          <li><b>Noë</b> <i>Action in Perception</i><br><span class="meta">Alva Noë · 2004 · 感知即技能性的行动</span></li>
-          <li><b>Gallagher</b> <i>How the Body Shapes the Mind</i><br><span class="meta">Shaun Gallagher · 2005 · Body schema vs body image</span></li>
-          <li><b>Clark</b> <i>Surfing Uncertainty</i> · <i>Being There</i><br><span class="meta">Andy Clark · 2016, 1997 · 预测加工 &middot; 延展心智</span></li>
-          <li><b>Metzinger</b> <i>Being No One</i> · <i>The Ego Tunnel</i><br><span class="meta">Thomas Metzinger · 2003, 2009 · 自我模型</span></li>
-          <li><b>Seth</b> <i>Being You</i><br><span class="meta">Anil Seth · 2021 · 受控的幻觉</span></li>
-          <li><b>Tversky</b> <i>Mind in Motion</i><br><span class="meta">Barbara Tversky · 2019 · 空间认知四十年</span></li>
-          <li><b>LeCun</b> <i>A Path Towards Autonomous Machine Intelligence</i><br><span class="meta">2022 · JEPA 与世界模型架构</span></li>
+          <li><b>Hillier</b> <i>Space is the Machine</i><br><span class="meta">1996 · 空间句法的自我辩护</span></li>
+          <li><b>Varela / Thompson / Rosch</b> <i>The Embodied Mind</i><br><span class="meta">1991 · 前半部分</span></li>
+          <li><b>Andy Clark</b> <i>Surfing Uncertainty</i><br><span class="meta">2016 · Ch. 1-3 · 预测加工</span></li>
+          <li><b>Hutchins</b> <i>Cognition in the Wild</i><br><span class="meta">1995 · 分布式认知 · 航海舱</span></li>
+          <li><b>Heft</b> <i>Ecological Psychology in Context</i><br><span class="meta">2001 · Gibson → 环境心理</span></li>
+          <li><b>Tversky</b> <i>Mind in Motion</i><br><span class="meta">2019 · 空间认知四十年</span></li>
+        </ol>
+      </div>
+      <div class="r-col">
+        <h4>进阶 / 批判</h4>
+        <ol>
+          <li><b>Lefebvre</b> <i>The Production of Space</i><br><span class="meta">1974 · 选段</span></li>
+          <li><b>Chemero</b> <i>Radical Embodied Cognitive Science</i><br><span class="meta">2009 · 全本</span></li>
+          <li><b>Malafouris</b> <i>How Things Shape the Mind</i><br><span class="meta">2013 · 物质参与理论</span></li>
+          <li><b>Yaneva</b> <i>Mapping Controversies in Architecture</i><br><span class="meta">2012 · ANT 建筑版</span></li>
+          <li><b>Casey</b> <i>The Fate of Place</i><br><span class="meta">1997 · 空间 vs. 地方哲学史</span></li>
+          <li><b>Friston et al.</b> <i>Active Inference: The Free Energy Principle in Mind, Brain, and Behavior</i><br><span class="meta">2022 · MIT Press · 数学硬核</span></li>
         </ol>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════ COLOPHON · FOOTER ══════════════════════════ -->
+<!-- ════════════════════════════ COLOPHON ════════════════════════════ -->
 <section class="colophon">
   <div class="wrap">
     <div class="eyebrow">Colophon · 专题附言</div>
-    <h2>"I just want to figure out space.<br>It's just that this field hasn't been invented yet."</h2>
-    <p class="cn">这个专题不急。它将每一两个月更新一篇札记,每一篇都必须同时欠哲学家、建筑师和工程师各一封邮件 —— 这是它的标准。如果你读到任何一篇有话要接上,请来信。</p>
+    <h2>"Embodied" is not a synonym for "good".<br>It is a position one chooses in a 100-year-old debate.</h2>
+    <p class="cn">这个专题不写优雅的话。它要做的是:让任何一个用"具身"做研究方向的人,都知道自己在选什么、放弃什么。每一两个月一篇札记,每一篇都必须把框架的某一行落到一个具体的架构决策上。如果你正在做相关方向、想合作或反驳,请来信。</p>
     <a class="back" href="../index.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       Back to the Lab &nbsp;·&nbsp; 返回实验室
@@ -1196,224 +1611,231 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
 </section>
 
 <footer>
-  <div>© 2026 &nbsp;·&nbsp; 四维空间感知实验室 · SFES Laboratory · Phenomenology Column</div>
+  <div>© 2026 &nbsp;·&nbsp; 四维空间感知实验室 · SFES Laboratory · Phenomenology Programme</div>
   <div class="sig">Built quietly · 于空间之外</div>
 </footer>
 
 <script>
-/* ── Thinker Atlas data ── */
-const DATA = {
-  merleau: {
-    name: "Maurice Merleau-Ponty (1908–1961)",
-    tag: "Phenomenology · France",
-    works: "<i>Phenomenology of Perception</i> (1945) · <i>The Visible and the Invisible</i>",
-    why: "空间现象学的核心人物。明确提出身体是知觉的主体,空间不是被心智表征的外部容器,而是身体向世界展开的结构。直接读 Part II, Ch. 2 'Space' 与 Ch. 3 'The Thing and the Natural World'。"
-  },
-  heidegger: {
-    name: "Martin Heidegger (1889–1976)",
-    tag: "Phenomenology · Ontology",
-    works: "<i>Being and Time</i> (1927) · <i>Building, Dwelling, Thinking</i> (1951)",
-    why: "提出 Being-in-the-world 与 ready-to-hand(上手)。空间首先是被使用的、被栖居的,而不是被测量的。Gibson 的 affordance 与之互通;Dreyfus 把他翻给了 AI。"
-  },
-  husserl: {
-    name: "Edmund Husserl (1859–1938)",
-    tag: "Phenomenology · Founder",
-    works: "<i>Logical Investigations</i> · <i>Ideas I</i> · <i>Ding und Raum</i> (手稿)",
-    why: "现象学的祖师爷。有专门关于空间构造的手稿,讨论运动感觉(kinesthesis)如何让空间经验得以可能 —— 今天具身 AI 用 self-supervised 在重新问这个问题。"
-  },
-  bachelard: {
-    name: "Gaston Bachelard (1884–1962)",
-    tag: "Phenomenology · Poetics",
-    works: "<i>The Poetics of Space</i> (1958)",
-    why: "把空间现象学写成关于家、壁橱、阁楼、贝壳的诗。给'被住进去的空间'提供最丰富的现象描述库。"
-  },
-  casey: {
-    name: "Edward Casey (b. 1939)",
-    tag: "Phenomenology · Place/Space",
-    works: "<i>The Fate of Place</i> · <i>Getting Back into Place</i>",
-    why: "当代空间现象学最系统的人。明确区分 place / space / body,写了一整部历史讲西方哲学如何把 place 简化为 space。"
-  },
-  zahavi: {
-    name: "Dan Zahavi (b. 1967)",
-    tag: "Contemporary Phenomenology",
-    works: "<i>Husserl's Phenomenology</i> · <i>Self-Awareness and Alterity</i>",
-    why: "哥本哈根学派,当代现象学最权威的解释者之一,和认知科学对话最多。把现象学精确化的最好入口。"
-  },
-  pallasmaa: {
-    name: "Juhani Pallasmaa (b. 1936)",
-    tag: "Architecture · Phenomenology",
-    works: "<i>The Eyes of the Skin</i> (1996) · <i>The Thinking Hand</i>",
-    why: "建筑现象学在当代最具影响力的代言人。批判视觉中心主义,主张触觉、听觉、嗅觉、动觉是建筑经验的共同主体。本专题的首要参考。"
-  },
-  norberg: {
-    name: "Christian Norberg-Schulz (1926–2000)",
-    tag: "Architecture · Phenomenology",
-    works: "<i>Genius Loci: Towards a Phenomenology of Architecture</i> (1980)",
-    why: "第一位把现象学系统翻给建筑学的人。提出场所精神,把 Heidegger 的栖居论嫁接到具体的城市、街道、广场。"
-  },
-  dreyfus: {
-    name: "Hubert Dreyfus (1929–2017)",
-    tag: "Phenomenology ∩ AI · Bridge",
-    works: "<i>What Computers Can't Do</i> (1972) · <i>Being-in-the-World</i>",
-    why: "直接用 Heidegger/Merleau-Ponty 怼 GOFAI,预言第一次 AI 寒冬,影响了 Rodney Brooks 的 subsumption architecture。'现象学可以指导 AI' 的活证据。"
-  },
-  varela: {
-    name: "Varela · Thompson · Rosch",
-    tag: "Enactivism · Bridge",
-    works: "<i>The Embodied Mind</i> (1991) · Thompson <i>Mind in Life</i>",
-    why: "把现象学、认知科学、佛教放进一本书的开山作。写'为什么 spatial intelligence 需要现象学',这是主力论证。"
-  },
-  gallagher: {
-    name: "Shaun Gallagher (b. 1948)",
-    tag: "Phenomenology ∩ Cognitive Science",
-    works: "<i>How the Body Shapes the Mind</i> · <i>Phenomenology</i>",
-    why: "提出并形式化了 body schema / body image 区分。当代最活跃的桥梁人物,参加的会议既有哲学也有脑科学。"
-  },
-  noe: {
-    name: "Alva Noë (b. 1964)",
-    tag: "Enactive Perception",
-    works: "<i>Action in Perception</i> (2004) · <i>Out of Our Heads</i>",
-    why: "把'感知是技能性的行动'这一现象学直觉翻成可与神经科学、机器人对话的理论。关于'空间如何在行动中显现'最清楚的论证者。"
-  },
-  fuchs: {
-    name: "Thomas Fuchs",
-    tag: "Phenomenological Psychiatry",
-    works: "<i>Ecology of the Brain</i>",
-    why: "从精神病学(自闭谱系、抑郁、精神分裂)切入身体-空间-世界的关系,另一种硬桥。"
-  },
-  brooks: {
-    name: "Rodney Brooks (b. 1954)",
-    tag: "Embodied Robotics · MIT",
-    works: "<i>Intelligence Without Representation</i> (1991) · <i>Flesh and Machines</i>",
-    why: "把 Dreyfus 的批判变成真机器人。Subsumption architecture 是'没有中央表征、只有和世界互动'的工程体现。具身 AI 的工程祖师。"
-  },
-  clark: {
-    name: "Andy Clark (b. 1957)",
-    tag: "Extended Mind · Predictive Processing",
-    works: "<i>Being There</i> · <i>Surfing Uncertainty</i> · <i>The Experience Machine</i>",
-    why: "把 predictive processing 写成一本本能被读懂的书。现象学直觉('世界先显现再被表征')在他这里被翻成神经计算语言。"
-  },
-  friston: {
-    name: "Karl Friston (b. 1959)",
-    tag: "Free Energy Principle · Active Inference",
-    works: "Free Energy Principle 系列 · Active Inference book",
-    why: "当代理论神经科学最野心的数学框架。主张具身主体用自己的世界模型最小化意外。要形式化空间经验,绕不过他。"
-  },
-  seth: {
-    name: "Anil Seth",
-    tag: "Consciousness · Predictive Processing",
-    works: "<i>Being You</i> (2021)",
-    why: "把预测加工写成可读的意识理论,强调'受控的幻觉'—— 我们感知的空间是大脑的最佳猜测。"
-  },
-  metzinger: {
-    name: "Thomas Metzinger",
-    tag: "Self-Model · Philosophy ∩ Neuroscience",
-    works: "<i>Being No One</i> · <i>The Ego Tunnel</i>",
-    why: "系统讲身体模型、自我模型、空间模型如何在大脑里构成经验的整体。关于'空间的第一人称视角'论证极其精细。"
-  },
-  tenenbaum: {
-    name: "Josh Tenenbaum (MIT)",
-    tag: "Cognitive AI · Bridge",
-    works: "直觉物理引擎 · probabilistic program induction 系列",
-    why: "MIT CoCoSci 实验室。把认知科学问题(人怎么推断物理、空间、因果)变成可跑的概率模型。'cog sci 如何约束 AI' 最成功的范式。"
-  },
-  activeinf: {
-    name: "Active Inference 机器人圈",
-    tag: "Theoretical Neuro ∩ Robotics",
-    works: "Pezzulo, Parr, Da Costa 等",
-    why: "把 Friston 的数学直接写到机器人上 —— 让 agent 通过最小化自由能探索空间。现象学气质最强的工程派。"
-  },
-  devrobo: {
-    name: "Developmental Robotics",
-    tag: "Robotics ∩ Developmental Psych",
-    works: "Asada, Oudeyer, Cangelosi 等",
-    why: "研究机器人能不能像婴儿一样,通过和世界的身体互动'长出'空间感。'空间是被经验出来的'在工程上的对应面。"
-  },
-  feifei: {
-    name: "Fei-Fei Li (b. 1976) · World Labs",
-    tag: "Spatial Intelligence · Flag-bearer",
-    works: "ImageNet · Embodied AI 综述 · World Labs (2024)",
-    why: "2024 年明确把 spatial intelligence 作为下一代 AI 的旗帜。但她的路径从 3D vision 上来,默认空间=几何。这恰恰是本专题要补的缝。"
-  },
-  lecun: {
-    name: "Yann LeCun · JEPA",
-    tag: "World Model · Architecture",
-    works: "<i>A Path Towards Autonomous Machine Intelligence</i> (2022)",
-    why: "主张 AI 必须学习世界模型才能真正'理解'。JEPA 是'用预测而非重建学空间',和 predictive processing/active inference 同源。"
-  },
-  ha: {
-    name: "David Ha / Jürgen Schmidhuber",
-    tag: "World Models",
-    works: "<i>World Models</i> (2018)",
-    why: "把'主体在内部维持一个可想象的世界模型'做成可跑的神经网络。世界模型这条线的工程起点。"
-  },
-  nerf: {
-    name: "NeRF / Gaussian Splatting",
-    tag: "3D Scene Representation",
-    works: "NeRF (2020) · 3DGS (2023)",
-    why: "让机器真正'重建'一个可走入的三维空间。技术极强,哲学上仍把空间当'从外部被看的几何'。本专题的问题是:身体从内部在其中是什么?"
-  },
-  habitat: {
-    name: "Meta Habitat · Embodied AI Platforms",
-    tag: "Embodied AI · Simulation",
-    works: "Habitat Sim · AI2-THOR · iGibson",
-    why: "让 agent 在模拟房子里走动、找东西、对话的标准平台。非常工程、目标导向,几乎没有现象学味道 —— 另一条可补的缝。"
-  },
-  gibson: {
-    name: "J.J. Gibson (1904–1979)",
-    tag: "Ecological Psychology · Almost a Bridge",
-    works: "<i>The Ecological Approach to Visual Perception</i> (1979)",
-    why: "提出 affordance:环境向身体显现的可能性。不是现象学家但气质完全一致,直接影响今日具身 AI 的 affordance learning。能引的最'科学'的桥。"
-  },
-  tversky: {
-    name: "Barbara Tversky",
-    tag: "Spatial Cognition",
-    works: "<i>Mind in Motion</i> (2019)",
-    why: "一辈子研究人如何思考空间。把现象学直觉('思想用空间来组织')做成几十年的心理学实验证据。写作极其清晰。"
-  }
-};
+/* ════════════════════════════════════════════════════════════════════════
+   Parallel-coordinates plot · 19 schools × 4 axes
+   Axis x positions: A=130, B=410, C=690, D=970
+   Axis y range: top=80, bottom=440, mid=260
+   Each school value v ∈ [-3, +3] → y = 260 - (v / 3) * 180
+   ════════════════════════════════════════════════════════════════════════ */
 
-const panel = document.getElementById('nodePanel');
-const nodes = document.querySelectorAll('.node');
-let activeNode = null;
+const SCHOOLS = [
+  // Architecture / Built Environment (rose)
+  { id:"lynch",     name:"林奇 · 认知地图", en:"Lynch — Image of the City", domain:"arch",
+    A: 2, B:-2, C:-2, D: 0,
+    note:"用 Tolman 的认知地图传统画城市意象。空间被视为可在头内表征的结构。",
+    cs:"SLAM · neural cognitive map · grid/place cells (DeepMind 2018)",
+    commit:"Agent carries a map." },
+  { id:"hillier",   name:"空间句法", en:"Hillier — Space Syntax", domain:"arch",
+    A: 2, B: 2, C:-2, D: 3,
+    note:"空间的社会-认知属性来自其拓扑配置,不来自主观感受。最'像算法'的建筑理论。",
+    cs:"GNN on floor plans · axial map · isovist · integration / choice",
+    commit:"Configuration is cognition — no central representation needed." },
+  { id:"affordance",name:"可供性 · Heft 应用", en:"Affordance Theory (Heft)", domain:"arch",
+    A: 3, B: 1, C: 1, D:-2,
+    note:"环境直接提供行动可能性。反对中间表征:知觉直接耦合行动。",
+    cs:"Affordance learning · action-conditioned policy · SAPIEN · Where2Act",
+    commit:"Perception delivers action — skip the geometric reconstruction." },
+  { id:"barker",    name:"行为情境", en:"Barker — Behavior Settings", domain:"arch",
+    A: 1, B: 3, C:-2, D:-1,
+    note:"行为的基本单位是'行为情境'——时间-地点-人群-活动模式的稳定耦合。",
+    cs:"Multi-agent simulation · ABM · scenario design · NetLogo · Mesa",
+    commit:"Single-agent benchmarks miss the unit of analysis." },
+  { id:"hall",      name:"Proxemics · Hall", en:"Hall — Proxemics", domain:"arch",
+    A: 1, B:-1, C:-2, D: 0,
+    note:"人有四种空间距离(亲密/个人/社会/公共),文化差异巨大。",
+    cs:"Social robotics personal space · Helbing social force · social-LSTM",
+    commit:"Distance carries semantic load — and it varies by culture." },
+  { id:"lefebvre",  name:"空间生产 · Lefebvre", en:"Lefebvre — Production of Space", domain:"arch",
+    A: 0, B: 3, C: 2, D: 3,
+    note:"空间不是中性容器,而是资本与权力生产的产物。三元辩证:实践/表征/表征空间。",
+    cs:"Algorithmic fairness · critical AI · dataset audits · spatial fairness",
+    commit:"Your training data is a political artifact, not a neutral input." },
+  { id:"alexander", name:"模式语言", en:"Alexander — A Pattern Language", domain:"arch",
+    A: 1, B: 0, C: 0, D: 2,
+    note:"建筑由 253 个递归嵌套的'模式'生成。半形式化、半诗意。",
+    cs:"GoF design patterns · shape grammar · WaveFunctionCollapse · diffusion-for-design",
+    commit:"Generative models should compose from grammars, not just sample latents." },
+  { id:"gehl",      name:"Gehl 公共生活", en:"Gehl — Life Between Buildings", domain:"arch",
+    A: 0, B:-1, C: 2, D: 3,
+    note:"系统观察城市公共空间中人的行为。数据驱动的城市设计。",
+    cs:"CV-based urban analytics · pedestrian detection · trajectory mining",
+    commit:"What we measure shapes what we design — choose your metrics carefully." },
+  { id:"ant",       name:"ANT · 建筑版", en:"Latour / Yaneva — ANT Architecture", domain:"arch",
+    A: 2, B: 3, C: 2, D:-1,
+    note:"建筑物是行动者。建筑的认知/社会效应不由人-物二分产生,而由混合网络产生。",
+    cs:"Distributed multi-agent · tool-use agents · MCP architecture · LangGraph",
+    commit:"Tools and environment are peers in the system, not consumed objects." },
+  { id:"ebs",       name:"环境行为学 · POE", en:"EBS — Environment-Behavior Studies", domain:"arch",
+    A: 2, B:-2, C:-2, D:-2,
+    note:"用实证社会科学方法研究'人在空间中做什么'。POE、行为图、问卷。",
+    cs:"Post-occupancy eval · sensor-based occupancy · BIM-integrated UX",
+    commit:"Treats space as IV, behavior as DV — risks stimulus-response simplification." },
 
-function renderDetail(d, isHover) {
-  const label = isHover ? `${d.tag} · Click to pin` : d.tag;
-  panel.innerHTML = `
-    <h3>${d.name}</h3>
-    <p class="tag">${label}</p>
-    <p class="works"><b>Works ·</b> ${d.works}</p>
-    <p class="why"><b>Why it matters ·</b> ${d.why}</p>
-  `;
-}
+  // Philosophy / Cognition (lavender)
+  { id:"phenomen",  name:"现象学 · 通论", en:"Phenomenology (broad)", domain:"phil",
+    A: 0, B:-2, C: 0, D:-2,
+    note:"Husserl/Merleau-Ponty/Heidegger 一脉:身体是知觉的主体,空间不是被表征的容器。",
+    cs:"Inspires affective computing, body-schema robotics — but historically resistant to formalization",
+    commit:"Lived space ≠ measurable space — but the gap remains philosophically stated, not yet engineered." },
+  { id:"ecology",   name:"生态心理 · 直接知觉", en:"Ecological Psychology", domain:"phil",
+    A: 3, B: 1, C: 2, D:-3,
+    note:"知觉直接拾取环境中的不变量(invariants)。光学流告诉你 time-to-contact。",
+    cs:"End-to-end policy learning · visuomotor control · Gibson-inspired affordance datasets",
+    commit:"No internal world model needed — perception-action loops do the work." },
+  { id:"extended",  name:"延展心智 · 分布认知", en:"Extended Mind / Distributed Cognition", domain:"phil",
+    A: 0, B: 3, C: 0, D:-1,
+    note:"Clark & Chalmers 1998 + Hutchins 1995:认知不止在头内 —— 笔记本、GPS、面板都是认知系统的一部分。",
+    cs:"RAG · memory-augmented networks · tool-use agents · MCP · LangGraph",
+    commit:"LLM + tools is literally extended cognition — name it, and design it deliberately." },
+  { id:"enactive",  name:"激进 enactivism", en:"Radical Enactivism", domain:"phil",
+    A: 3, B: 2, C: 3, D:-2,
+    note:"Varela/Thompson/Rosch 1991:认知 = 自主系统通过身体行动 enact 意义世界。生命-心智连续性。",
+    cs:"Autopoietic systems · active inference · 生成式模型的'世界不是被动给定的'",
+    commit:"Build agents that bring forth a world through coupling, not represent it." },
+  { id:"dynamical", name:"动力系统 · 激进具身", en:"Dynamical / Radical Embodied", domain:"phil",
+    A: 3, B: 1, C: 3, D:-3,
+    note:"Thelen & Smith 1994 / Chemero 2009:认知是耦合动力系统的连续状态演化,不是离散表征操作。",
+    cs:"Neural ODE · continuous-time RNN · predictive coding · reservoir computing",
+    commit:"Use differential equations, not symbolic operations — and definitely not voxel grids." },
+  { id:"metaphor",  name:"概念隐喻 · Lakoff", en:"Conceptual Metaphor", domain:"phil",
+    A: 1, B:-1, C:-1, D:-2,
+    note:"Lakoff & Johnson 1980/1999:抽象概念由身体意象图式构造 —— CONTAINER, PATH, BALANCE, UP-IS-GOOD。",
+    cs:"LLM concept grounding · 分布语义 vs. embodied semantics · VL 模型空间介词理解",
+    commit:"LLM 'understanding' of space leaks if it has no body to ground UP/CONTAINER schemas." },
+  { id:"predictive",name:"预测处理 · 主动推理", en:"Predictive Processing / Active Inference", domain:"phil",
+    A: 2, B: 1, C: 2, D:-1,
+    note:"Friston / Andy Clark:大脑是贝叶斯引擎,持续预测感觉输入、最小化预测误差(自由能)。",
+    cs:"World Models (Ha & Schmidhuber) · Dreamer · POMDP · Bayesian active learning",
+    commit:"World model is mandatory — and it must be probabilistic, not just geometric." },
+  { id:"material",  name:"物质参与 · Malafouris", en:"Material Engagement Theory", domain:"phil",
+    A: 2, B: 2, C: 2, D:-1,
+    note:"工具与物质直接参与认知的形成(陶工的轮子'思考'着陶匠的手)。",
+    cs:"Tool-use agents 的哲学基础 · 反驳'LLM 只是模仿文本'的批评",
+    commit:"Cognition has always been hybrid — designing agents without tools is artificial constraint." },
+  { id:"pragma",    name:"实用主义具身", en:"Pragmatism (Dewey, James, Mead)", domain:"phil",
+    A: 1, B: 1, C: 2, D:-2,
+    note:"Dewey 1934:认识 = 有机体-环境的交易(transaction)。经验不是接受,而是介入。",
+    cs:"Reinforcement learning 的哲学基础 · trial-and-error · adaptive behavior",
+    commit:"Experience-first agents are pragmatist by default — even if they don't know it." }
+];
 
-nodes.forEach(n => {
-  n.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (activeNode) activeNode.classList.remove('active');
-    n.classList.add('active');
-    activeNode = n;
-    const id = n.getAttribute('data-id');
-    const d = DATA[id];
-    if (!d) {
-      panel.innerHTML = '<h3>Awaiting entry</h3><p class="tag">This node is still unwritten</p>';
-      return;
-    }
-    renderDetail(d, false);
-  });
-  n.addEventListener('mouseenter', () => {
-    if (activeNode) return;
-    const id = n.getAttribute('data-id');
-    const d = DATA[id];
-    if (!d) return;
-    renderDetail(d, true);
+/* ── Render parallel coordinates ── */
+const linesG = document.getElementById('schoolLines');
+const dotsG = document.getElementById('schoolDots');
+const labelsG = document.getElementById('schoolLabels');
+const AX = { A: 130, B: 410, C: 690, D: 970 };
+
+function vToY(v) { return 260 - (v / 3) * 180; }
+
+SCHOOLS.forEach(s => {
+  const pts = [
+    `${AX.A},${vToY(s.A)}`,
+    `${AX.B},${vToY(s.B)}`,
+    `${AX.C},${vToY(s.C)}`,
+    `${AX.D},${vToY(s.D)}`
+  ].join(' ');
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+  line.setAttribute("class", `school-line ${s.domain}`);
+  line.setAttribute("points", pts);
+  line.setAttribute("data-id", s.id);
+  linesG.appendChild(line);
+
+  ['A','B','C','D'].forEach(ax => {
+    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    dot.setAttribute("class", `school-dot ${s.domain}`);
+    dot.setAttribute("cx", AX[ax]);
+    dot.setAttribute("cy", vToY(s[ax]));
+    dot.setAttribute("r", 3);
+    dot.setAttribute("fill", s.domain === 'arch' ? '#c87a96' : '#8a7ab8');
+    dot.setAttribute("opacity", 0.62);
+    dot.setAttribute("data-id", s.id);
+    dotsG.appendChild(dot);
   });
 });
 
-/* Scroll-reveal */
+const panel = document.getElementById('fwPanel');
+let pinned = null;
+
+function renderPanel(s, isHover) {
+  const domLabel = s.domain === 'arch' ? '建筑 / 城市行为学' : '哲学具身认知';
+  const axisVal = (v) => v > 1 ? '++' : v > 0 ? '+' : v > -0.5 ? '·' : v > -1.5 ? '−' : '−−';
+  panel.innerHTML = `
+    <h3>${s.name}<span class="en">${s.en}</span></h3>
+    <span class="badge ${s.domain}">${domLabel}</span>
+    ${isHover ? '<span class="badge">click to pin</span>' : '<span class="badge">pinned</span>'}
+    <div class="pos">
+      <div class="axis-mini">A · Repr ↔ Anti<b>${axisVal(s.A)}</b></div>
+      <div class="axis-mini">B · Indiv ↔ Sys<b>${axisVal(s.B)}</b></div>
+      <div class="axis-mini">C · Struct ↔ Proc<b>${axisVal(s.C)}</b></div>
+      <div class="axis-mini">D · Desc ↔ Norm<b>${axisVal(s.D)}</b></div>
+    </div>
+    <p>${s.note}</p>
+    <div class="cs"><b>Architectural commitment ·</b> ${s.commit}<br><b style="margin-top:6px;display:inline-block;">CS / AI stack ·</b> <span style="color:#e8d8ea">${s.cs}</span></div>
+  `;
+}
+
+function highlight(id) {
+  document.querySelectorAll('.school-line').forEach(l => {
+    l.classList.remove('active');
+    if (id) l.classList.toggle('dim', l.getAttribute('data-id') !== id);
+  });
+  if (id) {
+    const target = document.querySelector(`.school-line[data-id="${id}"]`);
+    if (target) target.classList.add('active');
+  } else {
+    document.querySelectorAll('.school-line').forEach(l => l.classList.remove('dim'));
+  }
+}
+
+document.querySelectorAll('.school-line, .school-dot').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    if (pinned) return;
+    const id = el.getAttribute('data-id');
+    const s = SCHOOLS.find(x => x.id === id);
+    if (s) { renderPanel(s, true); highlight(id); }
+  });
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    const id = el.getAttribute('data-id');
+    const s = SCHOOLS.find(x => x.id === id);
+    if (!s) return;
+    if (pinned === id) {
+      pinned = null;
+      panel.innerHTML = `<h3>悬停或点击一条线 →<span class="en">Hover or click any line to inspect a school</span></h3><p style="color: var(--sky-mist); margin-top: 14px;">每一条线都是一个学派在四个轴上的典型位置。**警告**:同一个学派在内部仍有分歧,这里给出的是该学派"主干立场"的概略 —— 用来比较,不用来定罪。</p>`;
+      highlight(null);
+    } else {
+      pinned = id;
+      renderPanel(s, false);
+      highlight(id);
+    }
+  });
+});
+
+/* ── Legend filter ── */
+document.querySelectorAll('.fw-legend span[data-domain]').forEach(el => {
+  el.addEventListener('click', () => {
+    const dom = el.getAttribute('data-domain');
+    const lines = document.querySelectorAll('.school-line');
+    const allDimmed = Array.from(lines).every(l => l.classList.contains('dim') || l.classList.contains(dom));
+    lines.forEach(l => {
+      if (allDimmed) {
+        l.classList.remove('dim');
+      } else {
+        l.classList.toggle('dim', !l.classList.contains(dom));
+      }
+    });
+  });
+});
+
+/* ── Scroll-reveal ── */
 (function(){
-  const els = document.querySelectorAll('section, .article-row, .case, .method-rule, .tl-epoch');
-  els.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(24px)'; el.style.transition = 'opacity 0.9s ease, transform 0.9s ease'; });
+  const els = document.querySelectorAll('section, .article-row, .tos-rung, .rule, .q-card');
+  els.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(20px)'; el.style.transition = 'opacity 0.85s ease, transform 0.85s ease'; });
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -1422,7 +1844,7 @@ nodes.forEach(n => {
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.08 });
   els.forEach(el => io.observe(el));
 })();
 </script>
