@@ -549,6 +549,140 @@ section.works {
   clip-path: polygon(0 65%, 12% 30%, 24% 55%, 38% 20%, 54% 45%, 68% 25%, 82% 50%, 100% 35%, 100% 100%, 0 100%);
 }
 
+/* Scene-E — Calvino piece, uses the actual hero image as a portal thumbnail */
+.scene-e {
+  background-color: #2a1c12;
+  background-image:
+    linear-gradient(180deg, rgba(40,24,12,0.05) 0%, rgba(40,24,12,0.35) 80%, rgba(40,24,12,0.65) 100%),
+    url('assets/05-hero.png');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+}
+
+/* ── LONG-READ MARK — for the consolidated No. 05 three-part essay ── */
+.work.long-read { position: relative; }
+.long-read-mark {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #e8c898;
+  background: rgba(20,12,6,0.88);
+  border: 1px solid rgba(232,184,80,0.5);
+  padding: 4px 11px;
+  border-radius: 1px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px -4px rgba(0,0,0,0.5);
+}
+
+/* Scene-G — Loop closes piece: a brushy circle with garden + joint icons */
+.scene-g {
+  background: linear-gradient(178deg,
+    #1e2620 0%,
+    #161d18 40%,
+    #0e1410 78%,
+    #060a08 100%);
+  position: relative;
+}
+.scene-g::before { /* circle of closure */
+  content: ''; position: absolute;
+  top: 22%; left: 50%;
+  transform: translate(-50%, 0);
+  width: 70%;
+  aspect-ratio: 1.4;
+  border: 1.2px dashed rgba(216,168,88,0.55);
+  border-radius: 50%;
+}
+.scene-g::after { /* tiny vermilion seal at center */
+  content: '知行合一'; position: absolute;
+  top: 46%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ede2c4;
+  background: #c4382c;
+  padding: 4px 6px;
+  letter-spacing: 0.06em;
+  border: 1px solid #8a2c20;
+  box-shadow: 0 4px 14px -3px rgba(196,56,44,0.5);
+  white-space: nowrap;
+}
+
+/* Scene-F — Jiangnan night with a vermilion seal for No. 06 */
+.scene-f {
+  background: linear-gradient(178deg,
+    #1e2620 0%,
+    #161d18 35%,
+    #0e1410 70%,
+    #060a08 100%);
+}
+.scene-f::before { /* faint ink-traced path */
+  content: ''; position: absolute;
+  top: 36%; left: 10%; right: 10%;
+  height: 1.5px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(232,222,196,0.55) 12%,
+    rgba(232,222,196,0.55) 78%,
+    transparent 100%);
+  opacity: 0.6;
+}
+.scene-f::after { /* vermilion seal at endpoint */
+  content: '蘇州'; position: absolute;
+  bottom: 28%; right: 14%;
+  width: 40px; height: 40px;
+  background: #c4382c;
+  border: 1.5px solid #8a2c20;
+  color: #ede2c4;
+  font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-3deg);
+  box-shadow:
+    inset 0 0 0 1px rgba(232,222,196,0.18),
+    0 4px 16px -4px rgba(196,56,44,0.55);
+  writing-mode: vertical-rl;
+  line-height: 1.05;
+  padding: 2px;
+}
+
+/* "Latest" badge for newest piece */
+.work.latest .work-portal {
+  box-shadow:
+    -1px 0 0 rgba(255,200,140,0.85),
+    1px 0 0 rgba(232,184,80,0.7),
+    0 22px 44px -10px rgba(60,40,80,0.32),
+    0 0 0 1px rgba(232,184,80,0.35);
+}
+.latest-badge {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #1c1018;
+  background: linear-gradient(180deg, #f0d488 0%, #e8b850 100%);
+  padding: 4px 12px;
+  border-radius: 2px;
+  box-shadow: 0 4px 14px -4px rgba(0,0,0,0.4);
+}
+.work.latest .work-meta .num { color: #c89a3a; }
+
 /* Portal figure inside */
 .work-portal .tiny-fig {
   position: absolute;
@@ -957,7 +1091,7 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
       <p class="cn">人类文明从来不只栖居于语言符号之中。城市与建筑——从紫禁城的轴线到徽州的马头墙——是人类智能以物质形式书写的史诗，是语言与社会结构之外，另一套沉默而持久的文明语法。</p>
       <p class="en">Civilization has never dwelt in language alone. The built environment — axes, thresholds, courtyards, ruins — is another grammar of intelligence, slower than speech and harder to forget. This lab asks what that grammar means now, as machine agents learn to navigate space without inhabiting it, and as attention capital empties the places where memory lives.</p>
       <div class="rule"></div>
-      <p class="cn" style="font-size: 14.5px; opacity: 0.78;">—— 戴诗琪 / DAI Shiqi &nbsp;·&nbsp; 独立观察者视角</p>
+      <p class="cn" style="font-size: 14.5px; opacity: 0.78;">—— Eva &middot; 戴诗琪 &nbsp;·&nbsp; 独立观察者视角</p>
     </div>
   </div>
 </section>
@@ -970,7 +1104,7 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
         已刊行的思考
         <span class="en">Essays & Field Notes</span>
       </div>
-      <div class="count">04 &nbsp;/&nbsp; Pieces</div>
+      <div class="count">05 &nbsp;/&nbsp; Pieces</div>
     </div>
 
     <div class="works-grid">
@@ -1032,6 +1166,23 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
             <span class="en">The Economics of Ruins — Illustrated</span>
           </h3>
           <p>An extended, image-rich genealogy connecting Shanghai, Detroit, Istanbul, Mumbai, Seoul, and Beirut.</p>
+        </div>
+      </a>
+
+      <a class="work latest long-read" href="03-看不见的城市_世界模型.html">
+        <div class="work-portal">
+          <div class="scene scene-e"></div>
+          <span class="latest-badge">Latest · 最新</span>
+          <span class="long-read-mark">A Long Read &middot; Three Parts</span>
+          <div class="tiny-fig"><svg viewBox="0 0 8 22"><rect x="3" y="0" width="2" height="6" fill="#1a1528" rx="1"/><rect x="2" y="6" width="4" height="10" fill="#1a1528"/><rect x="2" y="16" width="2" height="6" fill="#1a1528"/><rect x="4" y="16" width="2" height="6" fill="#1a1528"/></svg></div>
+        </div>
+        <div class="work-meta">
+          <div class="num">No. 05 &nbsp;·&nbsp; A Thought Experiment in Three Parts</div>
+          <h3>
+            一次思想实验:从《看不见的城市》到苏州
+            <span class="en">From Calvino &amp; Genie, through London / Paris / SF, to 王阳明 — One Continuous Arc</span>
+          </h3>
+          <p>Part I: Google &amp; AutoNavi read Calvino. Part II: the geography of the AI revolution lands on Suzhou. Part III: the loop closes — garden as software, joint as hardware, Wang Yangming as the non-Cartesian mother tongue.</p>
         </div>
       </a>
 
@@ -1182,7 +1333,7 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
       <dl>
         <div>
           <dt>Author</dt>
-          <dd>DAI Shiqi &nbsp;·&nbsp; 戴诗琪<span class="cn">EVA &nbsp;|&nbsp; M.Arch & Urban Studies</span></dd>
+          <dd>Eva &nbsp;·&nbsp; 戴诗琪<span class="cn">M.Arch &amp; Urban Studies</span></dd>
         </div>
         <div>
           <dt>Affiliation</dt>

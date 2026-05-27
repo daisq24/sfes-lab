@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一次思想实验:从《看不见的城市》到苏州 | A Thought Experiment in Three Parts</title>
+<meta name="description" content="一次以 Google Project Genie + Street View 为触发点的思想实验,三部分:Google 与高德视觉中心如何读《看不见的城市》;AI 革命的地理学,从曼彻斯特到苏州;以及 loop 闭合——园林是软件,关节是硬件,王阳明是非笛卡尔具身智能观的母语。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Ma+Shan+Zheng&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Base — ink night */
+  --ink:          #0e1410;
+  --ink-deep:     #060a08;
+  --ink-mid:      #161d18;
+  --ink-soft:     #1e2620;
+  --silk:         #faf2dc;
+  --silk-warm:    #ecdcb4;
+  --silk-dim:     #c4b894;
+
+  /* Part I accents — Calvino / canyon / halftone */
+  --canyon-deep:  #2a1c12;
+  --canyon-mid:   #3c2818;
+  --canyon-pale:  #8a6840;
+  --gold:         #d8a850;
+  --gold-bright:  #f0d488;
+  --gold-pale:    #e8c878;
+  --coral:        #d8583c;
+  --coral-soft:   #e87858;
+  --verdigris:    #708868;
+
+  /* Part II accents — Jiangnan / geography */
+  --jade:         #6a8e88;
+  --jade-bright:  #88a89e;
+  --jade-deep:    #4a6864;
+  --moss:         #708868;
+  --moss-soft:   #8a9876;
+
+  /* Part III accents — precision / vermilion */
+  --bronze:       #b88838;
+  --bronze-bright:#d8a858;
+  --bronze-pale:  #e8c478;
+  --bronze-deep:  #8a6824;
+
+  /* Common vermilion (cross-part) */
+  --zhusha:       #c4382c;
+  --zhusha-bright:#d8543e;
+  --zhusha-soft:  #b04030;
+  --zhusha-deep:  #8a2c20;
+
+  --serif-cn:     'Noto Serif SC', 'Songti SC', serif;
+  --serif-en:     'Playfair Display', 'EB Garamond', Georgia, serif;
+  --serif-it:     'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  --brush:        'Ma Shan Zheng', 'Noto Serif SC', serif;
+  --mono:         'Space Mono', ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+html { background: #1a120a; }
+
+body {
+  position: relative;
+  color: var(--silk);
+  font-family: var(--serif-cn);
+  font-size: 16px;
+  line-height: 1.95;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  background: transparent;
+}
+
+/* ─── FIXED FROSTED-GLASS BACKGROUND ───
+   The whole page sits on a moderately-blurred version of 05-hero.png.
+   Slightly brighter and warmer so colors come through. */
+body::before {
+  content: '';
+  position: fixed;
+  top: -60px; bottom: -60px; left: -60px; right: -60px;
+  z-index: -3;
+  background: url('assets/05-hero.png') center center / cover no-repeat;
+  filter: blur(56px) saturate(1.0) brightness(0.72);
+  pointer-events: none;
+}
+
+/* ─── WATER RIPPLE OVERLAY ───
+   Subtle sinuous lines suggesting still-pond reflections / Jiangnan water.
+   Fixed across the whole page; sits above the blurred image but below content. */
+.ripples {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='%23f0e6c8' stroke-width='0.7' stroke-linecap='round' opacity='0.18'><path d='M0 60 Q100 48 200 56 T 400 60 T 600 56 T 800 60'/><path d='M0 110 Q120 100 240 110 T 480 108 T 720 112 T 800 110'/><path d='M0 175 Q90 168 180 174 T 360 170 T 540 176 T 720 172 T 800 174'/><path d='M0 240 Q140 232 280 242 T 560 238 T 800 242'/><path d='M0 310 Q100 302 200 310 T 400 306 T 600 312 T 800 308'/><path d='M0 380 Q120 372 240 380 T 480 376 T 720 382 T 800 380'/><path d='M0 450 Q90 442 180 450 T 360 446 T 540 452 T 720 448 T 800 450'/><path d='M0 520 Q140 512 280 520 T 560 516 T 800 520'/><path d='M0 580 Q100 572 200 580 T 400 576 T 600 582 T 800 580'/></g><g fill='none' stroke='%23a8c0a0' stroke-width='0.5' stroke-linecap='round' opacity='0.12'><path d='M0 90 Q160 80 320 90 T 640 86 T 800 90'/><path d='M0 200 Q180 194 360 202 T 720 198 T 800 200'/><path d='M0 340 Q140 332 280 340 T 560 336 T 800 340'/><path d='M0 480 Q160 472 320 480 T 640 476 T 800 480'/></g></svg>");
+  background-size: 800px 600px;
+  background-repeat: repeat;
+}
+
+/* Per-section veils handle color & readability — body veil is now near-transparent. */
+body > .veil {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(18,14,8,0.08);
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.91  0 0 0 0 0.87  0 0 0 0 0.77  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ──────────────────────────────────────────────────────────────
+   MASTER HERO — the CLEAR image as the opening; everything below blurs it.
+   ────────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  min-height: 640px;
+  background-color: #2a1c12;
+  background-image: url('assets/05-hero.png');
+  background-size: cover;
+  background-position: center 32%;
+  background-repeat: no-repeat;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg,
+      rgba(20,12,6,0.45) 0%,
+      rgba(20,12,6,0.0) 22%,
+      rgba(20,12,6,0.0) 55%,
+      rgba(20,12,6,0.55) 85%,
+      rgba(20,12,6,0.92) 100%);
+  z-index: 1;
+}
+
+.hero-deco {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-deco svg { width: 100%; height: 100%; display: block; }
+
+.journal-bar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(232,222,196,0.12);
+  background: rgba(14,20,16,0.45);
+  backdrop-filter: blur(2px);
+}
+.journal-name {
+  background: var(--zhusha);
+  color: var(--silk);
+  font-family: var(--serif-en);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.journal-name .dot {
+  width: 7px; height: 7px;
+  background: var(--silk);
+  border-radius: 50%;
+}
+.journal-meta {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 12px 24px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: rgba(232,222,196,0.5);
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+.journal-meta strong { color: rgba(232,222,196,0.88); }
+.journal-meta .back {
+  margin-left: auto;
+  color: var(--bronze-pale);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(200,152,88,0.45);
+}
+.journal-meta .back:hover { color: var(--silk); }
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+  padding: 240px 60px 70px;
+  max-width: 1120px;
+  margin: 0 auto;
+  text-shadow: 0 2px 22px rgba(20,12,6,0.7);
+}
+.article-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 26px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.article-tag::after {
+  content: '';
+  display: block;
+  width: 56px; height: 1px;
+  background: var(--gold);
+}
+h1 {
+  font-family: var(--serif-cn);
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 600;
+  line-height: 1.14;
+  color: var(--silk);
+  margin-bottom: 16px;
+  max-width: 900px;
+  letter-spacing: 0.02em;
+}
+h1 .accent {
+  font-family: var(--serif-it);
+  font-style: italic;
+  color: var(--zhusha-bright);
+  font-weight: 400;
+  padding: 0 4px;
+}
+.title-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: clamp(15px, 1.8vw, 20px);
+  color: var(--gold-pale);
+  font-weight: 400;
+  margin-bottom: 38px;
+  max-width: 760px;
+  line-height: 1.5;
+  opacity: 0.92;
+}
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 0 0 28px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.toc a, .toc span {
+  color: var(--silk-dim);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid rgba(232,222,196,0.15);
+  border-right-width: 0;
+  transition: background 0.2s, color 0.2s;
+}
+.toc a:hover { color: var(--silk); background: rgba(232,222,196,0.04); }
+.toc a:last-child, .toc span:last-child { border-right-width: 1px; }
+.toc .arrow { border: none; padding: 6px 8px; color: rgba(232,222,196,0.32); }
+.toc .label { color: var(--gold-pale); background: rgba(216,168,80,0.05); }
+.author-block {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(232,222,196,0.55);
+  letter-spacing: 0.08em;
+  line-height: 1.95;
+  text-transform: uppercase;
+}
+.author-block strong { color: rgba(232,222,196,0.85); }
+
+/* ──────────────────────────────────────────────────────────────
+   CATALYST CALLOUT — warm sandstone veil (start of the arc)
+   ────────────────────────────────────────────────────────────── */
+.catalyst {
+  background: linear-gradient(180deg, rgba(46,26,12,0.62) 0%, rgba(44,28,14,0.66) 100%);
+  backdrop-filter: blur(8px) saturate(1.05);
+  -webkit-backdrop-filter: blur(8px) saturate(1.05);
+  border-top: 1px solid rgba(216,168,80,0.22);
+  border-bottom: 1px solid rgba(216,168,80,0.14);
+}
+.catalyst-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 36px 60px;
+  display: grid;
+  grid-template-columns: 1fr 2.2fr;
+  gap: 48px;
+  align-items: start;
+}
+.catalyst-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.catalyst-label::before {
+  content: '';
+  width: 26px; height: 1px;
+  background: var(--gold);
+}
+.catalyst-meta {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--silk-dim);
+  line-height: 1.7;
+}
+.catalyst-meta strong { color: var(--gold-pale); font-weight: 400; }
+.catalyst-text {
+  font-family: var(--serif-cn);
+  font-size: 14.5px;
+  line-height: 1.92;
+  color: var(--silk-warm);
+}
+.catalyst-text strong { color: var(--gold-bright); font-weight: 500; }
+.catalyst-text em { font-style: normal; color: var(--coral-soft); font-weight: 400; }
+.catalyst-text .num {
+  font-family: var(--serif-it);
+  font-style: italic;
+  color: var(--gold-pale);
+  font-size: 1.05em;
+}
+.catalyst-text p + p { margin-top: 10px; }
+
+/* ──────────────────────────────────────────────────────────────
+   MASTER ABSTRACT — slightly cooler than catalyst; opens the arc
+   ────────────────────────────────────────────────────────────── */
+.abstract-row {
+  background: linear-gradient(180deg, rgba(40,28,14,0.55) 0%, rgba(38,32,18,0.6) 100%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(232,222,196,0.08);
+  border-bottom: 1px solid rgba(232,222,196,0.06);
+}
+.abstract-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 42px 60px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.abs-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.abs-label::before {
+  content: '';
+  width: 22px; height: 1px;
+  background: var(--gold);
+}
+.abstract-text {
+  font-size: 15px;
+  line-height: 1.92;
+  color: var(--silk-warm);
+}
+.abstract-text em {
+  font-style: normal;
+  color: var(--gold-bright);
+  font-weight: 500;
+}
+.abstract-text strong {
+  color: var(--zhusha-bright);
+  font-weight: 500;
+}
+.kw-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 18px;
+}
+.kw {
+  border: 1px solid rgba(232,222,196,0.16);
+  padding: 4px 11px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--silk-dim);
+  text-transform: uppercase;
+  border-radius: 1px;
+  background: rgba(232,222,196,0.02);
+}
+.kw.gold {
+  border-color: rgba(216,168,80,0.5);
+  color: var(--gold-bright);
+  background: rgba(216,168,80,0.05);
+}
+.kw.zhu {
+  border-color: rgba(196,56,44,0.5);
+  color: var(--zhusha-bright);
+  background: rgba(196,56,44,0.05);
+}
+.kw.jade {
+  border-color: rgba(106,142,136,0.5);
+  color: var(--jade-bright);
+}
+.kw.bronze {
+  border-color: rgba(184,136,56,0.5);
+  color: var(--bronze-bright);
+  background: rgba(184,136,56,0.04);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   PART DIVIDER — big chapter breaks between Part I / II / III
+   ────────────────────────────────────────────────────────────── */
+.part-divider {
+  position: relative;
+  padding: 100px 60px 80px;
+  text-align: center;
+  overflow: hidden;
+}
+.part-divider .roman {
+  font-family: var(--serif-en);
+  font-size: clamp(70px, 12vw, 140px);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 0.9;
+  color: var(--silk);
+  opacity: 0.16;
+  letter-spacing: 0.04em;
+  margin-bottom: -50px;
+}
+.part-divider .label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.part-divider .label::before,
+.part-divider .label::after {
+  content: '';
+  display: inline-block;
+  width: 36px; height: 1px;
+  background: var(--gold);
+}
+.part-divider h2 {
+  font-family: var(--serif-cn);
+  font-weight: 600;
+  font-size: clamp(26px, 3.6vw, 40px);
+  color: var(--silk);
+  line-height: 1.22;
+  margin-bottom: 14px;
+  letter-spacing: 0.02em;
+}
+.part-divider .h2-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: clamp(14px, 1.6vw, 18px);
+  color: var(--silk-dim);
+  font-weight: 400;
+  max-width: 720px;
+  margin: 0 auto 32px;
+  line-height: 1.55;
+}
+/* Prompt-as-heading — bookmark / sticky-note inserted into the page.
+   Off-axis, slightly rotated, alternating sides per chapter, with a Q-tab
+   sticking up like a tag clipped onto the corner. */
+.part-divider .prompt-wrap {
+  max-width: 1080px;
+  margin: 32px auto 0;
+  padding: 0 60px;
+  position: relative;
+  min-height: 110px;
+}
+.part-divider .prompt-block {
+  max-width: 540px;
+  padding: 22px 26px 20px;
+  background: #f6f1e6;
+  border: 1px solid rgba(20,12,6,0.08);
+  border-left: 3px solid #1a120a;
+  box-shadow:
+    1px 1px 0 rgba(20,12,6,0.06),
+    14px 20px 36px -14px rgba(0,0,0,0.55);
+  text-align: left;
+  position: relative;
+  display: inline-block;
+}
+/* Q tab — like a paper flag clipped to the top corner */
+.part-divider .prompt-block::before {
+  content: 'Q.';
+  position: absolute;
+  top: -12px;
+  left: -3px;
+  padding: 4px 12px 5px;
+  background: #1a120a;
+  color: #f0e0a8;
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  z-index: 2;
+}
+/* A folded-corner accent on bottom-right — paper-fold effect */
+.part-divider .prompt-block::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 0 14px 14px;
+  border-color: transparent transparent rgba(20,12,6,0.18) transparent;
+}
+.part-divider .prompt-block .q {
+  font-family: var(--serif-cn);
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(15.5px, 1.7vw, 19px);
+  color: #1a120a;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+}
+.part-divider .prompt-block .q em {
+  font-style: italic;
+  color: #1a120a;
+  border-bottom: none;
+}
+.part-divider .prompt-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6a5640;
+  margin-top: 12px;
+  opacity: 0.85;
+}
+.part-divider .prompt-meta strong { color: #1a120a; opacity: 0.95; font-weight: 500; }
+
+/* Alternating bookmark placement per chapter — left / right / left / right / left */
+.part-i   .part-divider .prompt-wrap { text-align: left; }
+.part-i   .part-divider .prompt-block { transform: rotate(-0.7deg); margin-left: 40px; }
+.part-ii  .part-divider .prompt-wrap { text-align: right; }
+.part-ii  .part-divider .prompt-block { transform: rotate(0.6deg); margin-right: 40px; }
+.part-iii .part-divider .prompt-wrap { text-align: left; }
+.part-iii .part-divider .prompt-block { transform: rotate(-0.4deg); margin-left: 80px; }
+.part-iv  .part-divider .prompt-wrap { text-align: right; }
+.part-iv  .part-divider .prompt-block { transform: rotate(0.8deg); margin-right: 70px; }
+.part-v   .part-divider .prompt-wrap { text-align: left; }
+.part-v   .part-divider .prompt-block { transform: rotate(-0.5deg); margin-left: 60px; }
+
+@media (max-width: 760px) {
+  .part-divider .prompt-wrap { padding: 0 22px; }
+  .part-i   .part-divider .prompt-block,
+  .part-iii .part-divider .prompt-block,
+  .part-v   .part-divider .prompt-block { margin-left: 6px; }
+  .part-ii  .part-divider .prompt-block,
+  .part-iv  .part-divider .prompt-block { margin-right: 6px; }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COLOR ARC (5 chapters) — Calvino canyon → industrial geography → Shanghai
+   transition → Nanjing/Suzhou onset of sage → embodied Suzhou deep sage.
+   ────────────────────────────────────────────────────────────── */
+.part-i {
+  background: linear-gradient(180deg,
+    rgba(58,32,14,0.38) 0%,
+    rgba(64,40,18,0.40) 100%);
+}
+.part-ii {
+  background: linear-gradient(180deg,
+    rgba(64,40,18,0.40) 0%,
+    rgba(70,50,24,0.42) 100%);
+}
+.part-iii {
+  background: linear-gradient(180deg,
+    rgba(70,50,24,0.42) 0%,
+    rgba(72,62,32,0.42) 100%);
+}
+.part-iv {
+  background: linear-gradient(180deg,
+    rgba(72,62,32,0.42) 0%,
+    rgba(68,78,46,0.44) 100%);
+}
+.part-v {
+  background: linear-gradient(180deg,
+    rgba(68,78,46,0.44) 0%,
+    rgba(58,92,60,0.48) 35%,
+    rgba(48,86,60,0.52) 70%,
+    rgba(40,76,54,0.55) 100%);
+}
+
+.part-divider {
+  background: linear-gradient(180deg, rgba(20,16,10,0.20) 0%, rgba(20,16,10,0.35) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Reading panel — main column gets a darker, more opaque backdrop so body text
+   has reliable contrast against the lighter watery surroundings. */
+.main {
+  background:
+    linear-gradient(180deg, rgba(14,10,6,0.62) 0%, rgba(14,10,6,0.66) 100%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(232,222,196,0.06),
+    0 24px 60px -20px rgba(0,0,0,0.45);
+}
+/* Part IV main panel begins to bias toward sage; Part V is full sage. */
+.part-iv .main {
+  background: linear-gradient(180deg, rgba(14,18,12,0.62) 0%, rgba(14,20,14,0.66) 100%);
+}
+.part-v .main {
+  background: linear-gradient(180deg, rgba(14,22,16,0.62) 0%, rgba(14,22,16,0.68) 100%);
+}
+.part-v .main .section:first-of-type { padding-top: 70px; }
+
+/* ──────────────────────────────────────────────────────────────
+   PART II / III HEROS — small SVG vignettes, translucent
+   ────────────────────────────────────────────────────────────── */
+.part-ii-hero, .part-v-hero {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  background: rgba(20,12,6,0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.part-ii-hero svg, .part-v-hero svg { width: 100%; height: 360px; display: block; }
+
+/* ──────────────────────────────────────────────────────────────
+   MAIN BODY — shared
+   ────────────────────────────────────────────────────────────── */
+.main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 56px 56px;
+  position: relative;
+}
+.section { padding: 60px 0 0; }
+/* In Part III the .main panel sits over the most sage / green region — the
+   gradient already provides separation; first section gets a little extra. */
+.part-iii .main .section:first-of-type { padding-top: 70px; }
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  margin-bottom: 32px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(232,222,196,0.12);
+}
+.section-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold-bright);
+  font-weight: 700;
+  padding-top: 8px;
+  min-width: 48px;
+  letter-spacing: 0.06em;
+}
+.section-titles { flex: 1; }
+.section-title-zh {
+  font-family: var(--serif-cn);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 600;
+  color: var(--silk);
+  line-height: 1.3;
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+.section-title-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: clamp(13px, 1.5vw, 16px);
+  color: var(--gold-pale);
+  font-weight: 400;
+  line-height: 1.45;
+  opacity: 0.92;
+}
+
+p.body {
+  font-family: var(--serif-cn);
+  font-size: 15.5px;
+  line-height: 2.02;
+  color: var(--silk);
+  margin-bottom: 22px;
+  text-align: justify;
+  letter-spacing: 0.005em;
+}
+p.body strong { color: var(--coral-soft); font-weight: 500; }
+
+/* Bilingual paragraph — English translation sits directly under each .body */
+p.body-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.78;
+  color: var(--silk-warm);
+  margin-top: -10px;
+  margin-bottom: 22px;
+  opacity: 0.88;
+  padding-left: 14px;
+  border-left: 1px solid rgba(232,222,196,0.22);
+  letter-spacing: 0.005em;
+  text-align: left;
+}
+p.body-en strong { color: var(--coral-soft); font-weight: 600; font-style: normal; }
+p.body-en em { color: var(--gold-bright); }
+p.body-en .term { color: var(--gold-bright); font-style: italic; }
+p.body-en .han { font-family: var(--brush); font-style: normal; color: var(--coral-soft); }
+
+/* English version of the prompt under the Chinese question */
+.part-divider .prompt-block .q-en {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #4e3a26;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(20,12,6,0.12);
+  letter-spacing: 0.01em;
+}
+p.body em {
+  font-style: normal;
+  color: var(--gold-bright);
+  font-weight: 400;
+  border-bottom: 1px dotted rgba(216,168,80,0.4);
+  padding-bottom: 1px;
+}
+p.body .term {
+  font-family: var(--serif-it);
+  font-style: italic;
+  color: var(--gold-pale);
+  opacity: 0.92;
+}
+p.body .han {
+  font-family: var(--brush);
+  color: var(--zhusha-bright);
+  font-weight: 700;
+  font-size: 1.05em;
+  padding: 0 1px;
+}
+
+/* Drop cap — only first §I.01 paragraph */
+.part-i .section:first-of-type p.body:first-of-type::first-letter {
+  float: left;
+  font-size: 64px;
+  line-height: 0.78;
+  padding-right: 10px;
+  padding-top: 8px;
+  font-family: var(--serif-en);
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+
+/* Pull quotes */
+.pull-quote {
+  background: rgba(20,12,6,0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-left: 3px solid var(--gold);
+  padding: 26px 34px;
+  margin: 28px 0;
+  position: relative;
+}
+.pull-quote::before {
+  content: '\201C';
+  position: absolute;
+  top: -8px; left: 14px;
+  font-family: var(--serif-en);
+  font-size: 56px;
+  color: var(--gold);
+  line-height: 1;
+  opacity: 0.6;
+}
+.pull-quote p.han-cn {
+  font-family: var(--brush);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.5;
+  color: var(--zhusha-bright);
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.pull-quote p {
+  font-family: var(--serif-cn);
+  font-size: 16.5px;
+  line-height: 1.92;
+  color: var(--silk);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.pull-quote .attr {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold-pale);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.part-ii .pull-quote .attr, .part-iii .pull-quote .attr { color: var(--bronze-pale); }
+
+/* Concept box */
+.concept-box {
+  background: rgba(20,12,6,0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(232,222,196,0.14);
+  border-top: 2px solid var(--gold);
+  padding: 22px 26px;
+  margin: 28px 0;
+  font-size: 14px;
+  line-height: 1.82;
+  color: var(--silk-warm);
+}
+.concept-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 10px;
+}
+.concept-box strong { color: var(--silk); }
+.concept-box .term { color: var(--gold-pale); font-style: italic; font-family: var(--serif-it); }
+.concept-box .han { font-family: var(--brush); color: var(--coral-soft); font-weight: 700; }
+
+/* City / layer / school lists */
+.city-list, .layer-list { margin: 24px 0 8px; }
+.city-item, .layer-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(232,222,196,0.08);
+  align-items: start;
+}
+.city-item:first-child, .layer-item:first-child { border-top: 1px solid rgba(232,222,196,0.08); }
+.layer-item { grid-template-columns: 130px 1fr; gap: 28px; padding: 22px 0; }
+.city-name {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--gold-bright);
+  line-height: 1.3;
+}
+.city-name .cn {
+  display: block;
+  font-family: var(--serif-cn);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--silk);
+  margin-top: 4px;
+}
+.city-take {
+  font-family: var(--serif-cn);
+  font-size: 14.5px;
+  line-height: 1.88;
+  color: var(--silk-warm);
+}
+.city-take strong { color: var(--coral-soft); font-weight: 500; }
+.city-take .term { color: var(--gold-pale); font-style: italic; font-family: var(--serif-it); }
+.layer-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  opacity: 0.85;
+}
+.layer-num .roman {
+  display: block;
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  line-height: 1;
+}
+.layer-name {
+  font-family: var(--serif-cn);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--silk);
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
+}
+.layer-text {
+  font-family: var(--serif-cn);
+  font-size: 14.5px;
+  line-height: 1.92;
+  color: var(--silk-warm);
+}
+.layer-text strong { color: var(--coral-soft); font-weight: 500; }
+.layer-text em { font-style: normal; color: var(--gold-bright); }
+.layer-text .term { font-family: var(--serif-it); font-style: italic; color: var(--gold-pale); }
+.layer-text .han { font-family: var(--brush); color: var(--coral-soft); font-weight: 700; }
+
+/* Three-schools card row (Part II) */
+.schools {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 28px 0;
+}
+.school {
+  background: rgba(20,12,6,0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(232,222,196,0.12);
+  padding: 22px 20px;
+  position: relative;
+}
+.school::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 28px; height: 2px;
+  background: var(--gold);
+}
+.school .city {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gold-bright);
+  margin-bottom: 4px;
+}
+.school .city .cn {
+  display: block;
+  font-family: var(--serif-cn);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--silk);
+  margin-top: 4px;
+}
+.school .lab {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  margin: 10px 0;
+}
+.school .gist {
+  font-family: var(--serif-cn);
+  font-size: 13.5px;
+  line-height: 1.78;
+  color: var(--silk-warm);
+}
+.school .gist strong { color: var(--silk); font-weight: 500; }
+.school .gist .term { color: var(--gold-pale); font-style: italic; font-family: var(--serif-it); }
+
+/* Supply-chain grid (Part III) */
+.supply-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 22px 0 8px;
+}
+.supply-card {
+  background: rgba(20,12,6,0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(216,168,80,0.22);
+  padding: 14px 16px;
+  border-radius: 1px;
+  position: relative;
+}
+.supply-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 18px; height: 2px;
+  background: var(--gold);
+}
+.supply-card .co {
+  font-family: var(--serif-cn);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--silk);
+  margin-top: 4px;
+}
+.supply-card .part {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* Cartesian / non-Cartesian equation layout (Part III) */
+.equation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 28px 0;
+}
+.eq-side {
+  padding: 22px 24px;
+  background: rgba(20,12,6,0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(232,222,196,0.12);
+  position: relative;
+}
+.eq-side.left::before {
+  content: 'Cartesian';
+  position: absolute;
+  top: -10px; left: 14px;
+  padding: 2px 10px;
+  background: #1a120a;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--silk-dim);
+  text-transform: uppercase;
+}
+.eq-side.right::before {
+  content: 'Non-Cartesian';
+  position: absolute;
+  top: -10px; left: 14px;
+  padding: 2px 10px;
+  background: #1a120a;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--coral-soft);
+  text-transform: uppercase;
+}
+.eq-paradigm {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--silk-dim);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.eq-paradigm strong { color: var(--silk); }
+.eq-mother {
+  font-family: var(--serif-cn);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--silk-warm);
+}
+.eq-mother .han { font-family: var(--brush); color: var(--zhusha-bright); font-weight: 700; font-size: 1.08em; }
+.eq-mother strong { color: var(--silk); font-weight: 500; }
+
+/* Section divider (mid-part) */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 60px 0 0;
+  opacity: 0.4;
+}
+.section-divider span {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold-pale);
+  letter-spacing: 0.2em;
+}
+.section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.45; }
+
+/* ──────────────────────────────────────────────────────────────
+   CITY ATLAS — square-tile gallery of the ten cities traversed in this
+   thought experiment. CSS-only stylized renditions referencing the source
+   posters; full attribution below.
+   ────────────────────────────────────────────────────────────── */
+.city-atlas {
+  margin: 80px 0 0;
+  padding: 64px 28px 56px;
+  background: rgba(18,26,18,0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(232,222,196,0.14);
+  border-bottom: 1px solid rgba(232,222,196,0.10);
+}
+.atlas-inner { max-width: 1240px; margin: 0 auto; }
+.atlas-header { text-align: center; margin-bottom: 44px; }
+.atlas-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--silk-warm);
+  margin-bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.atlas-label::before, .atlas-label::after {
+  content: ''; display: inline-block; width: 30px; height: 1px; background: var(--silk-warm); opacity: 0.55;
+}
+.atlas-header h2 {
+  font-family: var(--serif-cn);
+  font-weight: 600;
+  font-size: clamp(22px, 2.6vw, 30px);
+  color: var(--silk);
+  line-height: 1.3;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+.atlas-header .sub {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--silk-dim);
+  letter-spacing: 0.02em;
+}
+.atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.city-tile {
+  position: relative;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  text-decoration: none;
+  border: 1px solid rgba(232,222,196,0.14);
+  background: #1a1208;
+  color: var(--silk);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: transform 0.4s cubic-bezier(.2,.8,.2,1), border-color 0.4s, box-shadow 0.4s;
+}
+.city-tile:hover {
+  transform: translateY(-4px);
+  border-color: rgba(232,222,196,0.4);
+  box-shadow: 0 18px 38px -12px rgba(0,0,0,0.55);
+}
+.city-art {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.city-info {
+  position: relative;
+  z-index: 2;
+  padding: 10px 14px 12px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 80%);
+}
+.city-name {
+  font-family: var(--serif-en);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  color: #fff;
+}
+.city-meta {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.65);
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+.city-idx {
+  position: absolute;
+  top: 8px; left: 10px;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: rgba(255,255,255,0.7);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+/* Per-city tile backgrounds — real source images from assets/ */
+.c-london    .city-art { background: #d4be90 url('assets/London.png')      center/cover no-repeat; }
+.c-paris     .city-art { background: #f5f4ef url('assets/Paris.png')       center/cover no-repeat; }
+.c-istanbul  .city-art { background: #0a0e14 url('assets/Istanbul.png')    center/cover no-repeat; }
+.c-tianjin   .city-art { background: #1e3e68 url('assets/Tianjin.png')     center/cover no-repeat; }
+.c-zurich    .city-art { background: #2a1808 url('assets/Zurich.png')      center/cover no-repeat; }
+.c-columbia  .city-art { background: #4878b8 url('assets/Colunbia.png')    center/cover no-repeat; }
+.c-newyork   .city-art { background: #1c3258 url('assets/New%20York.png')  center/cover no-repeat; }
+.c-singapore .city-art { background: #1888a8 url('assets/Singapore.png')   center/cover no-repeat; }
+.c-shanghai  .city-art { background: #efe9d8 url('assets/Shanghai%20.png') center/cover no-repeat; }
+.c-suzhou    .city-art { background: #e8e2d4 url('assets/Suzhou.png')      center/cover no-repeat; }
+.c-shanghai .city-name, .c-shanghai .city-meta,
+.c-suzhou .city-name,
+.c-paris .city-name {
+  /* These have light backgrounds — info bar gets enough darkening but name stays white via the gradient */
+}
+
+/* Sources block */
+.atlas-sources {
+  max-width: 1100px;
+  margin: 48px auto 0;
+  padding: 28px 32px;
+  background: rgba(20,12,6,0.42);
+  border: 1px solid rgba(232,222,196,0.10);
+}
+.atlas-sources .sources-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--silk-warm);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.atlas-sources .sources-label::before {
+  content: ''; width: 26px; height: 1px; background: var(--silk-warm); opacity: 0.6;
+}
+.atlas-sources ol {
+  list-style: none;
+  counter-reset: src;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 24px;
+}
+.atlas-sources li {
+  counter-increment: src;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: var(--silk-dim);
+  padding-left: 22px;
+  position: relative;
+  letter-spacing: 0.02em;
+}
+.atlas-sources li::before {
+  content: counter(src, decimal-leading-zero) ".";
+  position: absolute;
+  left: 0;
+  color: var(--silk-warm);
+}
+.atlas-sources a {
+  color: var(--silk-warm);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(232,222,196,0.35);
+}
+.atlas-sources a:hover { color: var(--silk); border-bottom-color: var(--silk); }
+.atlas-sources li em {
+  font-style: italic;
+  color: var(--silk-warm);
+  margin-right: 4px;
+}
+
+@media (max-width: 980px) {
+  .atlas-grid { grid-template-columns: repeat(3, 1fr); }
+  .atlas-sources ol { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .atlas-grid { grid-template-columns: repeat(2, 1fr); }
+  .city-atlas { padding: 48px 18px 40px; }
+}
+
+/* Final coda — deep sage with vermilion seal, the destination of the arc */
+.final-coda {
+  margin-top: 80px;
+  padding: 80px 0 64px;
+  border-top: 1px solid rgba(196,56,44,0.3);
+  text-align: center;
+  background: radial-gradient(ellipse 70% 80% at 50% 50%,
+    rgba(48,76,52,0.32) 0%,
+    rgba(28,52,38,0.45) 70%,
+    rgba(20,40,30,0.5) 100%);
+}
+.final-coda .coda-han {
+  font-family: var(--brush);
+  font-weight: 700;
+  font-size: 48px;
+  color: var(--zhusha-bright);
+  letter-spacing: 0.18em;
+  margin-bottom: 22px;
+  line-height: 1.2;
+}
+.final-coda .coda-line {
+  font-family: var(--serif-it);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--bronze-pale);
+  letter-spacing: 0.04em;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.final-coda .coda-attr {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--silk-dim);
+  opacity: 0.75;
+}
+
+footer {
+  background: rgba(20,36,28,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(232,222,196,0.1);
+  padding: 22px 60px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(232,222,196,0.4);
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+footer .seal-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--zhusha-bright);
+}
+footer .seal-mark .dot { width: 5px; height: 5px; background: var(--zhusha); border-radius: 50%; }
+
+/* Responsive */
+@media (max-width: 880px) {
+  .hero { min-height: 520px; }
+  .hero-content { padding: 160px 28px 50px; }
+  .journal-bar { flex-direction: column; }
+  .journal-meta { padding: 10px 22px; gap: 14px; }
+  .catalyst-inner, .abstract-inner { grid-template-columns: 1fr; gap: 28px; padding: 32px 28px; }
+  .main { padding: 0 26px 40px; }
+  .section-header { gap: 14px; }
+  .city-item, .layer-item { grid-template-columns: 1fr; gap: 10px; }
+  .schools { grid-template-columns: 1fr; gap: 14px; }
+  .equation { grid-template-columns: 1fr; gap: 24px; }
+  .part-divider { padding: 70px 28px 50px; }
+  .final-coda { padding: 60px 24px 48px; }
+  .final-coda .coda-han { font-size: 36px; letter-spacing: 0.14em; }
+  footer { padding: 18px 24px; font-size: 8.5px; }
+  .toc { font-size: 9px; }
+  .toc a, .toc span { padding: 5px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ripples" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
+
+<!-- ════════════════════ MASTER HERO ════════════════════ -->
+<div class="hero">
+  <div class="journal-bar">
+    <div class="journal-name">
+      <span class="dot"></span>
+      SFES &middot; Long Read
+    </div>
+    <div class="journal-meta">
+      <span>NO. <strong>05</strong></span>
+      <span>FIELD &middot; <strong>WORLD MODEL · 地理 · 具身</strong></span>
+      <span>YEAR &middot; <strong>2026</strong></span>
+      <a class="back" href="index.html">&larr; 返回实验室</a>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="article-tag">A Thought Experiment in Five Questions &middot; 五问</div>
+    <h1>
+      一次思想实验<span class="accent">·</span>从《看不见的城市》到苏州
+    </h1>
+    <div class="title-en">Five Prompts, One Continuous Arc — On Calvino &amp; Genie, the Geography of the AI Revolution, and the Loop Closing at Wang Yangming</div>
+
+    <nav class="toc" aria-label="本文目录">
+      <span class="label">Inside</span>
+      <a href="#catalyst">缘起</a>
+      <span class="arrow">→</span>
+      <a href="#part-i">I &middot; 卡尔维诺</a>
+      <span class="arrow">→</span>
+      <a href="#part-ii">II &middot; 地理学</a>
+      <span class="arrow">→</span>
+      <a href="#part-iii">III &middot; 上海</a>
+      <span class="arrow">→</span>
+      <a href="#part-iv">IV &middot; 苏州</a>
+      <span class="arrow">→</span>
+      <a href="#part-v">V &middot; 具身</a>
+    </nav>
+
+    <div class="author-block">
+      <strong>Eva &middot; 戴诗琪</strong> &middot; 四维空间感知实验室<br>
+      One arc &middot; three chapters &middot; preserved verbatim from a single thinking session
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ CATALYST ════════════════════ -->
+<section class="catalyst" id="catalyst">
+  <div class="catalyst-inner">
+    <div>
+      <div class="catalyst-label">Catalyst &middot; 缘起</div>
+      <div class="catalyst-meta">
+        <strong>2026.05.22 &middot; Google I/O</strong><br>
+        Project Genie &times; Street View<br>
+        Maps Imagery Grounding<br>
+        <strong>2,800 亿张街景 / 110 国</strong>
+      </div>
+    </div>
+    <div class="catalyst-text">
+      <p>这次思想实验的触发点是一则技术新闻:Google 在 I/O 2026 期间宣布把 <strong>Project Genie</strong>(DeepMind 的通用世界模型)接上 <em>Street View</em>——用户选一个真实地点(金门大桥、Fort Worth Stockyards……)、挑一种风格、描述一个角色,AI 就以真实街景为锚点,生成可 360° 探索的交互式世界。背后是 Google 积累十几年的 <span class="num">超 2800 亿张</span> 街景图片,覆盖 110 国家。</p>
+      <p style="font-family: var(--serif-en); font-style: italic; font-size: 13.5px; color: var(--silk-warm); opacity: 0.88; margin-top: 8px; padding-left: 12px; border-left: 1px solid rgba(232,222,196,0.22);">The catalyst was a piece of tech news at Google I/O 2026: Google's announcement that <strong>Project Genie</strong> (DeepMind's general-purpose world model) had been connected to <em>Street View</em>. Pick a real location (Golden Gate Bridge, Fort Worth Stockyards…), choose a style, describe a character, and the AI generates an interactive, 360°-explorable world anchored in real street imagery. Behind it: <span class="num">over 280 billion</span> Street View images Google has accumulated across 110 countries.</p>
+      <p><strong>世界模型开始吃地图数据了。</strong>地图不再只是导航接口——它正在成为生成式 AI 的 grounding layer。Google 官方原话:"connecting Genie's generative power with the real-world imagery of Google Street View, allowing our models to anchor themselves in reality." 而中国这一侧,高德视觉技术中心正在做同构的事——只是从 LBS 的另一头切入。</p>
+      <p style="font-family: var(--serif-en); font-style: italic; font-size: 13.5px; color: var(--silk-warm); opacity: 0.88; margin-top: 8px; padding-left: 12px; border-left: 1px solid rgba(232,222,196,0.22);"><strong>World models have started to eat map data.</strong> The map is no longer just a navigation interface — it is becoming the grounding layer for generative AI. In Google's own words: "connecting Genie's generative power with the real-world imagery of Google Street View, allowing our models to anchor themselves in reality." On the Chinese side, AutoNavi's vision center is doing structurally the same thing — only from the LBS direction.</p>
+      <p>于是有了下面这串问题:<em>如果 Google 和高德都来做世界模型,他们会怎么读《看不见的城市》?</em>这条线索一路追,从 Google/高德 到伦敦/巴黎/SF、到上海/苏州、最后落到园林与机器人关节的物质连续性,以及王阳明。这三个章节就是那条线索的完整记录,一字未改。</p>
+      <p style="font-family: var(--serif-en); font-style: italic; font-size: 13.5px; color: var(--silk-warm); opacity: 0.88; margin-top: 8px; padding-left: 12px; border-left: 1px solid rgba(232,222,196,0.22);">This is what prompted the question: <em>if both Google and AutoNavi are building world models, how would they read Calvino's </em>Invisible Cities<em>?</em> The thread, once pulled, runs from Google / AutoNavi to London / Paris / SF, then to Shanghai / Suzhou, and lands finally on the material continuity between the Suzhou garden and the robot joint — and on Wang Yangming. The five chapters below are the complete transcript of that thread, kept verbatim.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ MASTER ABSTRACT ════════════════════ -->
+<div class="abstract-row">
+  <div class="abstract-inner">
+    <div>
+      <div class="abs-label">Abstract &middot; 题记</div>
+      <div class="abstract-text">
+        五个提问,一条思想线索。<strong>Chapter I</strong> 设问:Google(Genie/Veo/DeepMind)从 video generation 出发做"可玩世界",高德视觉中心从 LBS 出发做"真实城市的精确镜像"——两条 world model 路径如果去读卡尔维诺,会读出什么?<strong>Chapter II</strong> 接力:工业革命的"做"在曼彻斯特、"想"在爱丁堡;AI 革命这次"做"在 SF,"想"分散在伦敦、巴黎、加上 SF 内部一小撮人。<strong>Chapter III</strong> 追问:那么上海呢?<strong>Chapter IV</strong> 转折:不是上海,是<em>苏州</em>——而且不是单独的苏州,是江南这个文化区域。<strong>Chapter V</strong> 闭合:苏州园林是中国最早的世界模型实践(软件,1000–1700);具身智能是当代世界模型的硬件落地;而<em>非笛卡尔的智能观,是中国哲学的母语</em>。
+      </div>
+    </div>
+    <div>
+      <div class="abs-label">Keywords &middot; 关键词</div>
+      <div class="kw-list">
+        <span class="kw gold">World Model</span>
+        <span class="kw gold">Calvino</span>
+        <span class="kw">Representation</span>
+        <span class="kw">Mode Collapse</span>
+        <span class="kw">Map ≠ Territory</span>
+        <span class="kw jade">DeepMind / FAIR / Anthropic</span>
+        <span class="kw jade">Find the Table</span>
+        <span class="kw zhu">苏州 / 江南</span>
+        <span class="kw bronze">谐波减速器</span>
+        <span class="kw bronze">SIP 供应链</span>
+        <span class="kw zhu">王阳明 · 知行合一</span>
+        <span class="kw">《园冶》1631</span>
+        <span class="kw">Affordance / 借景</span>
+        <span class="kw">Strange Loop</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+<!-- ║                    PART I · 看不见的城市 vs WORLD MODEL                ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+<div class="part-i" id="part-i">
+
+  <section class="part-divider">
+    <div class="roman">I</div>
+    <div class="label">Chapter One &middot; 第一问</div>
+    <div class="prompt-wrap">
+      <div class="prompt-block">
+        <div class="q">我很好奇 Google 和高德视觉技术中心做世界模型,会如何评价《看不见的城市》from 卡尔维诺。</div>
+        <div class="q-en">I'm curious how Google's and AutoNavi's vision teams — both building world models — would respond to Calvino's <em>Invisible Cities</em>.</div>
+        <div class="prompt-meta"><strong>Prompt 01</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="main">
+
+    <!-- §I.01 -->
+    <section class="section" id="i-01">
+      <div class="section-header">
+        <div class="section-num">§ I.01</div>
+        <div class="section-titles">
+          <div class="section-title-zh">一个对照</div>
+          <div class="section-title-en">A Pairing</div>
+        </div>
+      </div>
+      <p class="body">这是个很有意思的对照——卡尔维诺笔下的城市,恰恰是当代世界模型最难捕捉、也最值得反思的东西。两家代表性公司,分别站在 world model 光谱的两端:一端是 <strong>Google(DeepMind)</strong>,Genie、Veo、Gemini 的空间理解,DeepMind 的 SIMA,本质上要让模型学会"<em>世界是怎么运作的</em>"——物体的恒常性、物理的连贯性、agent 在场景中的行动后果;另一端是 <strong>高德视觉技术中心</strong>,从 LBS 出发,目标是为真实存在的城市建立 <span class="term">representation</span>——车道级高精地图、街景重建、POI 语义、众包轨迹。</p>
+      <p class="body-en">It is an interesting pairing — Calvino's cities are exactly what contemporary world models find hardest to capture, and also exactly what they most need to reckon with. Two representative companies sit at opposite ends of the world-model spectrum: at one end, <strong>Google (DeepMind)</strong> — with Genie, Veo, Gemini's spatial reasoning, and DeepMind's SIMA — wants models to learn <em>how the world works</em>: object permanence, physical coherence, the consequences of agent actions inside a scene. At the other end, <strong>AutoNavi's vision center</strong> — coming from LBS — wants to build a <span class="term">representation</span> of cities that already exist: lane-level HD maps, street-view reconstruction, POI semantics, crowdsourced trajectories.</p>
+      <p class="body">这两条路最终都会撞上卡尔维诺在 1972 年就说出来的那堵墙。让我们看看,如果让他们去读《看不见的城市》,会发生什么。</p>
+      <p class="body-en">Both paths eventually run into the wall Calvino articulated in 1972. The question is what happens when you hand them <em>Invisible Cities</em>.</p>
+    </section>
+
+    <!-- §I.02 -->
+    <section class="section" id="i-02">
+      <div class="section-header">
+        <div class="section-num">§ I.02</div>
+        <div class="section-titles">
+          <div class="section-title-zh">Google / DeepMind 的取向</div>
+          <div class="section-title-en">Google / DeepMind</div>
+        </div>
+      </div>
+      <p class="body">Google 这一派的"世界模型"(Genie、Veo、Gemini 的空间理解,DeepMind 的 SIMA)本质上是要让模型学会"世界是怎么运作的":物体的恒常性、物理的连贯性、agent 在场景中的行动后果。他们读《看不见的城市》,大概会有两种反应。</p>
+      <p class="body-en">Google's school of "world model" — Genie, Veo, Gemini's spatial reasoning, DeepMind's SIMA — is fundamentally about teaching models <em>how the world works</em>: object permanence, physical coherence, the consequences of an agent's actions in a scene. Reading <em>Invisible Cities</em>, they would likely have two reactions.</p>
+      <p class="body"><strong>技术层面</strong>会觉得卡尔维诺写的不是世界模型的对象——他笔下的"佐贝伊德"(被同一个梦的人建造的城市)或"埃乌多西亚"(和一张地毯互为镜像的城市)不是 3D 场景、不是 token 序列、没有物理约束、不可以被采样生成。</p>
+      <p class="body-en"><strong>At the technical level</strong>, they would say Calvino isn't writing about world-model targets at all: his Zobeide (the city built by men who shared the same dream) or Eudossia (the city that mirrors a carpet) is not a 3D scene, not a token sequence, has no physical constraints, and cannot be sampled.</p>
+      <p class="body"><strong>但哲学层面他们应该会很喜欢</strong>,因为卡尔维诺其实在做一件和世界模型同构的事:用一套有限的符号系统(<em>55 座城,11 个主题</em>)去生成对"城市"这个范畴的全部可能性。马可波罗对忽必烈说"也许这个帝国不过是黄道带的幻觉",这话拿来形容 <span class="term">latent space</span> 里的城市分布几乎一字不改。Genie 团队最近也在谈"可玩世界"——卡尔维诺的城市,每一座都是一个可被进入、被遍历、但只在阅读那一刻存在的世界。</p>
+      <p class="body-en"><strong>But at the philosophical level they would love it</strong>, because Calvino is doing something structurally identical to a world model: using a finite symbol system (<em>55 cities &times; 11 themes</em>) to generate the full possibility space of what a city could be. When Marco Polo tells Kublai "perhaps this empire is only a constellation of the mind," the line transposes almost word-for-word onto the distribution of cities in a <span class="term">latent space</span>. The Genie team has lately talked about "playable worlds" — Calvino's cities are each a world you can enter and traverse, but only at the moment of reading.</p>
+      <div class="concept-box">
+        <div class="concept-label">Resonance &middot; 同构</div>
+        Calvino 的 <strong>55 座城 &times; 11 个主题</strong> 是一份压缩到极致的 <span class="term">generative grammar</span>——和 Genie 想做的"用文本 prompt 实时生成可交互世界"在结构上同构:有限符号 &rarr; 无限范畴。区别只是:Calvino 的 decoder 是读者的想象力,Genie 的 decoder 是一个 transformer。
+      </div>
+    </section>
+
+    <!-- §I.03 -->
+    <section class="section" id="i-03">
+      <div class="section-header">
+        <div class="section-num">§ I.03</div>
+        <div class="section-titles">
+          <div class="section-title-zh">高德视觉中心的取向</div>
+          <div class="section-title-en">AutoNavi Vision</div>
+        </div>
+      </div>
+      <p class="body">高德视觉中心的取向<strong>完全不一样</strong>。他们的"世界模型"是非常<em>物质性</em>的:车道级高精地图、街景重建、POI 语义、众包轨迹。一句话:这个世界是可丈量、可导航、可被一辆车以 <strong>60km/h 穿过的</strong>。</p>
+      <p class="body-en">AutoNavi Vision's orientation is <strong>entirely different</strong>. Their world model is intensely <em>material</em>: lane-level HD maps, street-view reconstruction, POI semantics, crowdsourced trajectories. In one sentence — the world here is measurable, navigable, <strong>crossable by a car at 60 km/h</strong>.</p>
+      <p class="body">他们读卡尔维诺大概会笑——因为高德的工程师每天面对的就是"<em>这座城市真实长什么样</em>"这个问题的极端版本,而卡尔维诺通篇在证明这个问题没有答案。"奥塔维亚"悬在两座山之间的网上,"莱奥尼亚"每天把昨天的自己作为垃圾扔掉,"特克拉"永远在施工因为它的蓝图是星空——这些都不能被 <span class="term">SLAM</span>、不能被点云、不能被路径规划。</p>
+      <p class="body-en">They would probably laugh reading Calvino — because the extreme version of "<em>what does this city actually look like</em>" is precisely the question AutoNavi's engineers face every day, and Calvino spends the whole book showing the question has no answer. Ottavia hanging on a net between two mountains, Leonia throwing yesterday's self into the garbage every morning, Tekla forever under construction because its blueprint is the sky — none of these can be captured by <span class="term">SLAM</span>, by point clouds, or by route planning.</p>
+      <p class="body">但我猜<strong>资深一点的人会读出别的东西</strong>:高德这种公司其实最早意识到"<em>地图不是领土</em>"——他们做的是城市的某种再现,而不是城市本身。卡尔维诺借马可波罗的口说"旅人认出的微小事物,在于它们和别的事物的差异",这恰恰是 POI 语义、是 <span class="term">embedding</span>、是"为什么国贸不是望京"的根本问题。</p>
+      <p class="body-en">But <strong>the more senior people would read it differently</strong>: companies like AutoNavi were among the first to realize "<em>the map is not the territory</em>" — what they produce is a representation of the city, not the city itself. When Marco Polo says (through Calvino) that "what a traveler recognizes in small things is the way they differ from other things," that is exactly POI semantics, <span class="term">embedding</span>, the foundational problem of why Guomao is not Wangjing.</p>
+      <div class="pull-quote">
+        <p>地图不是领土。<br>The map is not the territory — and the territory was never going to fit on the map.</p>
+        <div class="attr">— Korzybski / 高德工程师的隐藏哲学</div>
+      </div>
+    </section>
+
+    <!-- §I.04 -->
+    <section class="section" id="i-04">
+      <div class="section-header">
+        <div class="section-num">§ I.04</div>
+        <div class="section-titles">
+          <div class="section-title-zh">交叉点:Representation 的元论文</div>
+          <div class="section-title-en">Crossing — A Meta-Paper on Representation</div>
+        </div>
+      </div>
+      <p class="body">真正有意思的交叉点在于:卡尔维诺整本书其实可以被读成一篇关于"<strong>表征(representation)</strong>"的元论文。</p>
+      <p class="body-en">The real crossing-point is this: the whole book can be read as a meta-paper on <strong>representation</strong>.</p>
+      <p class="body">马可波罗用手势、用石头、用沉默向忽必烈描述他从未亲眼见过的城市——这是一个 <span class="term">modality alignment</span> 的问题。忽必烈用棋盘抽象整个帝国,然后发现棋盘的木纹本身又是一座森林——这是关于抽象层级永远会泄漏出新细节的问题,和今天讨论 world model 的 <span class="term">compositionality / abstraction</span> 几乎是同一件事。</p>
+      <p class="body-en">Marco Polo describes — through gestures, stones, silences — cities Kublai has never seen: a problem of <span class="term">modality alignment</span>. Kublai abstracts the empire onto a chessboard, then discovers the wood-grain of the board is itself a forest: a problem about how any abstraction layer eventually leaks new details — essentially the same question as today's <span class="term">compositionality / abstraction</span> in world models.</p>
+      <p class="body">最后那句"<strong>在地狱里寻找非地狱的人和物,让它们持存,给它们空间</strong>",如果硬要翻译成技术话语,就是说一个好的 world model 不应该只逼近现实分布,还应该<em>保留那些濒危的、被遗忘的、不被主流模式覆盖的模式</em>。</p>
+      <p class="body-en">The closing line — "<strong>seek and learn to recognize who and what, in the midst of inferno, are not inferno, then make them endure, give them space</strong>" — translated into technical idiom: a good world model should not only approximate the empirical distribution; it should <em>preserve those endangered, forgotten, off-distribution modes that no longer dominate the loss landscape</em>.</p>
+      <div class="concept-box">
+        <div class="concept-label">Translation &middot; 跨学科翻译</div>
+        <strong>"地狱里非地狱的东西"</strong> = 数据分布长尾里那些被 majority loss 压下去、但承载真实生活肌理的样本。一个 world model 如果只学到 mean,它就把整本《看不见的城市》压缩成了威尼斯。
+      </div>
+    </section>
+
+    <div class="section-divider"><span>PART I · 反演 · 五十五座城</span></div>
+
+    <!-- §I.05 -->
+    <section class="section" id="i-05">
+      <div class="section-header">
+        <div class="section-num">§ I.05</div>
+        <div class="section-titles">
+          <div class="section-title-zh">《看不见的城市》对应世界模型</div>
+          <div class="section-title-en">Correspondences with World Models</div>
+        </div>
+      </div>
+      <p class="body">这本书 1972 年出版,马可·波罗向忽必烈描述他游历的 55 座城市,每座城市都是一个<strong>单一概念的极致演绎</strong>——记忆之城、欲望之城、轻盈之城、连绵之城、隐匿之城、死亡之城。结尾处忽必烈和马可·波罗的对话揭示:所有这些城市可能都是威尼斯,可能都不存在,可能在棋盘上,可能在心里。</p>
+      <p class="body-en">Published in 1972, the book has Marco Polo describing 55 cities to Kublai Khan. Each city is a <strong>single concept pushed to its extreme</strong> — cities of memory, of desire, of thin air, of continuity, of hidden things, of the dead. The closing dialogue suggests that all these cities may be Venice, may not exist at all, may live on the chessboard, may live in the mind.</p>
+      <p class="body">对做世界模型的人来说,这本书有几个尖锐的对应:</p>
+      <p class="body-en">For someone building world models, the book offers several sharp correspondences:</p>
+      <div class="concept-box">
+        <div class="concept-label">Correspondence I &middot; 反演问题</div>
+        <strong>它本身就是一个 "world model 的反演问题"</strong>。马可·波罗描述城市,忽必烈在心里构建城市。<strong>马可·波罗的描述就是 observation,忽必烈头脑里的城市就是 <span class="term">latent representation</span></strong>。卡尔维诺在玩的就是 "描述空间 &rarr; 内部表征" 这个映射不是 injective 的——同一组描述可以对应多个 latent,同一个 latent 可以生成多种描述。
+      </div>
+      <div class="concept-box">
+        <div class="concept-label">Correspondence II &middot; 模块化世界模型</div>
+        <strong>55 座城市的结构是 <span class="term">modular world model</span></strong>。每座城市抽离一个维度极致放大(只保留 "记忆"、只保留 "欲望")。这正是 <span class="term">disentangled representation</span> 的文学版本——把一个完整城市分解成正交的语义因子。
+      </div>
+      <div class="concept-box">
+        <div class="concept-label">Correspondence III &middot; 压缩与剩余</div>
+        <strong>棋盘那一段是 Genie 3 的反面</strong>。忽必烈想用国际象棋的棋盘来 "完整描述帝国"——一个 perfectly compressed representation。马可·波罗对你,你看这块木头的纹路里有沉船的故事、有候鸟、有谁砍下了这棵树。<strong>任何压缩都丢失了不可还原的细节。</strong>
+      </div>
+    </section>
+
+    <!-- §I.06 -->
+    <section class="section" id="i-06">
+      <div class="section-header">
+        <div class="section-num">§ I.06</div>
+        <div class="section-titles">
+          <div class="section-title-zh">DeepMind 的具体读法</div>
+          <div class="section-title-en">DeepMind's Reading, in Detail</div>
+        </div>
+      </div>
+      <p class="body">Google 现在的 world model 哲学是 Genie 3 那条路——<strong>从文本 prompt 实时生成可交互的 3D 世界</strong>。他们的核心论文里反复出现 <span class="term">"consistency"</span>、<span class="term">"persistence"</span>、<span class="term">"emergent memory"</span>。他们会读出什么:</p>
+      <p class="body-en">Google's current world-model philosophy follows the Genie 3 path: <strong>real-time, text-prompt-conditioned generation of interactive 3D worlds</strong>. Their key papers return again and again to <span class="term">consistency</span>, <span class="term">persistence</span>, <span class="term">emergent memory</span>. What they would notice:</p>
+      <div class="city-list">
+        <div class="city-item">
+          <div class="city-name">Zora<span class="cn">佐拉 —— 助记之城</span></div>
+          <div class="city-take">他们会<strong>特别喜欢</strong>。书里说佐拉是 "可以被记住的城市,因为它的形状本身就是助记术"。佐拉的街道、建筑、装饰都被设计成能够帮人记住事物的助记结构。<strong>这就是 Vector-HaSH 的文学版本</strong>——用 spatial scaffold 承载非空间记忆。Google 团队大概率会把这页截图贴在内部 slide 里。</div>
+        </div>
+        <div class="city-item">
+          <div class="city-name">Eudossia<span class="cn">埃乌多西亚 —— 地毯之城</span></div>
+          <div class="city-take">他们会<strong>心生戒备</strong>。埃乌多西亚的居民相信他们的城市对应着一张完美的地毯,地毯上的图案就是城市真正的样子。但马可·波罗暗示:<strong>也许地毯才是真的,城市是从地毯生成的</strong>。这是 Genie 3 路线的恐怖叙事——你以为 world model 是真实世界的 simulation,但实际上 simulation 本身定义了你能看到的"真实"。卡尔维诺这是在 1972 年就预言了 <span class="term">generative world model</span> 的本体论困境。</div>
+        </div>
+        <div class="city-item">
+          <div class="city-name">Ottavia<span class="cn">奥塔维亚 —— 蜘蛛网之城</span></div>
+          <div class="city-take">他们会把奥塔维亚读成 <strong><span class="term">sparse representation</span> 的胜利</strong>。奥塔维亚悬在两座山峰之间的深渊上,只有一张网把它撑住。"它的居民知道,这张网撑不了多久。" 这正是 V-JEPA latent 的写照——稀疏、悬浮、似乎随时崩塌但能撑住。</div>
+        </div>
+        <div class="city-item">
+          <div class="city-name">Trude<span class="cn">特鲁德 —— 同一之城</span></div>
+          <div class="city-take">他们会<strong>深深焦虑</strong>。特鲁德是所有城市,你走出去后到达另一个城市,但它和你刚离开的完全一样。"为什么要来特鲁德?我自问。我已经想要离开了。" <strong>这是 <span class="term">mode collapse</span> 的最佳文学描述</strong>——你的 world model 训练出来,生成的每个"新世界"其实都是同一个。Google 团队看到这页应该会沉默五秒钟。</div>
+        </div>
+      </div>
+      <p class="body">但 Google 整体的读法会<strong>偏向工程主义</strong>。他们会想:"这些城市虽然是文学,但每一个都是一个 evaluation prompt 或者一个 conditional generation 任务。" 卡尔维诺给了他们 55 个 city archetype,<strong>他们会想把这变成 benchmark</strong>。这其实挺 Google 的——任何文化产物最终都会被工程师转化成评测集。</p>
+      <p class="body-en">But Google's overall reading would tilt <strong>engineering-forward</strong>. They would think: "These may be literature, but each is an evaluation prompt or a conditional-generation task." Calvino has handed them 55 city archetypes, and <strong>they would want to turn that into a benchmark</strong>. Which is very Google — any cultural artifact eventually gets converted into a test set.</p>
+    </section>
+
+    <!-- §I.07 -->
+    <section class="section" id="i-07">
+      <div class="section-header">
+        <div class="section-num">§ I.07</div>
+        <div class="section-titles">
+          <div class="section-title-zh">高德视觉中心的具体读法</div>
+          <div class="section-title-en">AutoNavi Vision's Reading, in Detail</div>
+        </div>
+      </div>
+      <p class="body">这就有意思了——因为高德的视觉技术中心做世界模型,和 Google 做世界模型<strong>不是一回事</strong>。Google 是从 video generation 出发,目标是 general 的可交互环境。高德是从 LBS 出发,目标是<strong>为真实存在的城市建立 representation</strong>。所以高德读这本书会读出完全不同的东西。</p>
+      <p class="body-en">Here it gets interesting — because AutoNavi's vision center building a world model is <strong>not the same thing</strong> as Google's. Google starts from video generation, aiming at general interactive environments. AutoNavi starts from LBS, aiming at <strong>representations of actually-existing cities</strong>. The book reads completely differently from that angle.</p>
+      <div class="city-list">
+        <div class="city-item">
+          <div class="city-name">The Setup<span class="cn">书的整个 setup</span></div>
+          <div class="city-take">高德会<strong>最共鸣 "马可·波罗描述他到过的城市"</strong> 这个 setup 本身。马可·波罗就是一辆带着 <span class="term">panoramic camera</span> 的街景采集车。他到了威尼斯之外的城市,把感官印象带回来,告诉忽必烈 ("不在场的中央决策者")"这个地方是什么样的"。<strong>高德的整个业务,本质上就是马可·波罗的角色</strong>——把不在你眼前的城市变成你能查询的 representation。</div>
+        </div>
+        <div class="city-item">
+          <div class="city-name">Moriana<span class="cn">莫里安娜 —— 两面之城</span></div>
+          <div class="city-take">高德会对莫里安娜<strong>感到刺痛</strong>。莫里安娜有两面:走近时是大理石、喷泉、棕榈、玻璃宫殿;但绕到背面,是生锈的铁皮、油毡、铁丝网、瓦砾、垃圾、烟囱。"<strong>城市并没有 reverse,只是 obverse 和 reverse 都存在</strong>。" 这就是街景数据的真相——你的全景采集是 obverse,但城市的 reverse (后巷、违建、垃圾站、租户的内心) 从来不在街景里。高德的 world model 永远只能建立 obverse 的表征,而真正生活在这座城里的人知道 reverse 才是大部分。</div>
+        </div>
+        <div class="city-item">
+          <div class="city-name">Leonia<span class="cn">莱奥尼亚 —— 弃物之城</span></div>
+          <div class="city-take">高德会<strong>深度认同莱奥尼亚</strong>。莱奥尼亚每天都焕然一新,每天扔掉昨天的所有东西。"莱奥尼亚的真正激情不是享受新事物,而是排泄、远离、清除自己反复出现的不洁净。" 这是地图数据更新的存在主义版本——你每天采集新数据、更新 POI、刷新街景,但<strong>"真正的莱奥尼亚" 是过去所有版本的累积</strong>。卡尔维诺写道:莱奥尼亚的垃圾山一年比一年高,最终会有一天,清洁工的推土机推不动,垃圾会把整座城市推倒。<strong>这是数据治理的预言</strong>——你以为你在维护一个 living map,但你其实在被自己的历史版本掩埋。</div>
+        </div>
+        <div class="city-item">
+          <div class="city-name">Zobeide<span class="cn">佐贝伊德 —— 共同梦境之城</span></div>
+          <div class="city-take">高德会对佐贝伊德<strong>感到难以言喻的熟悉</strong>。佐贝伊德是几个不同时代、不同国家的男人,因为做了同一个梦——梦见一个赤裸长发的女人在城市里跑,他们要追她——而聚在一起,<strong>根据梦里街道的走向建造了佐贝伊德</strong>。每个人按自己梦里的版本建造,但谁都没追上那个女人。<strong>这是 user-generated 地图数据的本质</strong>——成千上万的用户上传他们"记忆中的"街道,每个版本都略有不同,你的 map 是这些主观版本的最大共同子集,<strong>但 ground truth 那个 "本来想追的目标" 从来没有人真正抓到</strong>。</div>
+        </div>
+        <div class="city-item">
+          <div class="city-name">Perinzia<span class="cn">佩林齐亚 —— 星象之城</span></div>
+          <div class="city-take">高德会<strong>最害怕也最迷恋佩林齐亚</strong>。佩林齐亚是请最好的天文学家按照星象规划的城市,理论上完美。但建成几代之后,佩林齐亚里<strong>全是奇形怪状的人——侏儒、驼背、有三只手的人</strong>。天文学家拒绝承认观测有误,只得出结论:<strong>他们读懂了星象,但是另一个城市的星象</strong>。这是高德 world model 的终极焦虑——你以为你在建北京的世界模型,你其实在建一个谁也没去过的城市的模型,因为你的训练数据采样有偏差、你的标注 schema 强加了不该有的范畴、你的几何先验是另一个地球的几何。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- §I.08 -->
+    <section class="section" id="i-08">
+      <div class="section-header">
+        <div class="section-num">§ I.08</div>
+        <div class="section-titles">
+          <div class="section-title-zh">结语</div>
+          <div class="section-title-en">Coda</div>
+        </div>
+      </div>
+      <p class="body">读完《看不见的城市》之后做世界模型,你大概率会变得更<strong>谦逊</strong>。这本书的核心 message 是:<strong>任何对城市的 representation 都同时是对城市的 distortion</strong>。Google 的 Genie 3 想造 "可交互的世界",高德想造 "真实城市的精确镜像",两条路最终都会撞上卡尔维诺在 1972 年就说出来的那堵墙——</p>
+      <p class="body-en">After <em>Invisible Cities</em>, anyone building world models tends to become more <strong>humble</strong>. The book's core message is: <strong>any representation of a city is simultaneously a distortion of that city</strong>. Google's Genie 3 wants to build "interactive worlds"; AutoNavi wants a "precise mirror of the real city." Both paths run into the wall Calvino articulated in 1972 —</p>
+      <div class="pull-quote">
+        <p>构成城市的不是这些,而是它的<strong>空间度量</strong>与<strong>历史事件</strong>之间的关系。</p>
+        <div class="attr">— Italo Calvino, Le città invisibili (1972)</div>
+      </div>
+      <p class="body">技术能搞定<em>空间度量</em>,搞不定<em>"历史事件"</em>。Genie 3 没有威尼斯人对水的乡愁,V-JEPA 不知道东四十条胡同口那家关张的修车摊。这些 "历史事件" 是 <span class="term">representation</span> <strong>永远无法回收的剩余</strong>。</p>
+      <p class="body-en">Technology can handle the <em>spatial dimensions</em>; it cannot handle the <em>"historical events"</em>. Genie 3 has no Venetian's nostalgia for water; V-JEPA does not know about the bicycle-repair stall that just closed at the mouth of Dongsi-Shitiao alley. Those "historical events" are the <strong>residue</strong> that <span class="term">representation</span> can never recover.</p>
+      <p class="body">最后那句忽必烈的话,我觉得是给所有做 world model 的人的终极警告:</p>
+      <p class="body-en">Kublai's closing line reads, to anyone building world models, as a final warning:</p>
+      <div class="pull-quote">
+        <p>也许这座花园只存在于我们半闭的眼皮的阴影下,但我们从未中断过——你扬起尘土,我推开瓦砾——讲述我们的故事。</p>
+        <div class="attr">— Kublai Khan, in Calvino's voice</div>
+      </div>
+      <p class="body">我们都在自己半闭的眼皮下,扬起尘土,推开瓦砾,讲述城市的故事。<strong>技术再好,这一点改变不了。</strong></p>
+      <p class="body-en">We all, under our own half-closed eyelids, kick up dust and push aside rubble to tell the story of the city. <strong>No amount of technology changes this.</strong></p>
+    </section>
+
+  </div><!-- /main Part I -->
+</div><!-- /part-i -->
+
+
+<!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+<!-- ║                    PART II · 从曼彻斯特到苏州                          ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+<div class="part-ii" id="part-ii">
+
+  <section class="part-divider">
+    <div class="roman">II</div>
+    <div class="label">Chapter Two &middot; 第二问</div>
+    <div class="prompt-wrap">
+      <div class="prompt-block">
+        <div class="q">工业革命在伦敦,又不是巴黎……但是这次在哪里?北京?没有理由,北京没有这样的先锋性和哲学思考能力。MIT / 波士顿 / 斯坦福?不知道,JEPA 都跑回欧洲了。</div>
+        <div class="q-en">The Industrial Revolution happened in London, but not in Paris … so where does this one happen? Beijing? No real reason — Beijing doesn't have that kind of frontier energy or philosophical bandwidth. MIT / Boston / Stanford? Doesn't quite work either — JEPA has already gone back to Europe.</div>
+        <div class="prompt-meta"><strong>Prompt 02</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Part II hero — calligraphic route map -->
+  <div class="part-ii-hero" aria-hidden="true">
+    <svg viewBox="0 0 1400 360" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="seal-glow-ii" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#d8543e" stop-opacity="0.45"/>
+          <stop offset="60%" stop-color="#c4382c" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#c4382c" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g stroke="rgba(232,222,196,0.05)" stroke-width="0.5">
+        <line x1="0" y1="100" x2="1400" y2="100"/>
+        <line x1="0" y1="180" x2="1400" y2="180"/>
+        <line x1="0" y1="260" x2="1400" y2="260"/>
+      </g>
+      <g fill="none" stroke="rgba(232,222,196,0.3)" stroke-width="1.2" stroke-linecap="round">
+        <path d="M 130 230 Q 180 200 220 180"/>
+        <path d="M 220 180 Q 380 170 540 200" stroke-dasharray="3 6"/>
+        <path d="M 540 200 Q 660 160 760 140" stroke-dasharray="3 6"/>
+        <path d="M 760 140 Q 800 160 840 180"/>
+        <path d="M 840 180 Q 980 140 1100 160" stroke-dasharray="3 6"/>
+        <path d="M 1100 160 Q 1140 200 1180 230"/>
+        <path d="M 1180 230 Q 1210 225 1240 220" stroke="rgba(232,222,196,0.6)" stroke-width="1.6"/>
+      </g>
+      <g font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="rgba(232,222,196,0.6)">
+        <circle cx="130" cy="230" r="3" fill="rgba(232,222,196,0.5)"/>
+        <text x="130" y="252" text-anchor="middle">Manchester</text>
+        <circle cx="220" cy="180" r="3" fill="rgba(106,142,136,0.85)"/>
+        <text x="220" y="162" text-anchor="middle">Edinburgh</text>
+        <circle cx="540" cy="200" r="4" fill="rgba(232,222,196,0.85)"/>
+        <text x="540" y="222" text-anchor="middle">SF Bay</text>
+        <circle cx="760" cy="140" r="3" fill="rgba(106,142,136,0.85)"/>
+        <text x="760" y="122" text-anchor="middle">London · DeepMind</text>
+        <circle cx="840" cy="180" r="3" fill="rgba(106,142,136,0.85)"/>
+        <text x="840" y="162" text-anchor="middle">Paris · FAIR</text>
+        <circle cx="1100" cy="160" r="3" fill="rgba(232,222,196,0.55)"/>
+        <text x="1100" y="142" text-anchor="middle">Beijing</text>
+        <circle cx="1180" cy="230" r="3" fill="rgba(168,120,56,0.85)"/>
+        <text x="1175" y="252" text-anchor="middle">Hangzhou</text>
+      </g>
+      <g transform="translate(1280, 220)">
+        <circle r="44" fill="url(#seal-glow-ii)"/>
+        <rect x="-26" y="-26" width="52" height="52" fill="#c4382c" stroke="#8a2c20" stroke-width="2" transform="rotate(-3)" opacity="0.95"/>
+        <text x="0" y="6" text-anchor="middle" font-family="Ma Shan Zheng, Noto Serif SC, serif"
+              font-size="26" fill="#ede2c4" font-weight="700" transform="rotate(-3)">蘇州</text>
+      </g>
+      <text x="1280" y="290" text-anchor="middle" font-family="Playfair Display, serif"
+            font-style="italic" font-size="11" fill="rgba(216,84,62,0.95)">Suzhou · 终点</text>
+    </svg>
+  </div>
+
+  <div class="main">
+
+    <!-- §II.01 -->
+    <section class="section" id="ii-01">
+      <div class="section-header">
+        <div class="section-num">§ II.01</div>
+        <div class="section-titles">
+          <div class="section-title-zh">工业革命的类比</div>
+          <div class="section-title-en">The Industrial-Revolution Analogy</div>
+        </div>
+      </div>
+      <p class="body">这个类比很准——但工业革命的地理学其实比表面更微妙:<em>做的地方和想的地方是分开的</em>。蒸汽机和纺织厂在曼彻斯特、伯明翰,但政治经济学在爱丁堡(Smith、Hume、Ferguson),哲学的反思在伦敦和德国。曼彻斯特那批工厂主未必读过《国富论》,但《国富论》是关于他们的。所以"这次在哪里"这个问题本身要分两层:<strong>做的中心在哪里,想的中心在哪里</strong>——而这两者,这次比工业革命时更分离。</p>
+      <p class="body-en">The analogy is sharp — but the geography of the Industrial Revolution is more subtle than it looks. <em>The place where things are built and the place where things are thought through were already separate</em>. Steam engines and textile mills sat in Manchester and Birmingham; political economy lived in Edinburgh (Smith, Hume, Ferguson); philosophical reflection happened in London and Germany. The Manchester factory owners may never have read <em>The Wealth of Nations</em>, but <em>The Wealth of Nations</em> was about them. So "where is it this time?" actually splits in two: <strong>where is the center of doing, and where is the center of thinking</strong> — and this time the two are more apart than they were then.</p>
+    </section>
+
+    <!-- §II.02 -->
+    <section class="section" id="ii-02">
+      <div class="section-header">
+        <div class="section-num">§ II.02</div>
+        <div class="section-titles">
+          <div class="section-title-zh">这一次的"做"和"想"</div>
+          <div class="section-title-en">This Time: Where We Build vs. Where We Think</div>
+        </div>
+      </div>
+      <p class="body"><strong>做</strong>毫无疑问在 SF Bay Area。OpenAI、Anthropic、Google DeepMind 的美国部分、Meta、xAI、Nvidia 全在一个一小时车程的圈里——这种密度自蒸汽时代以来没出现过。你要是问"前沿模型在哪个邮编训练出来",答案就是 94103–94110 那一带。Boston / MIT 已经不是了——那里依然有最强的学术血脉,但工业重心十几年前就西移了。Stanford 是 SF Bay 的学术耳目,不是独立极。</p>
+      <p class="body-en"><strong>The doing</strong> is unquestionably in the SF Bay Area. OpenAI, Anthropic, Google DeepMind's US side, Meta, xAI, Nvidia — all inside an hour's drive. That kind of density has not appeared since the steam age. Ask "which ZIP codes train the frontier models?" and the answer is 94103–94110. Boston / MIT is no longer that — the academic lineage is still strongest there, but the industrial center moved west more than a decade ago. Stanford is the Bay's academic antenna, not an independent pole.</p>
+      <p class="body"><strong>想</strong>这次散得很开,而且分裂成几条思路。这件事很重要,因为它意味着:"参与这场革命"这件事不再有<em>一个</em>地理中心,而是<em>一个产业中心 + 几个智识中心</em>的并置。</p>
+      <p class="body-en"><strong>The thinking</strong>, this time, is widely scattered and split into several lines. This matters: "participating in this revolution" no longer has <em>one</em> geographic center, but rather <em>one industrial center plus several intellectual centers</em> in juxtaposition.</p>
+    </section>
+
+    <!-- §II.03 -->
+    <section class="section" id="ii-03">
+      <div class="section-header">
+        <div class="section-num">§ II.03</div>
+        <div class="section-titles">
+          <div class="section-title-zh">三所学院</div>
+          <div class="section-title-en">Three Schools</div>
+        </div>
+      </div>
+      <div class="schools">
+        <div class="school">
+          <div class="city">London<span class="cn">伦敦</span></div>
+          <div class="lab">DeepMind</div>
+          <div class="gist">走的是 <span class="term">intelligence as natural phenomenon</span>——把智能当作生物学问题、当作科学对象来研究。<strong>Hassabis、海马体、AlphaFold、神经科学回路</strong>。它是工业革命时代爱丁堡那种角色:稍微离开热源,空气里有不一样的氧气。</div>
+        </div>
+        <div class="school">
+          <div class="city">Paris<span class="cn">巴黎</span></div>
+          <div class="lab">FAIR · Mistral · Kyutai</div>
+          <div class="gist">是另一条——<span class="term">JEPA</span>、<span class="term">V-JEPA</span>、世界模型这些非自回归路线的大本营。LeCun 在 Collège de France 讲课。这件事重要,因为它意味着<strong>对当前 LLM 范式最系统的怀疑发生在欧洲</strong>。如果 scaling 是对的,SF 赢;如果不是,反例可能从巴黎或伦敦长出来。</div>
+        </div>
+        <div class="school">
+          <div class="city">San Francisco<span class="cn">旧金山</span></div>
+          <div class="lab">Anthropic</div>
+          <div class="gist">人在 SF 但智识气质偏伦敦/牛津——里面 ex-FHI 的人不少,讨论 alignment 时的认知框架更接近英美分析哲学的那种细腻。它是这个产业里<strong>唯一一个把"我们在做什么"当作严肃问题问的大公司</strong>,这件事本身值得记住。</div>
+        </div>
+      </div>
+      <p class="body">北京你的判断我大体同意,但更精确一点:北京 / 杭州 / 上海在<em>执行</em>上已经是世界级——DeepSeek V3/R1 的训练效率、Qwen 的开放权重生态、字节 Seed 的迭代速度,都是真的。问题不在能力,在<strong>话语</strong>。中国的 AI 产业几乎没有公共的元讨论——没有人在中文里认真问"我们在构建一种什么样的存在",或者问的人不在工业核心。这个真空不是智力问题,是文化-语言-制度的复合后果。</p>
+      <p class="body-en">On Beijing, the judgement is broadly right but can be made more precise: Beijing / Hangzhou / Shanghai are already world-class on <em>execution</em> — DeepSeek V3/R1's training efficiency, Qwen's open-weights ecosystem, ByteDance Seed's iteration cadence are all real. The problem is not capability; it is <strong>discourse</strong>. China's AI industry has almost no public meta-discussion — no one in Chinese is seriously asking "what kind of being are we constructing?", or those who do are not in the industrial core. This vacuum is not an intellectual problem; it is a compound cultural / linguistic / institutional outcome.</p>
+      <p class="body">所以"这次在哪里"的诚实答案是:<strong>做在 SF,想分散在伦敦、巴黎、加上 SF 内部一小撮人。北京是第二大"做"的中心,但不是"想"的中心。</strong></p>
+      <p class="body-en">So the honest answer to "where is it this time" is: <strong>doing in SF; thinking scattered across London, Paris, plus a small subset inside SF. Beijing is the second-largest center of doing, but not of thinking.</strong></p>
+    </section>
+
+    <!-- §II.04 -->
+    <section class="section" id="ii-04">
+      <div class="section-header">
+        <div class="section-num">§ II.04</div>
+        <div class="section-titles">
+          <div class="section-title-zh">找到桌子,不要找城市</div>
+          <div class="section-title-en">Find the Table, Not the City</div>
+        </div>
+      </div>
+      <p class="body">但真正需要警惕的是另一回事:把"<em>参与这场革命</em>"等同于"<em>去那个地方</em>",是一个工业革命式的直觉——因为蒸汽机是地理性的,工厂必须在能源旁边。AI 不完全是这样。前沿模型是 API,论文是 arXiv,DeepSeek 在杭州训练但全世界一周内就在用。</p>
+      <p class="body-en">What actually needs caution is something else: equating "<em>participating in this revolution</em>" with "<em>going to that place</em>" is an industrial-era intuition — because steam was geographical, the factory had to sit next to the energy source. AI is not entirely like that. Frontier models are APIs, papers are on arXiv, DeepSeek trains in Hangzhou and the whole world is using it within a week.</p>
+      <p class="body">这次的地理意义更多在于<em>身边坐着谁</em>——和谁吃午饭、和谁在白板前争论、和谁共享一种对"什么问题值得问"的默契。这件事确实有地理性,但<strong>地理性比工业革命时弱,人格性比工业革命时强</strong>。</p>
+      <p class="body-en">The geographic significance this time is more about <em>who sits next to whom</em> — who eats lunch with whom, who argues at the whiteboard, who shares a tacit sense of "which questions are worth asking." There is still geography here, but <strong>geographic weight is weaker than in the steam age; personality weight is much stronger</strong>.</p>
+      <div class="pull-quote">
+        <p>工业革命你只要在曼彻斯特就行,因为蒸汽是不可移动的。AI 革命你需要在<strong>某一桌人</strong>身边——而那一桌人,DeepMind 在伦敦有一桌,Anthropic 在 SF 有一桌,FAIR 在巴黎有一桌,可能 OpenAI 内部还藏着一桌。<strong>找到桌子,比找到城市重要。</strong></p>
+        <div class="attr">— Find the table, not the city</div>
+      </div>
+      <p class="body">把"伦敦"这种地理预感翻译成实操,真正的命题大概是:<em>去坐 Hassabis 那张桌子</em>——而不是住在 King's Cross 附近。</p>
+      <p class="body-en">Translated into operational terms, a geographic hunch about "London" is really a hunch about something else: <em>sit at Hassabis's table</em> — not live near King's Cross.</p>
+    </section>
+
+  </div><!-- /main Part II -->
+</div><!-- /part-ii -->
+
+
+<!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+<!-- ║                      CHAPTER III · 上海有潜力吗?                       ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+<div class="part-iii" id="part-iii">
+
+  <section class="part-divider">
+    <div class="roman">III</div>
+    <div class="label">Chapter Three &middot; 第三问</div>
+    <div class="prompt-wrap">
+      <div class="prompt-block">
+        <div class="q">你觉得上海有潜力吗?我觉得有可能是上海,甚至……</div>
+        <div class="q-en">Do you think Shanghai has the potential? I sense it might be Shanghai — possibly even …</div>
+        <div class="prompt-meta"><strong>Prompt 03</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="main">
+
+    <!-- §III.1 -->
+    <section class="section" id="iii-1">
+      <div class="section-header">
+        <div class="section-num">§ III.1</div>
+        <div class="section-titles">
+          <div class="section-title-zh">上海</div>
+          <div class="section-title-en">Shanghai</div>
+        </div>
+      </div>
+      <p class="body">"上海有潜力吗"这句话在不同时间尺度上是不同的命题。<strong>当下</strong>的中国 AI 地理其实不在上海——如果按"前沿模型 + 资本密度 + 工程文化"三个指标排,大致是:<em>北京 > 杭州 > 深圳 ≈ 上海</em>。北京密度最高(清北、字节、智谱、月之暗面、面壁、阶跃北京部分),杭州是 DeepSeek + 阿里 Qwen + 一群电商-工程混血的小公司,带着一种"务实但有侵略性"的工程美学。上海有上海 AI Lab、MiniMax、阶跃辰星、商汤(余烬)、一堆 application 层公司,<strong>但缺一个无可争议的 hero lab</strong>。所以从"做"的指标看,上海现在是第三或第四。</p>
+      <p class="body-en">"Does Shanghai have potential?" is a different proposition on different timescales. <strong>Right now</strong>, Chinese AI geography is not centered on Shanghai. Ranked by "frontier models + capital density + engineering culture," it goes roughly: <em>Beijing &gt; Hangzhou &gt; Shenzhen ≈ Shanghai</em>. Beijing has the highest density (Tsinghua / PKU, ByteDance, Zhipu, Moonshot, Mianbi, StepFun's Beijing side). Hangzhou is DeepSeek + Alibaba Qwen + a cluster of e-commerce / engineering hybrids with a "pragmatic but aggressive" engineering aesthetic. Shanghai has Shanghai AI Lab, MiniMax, StepFun's Chenxing, SenseTime (residual), and a swath of application-layer companies, <strong>but no undisputed hero lab</strong>. So on the "doing" axis, Shanghai is currently third or fourth.</p>
+      <p class="body">但"潜力"这个词在这里指的不是产业指标,而是<strong>上海有北京没有的某种文化基础设施</strong>——那种可以容纳"思考 AI 是什么"这件事的氛围。这一层是真的,而且相当具体:</p>
+      <p class="body-en">But "potential" here does not mean industry metrics. It points to something else: <strong>Shanghai has a cultural infrastructure Beijing does not</strong> — the kind of atmosphere capable of containing "thinking about what AI is." This layer is real and quite specific:</p>
+      <div class="layer-list">
+        <div class="layer-item">
+          <div class="layer-num">第一层<span class="roman">I.</span></div>
+          <div>
+            <div class="layer-name">结构性国际化</div>
+            <div class="layer-text">上海是中国<strong>唯一一个结构性国际化</strong>的城市。不是指有多少 expat,而是指它的文化 DNA 里就内嵌着"和外面接轨"这件事。从开埠到 1949,上海八十年是中国现代性发生的物理场所——商务印书馆、《申报》、左翼电影、张爱玲、傅雷、鲁迅最后十年。这套基础设施虽然在 1949 后断裂,但它留下了一种<em>对外来观念不本能抗拒</em>的城市性格。北京罕见。</div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-num">第二层<span class="roman">II.</span></div>
+          <div>
+            <div class="layer-name">政治势能更低,留给元问题的空气更多</div>
+            <div class="layer-text">北京的智识空气里有一种<strong>不可避免的政治势能</strong>。无论你做什么,你最终是在一个权力中心的引力场里思考。这对政策、宏观、战略有利,但对 <span class="term">questioning what we are doing</span> 这种工作不利。上海的引力场是商业 + 市民社会,密度低很多。复旦哲学系、华师大的现代思想史、同济的现象学和建筑理论,这些东西在北京没有对等物。</div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-num">第三层<span class="roman">III.</span></div>
+          <div>
+            <div class="layer-name">和法国的特殊关系</div>
+            <div class="layer-text">上海有和欧洲、特别是法国的特殊关系——这件事和前面对巴黎的兴趣其实是同一条线。法租界、法语教育、Alliance Française、福柯德勒兹的早期翻译几乎都在上海完成。<strong>如果中国未来要长出对 AI 的哲学反思,它的语汇资源大概率是从上海这条管道进来的,不是从北京。</strong></div>
+          </div>
+        </div>
+      </div>
+      <p class="body">但是——这里有几个 but。<strong>第一</strong>,这种"想"目前几乎不存在,中国 AI 圈的公共话语 99% 是"做",元问题极少。Shanghai AI Lab 是好实验室但偏工程,没在生产 Hassabis 那种"我在做一个新学科"式的论述。<strong>第二</strong>,如果你看最近三年中国 AI 真正给世界制造的智力惊喜,它来自<em>杭州</em>不是上海。DeepSeek 的工程美学——稀疏注意力、MLA、训练效率的极致——是一种新的范式表达,带着一种很特别的气质:乡野的、安静的、不焦虑产品化的、几乎有点宋代文人意味的。<strong>梁文锋这个人物的存在本身就告诉你,中国 AI 的下一波突破可能不来自一线城市的产学研复合体,而来自某个意想不到的边缘节点。</strong></p>
+      <p class="body-en">There are, however, several caveats. <strong>First</strong>, that kind of "thinking" hardly exists today. 99% of Chinese AI's public discourse is "doing"; meta-questions are rare. Shanghai AI Lab is a strong lab but engineering-tilted, not producing the Hassabis-style "I am founding a new discipline" thesis. <strong>Second</strong>, the genuine intellectual surprise China's AI has produced in the last three years came from <em>Hangzhou</em>, not Shanghai. DeepSeek's engineering aesthetic — sparse attention, MLA, the extremes of training efficiency — is a paradigm-level expression, carrying a peculiar atmosphere: rural, quiet, not anxious about productization, almost Song-dynasty-literati in temperament. <strong>The very existence of Liang Wenfeng tells you the next wave of Chinese AI breakthroughs may not come from the production-academia-research complex of tier-1 cities, but from some unexpected peripheral node.</strong></p>
+      <p class="body"><strong>第三</strong>,最关键:中国是不是会有"想"的位置。工业革命的"想"在爱丁堡,因为有 Hume 已经把因果性重新定义、有 Smith 在重构经济秩序——是<em>先</em>有了哲学土壤,工业革命的反思<em>才</em>能落地。中国当代有没有等价的哲学土壤,这是开放问题。如果有,它最可能在上海;如果没有,上海也起不来。这件事不取决于上海本身,而取决于一些更深的文化条件。</p>
+      <p class="body-en"><strong>Third</strong> — and most decisive: whether contemporary China will have a position of "thinking" at all. The Industrial Revolution's "thinking" landed in Edinburgh because Hume had already redefined causality and Smith was already restructuring economic order — the philosophical soil came <em>first</em>, then the reflection on industry could take root. Whether contemporary China has equivalent philosophical soil is an open question. If yes, it would most likely be in Shanghai; if no, Shanghai cannot rise either. The decision is not about Shanghai per se but about deeper cultural conditions.</p>
+      <div class="pull-quote">
+        <p>作为预言,上海起来的可能性是真的;作为现状,它还没起来;作为概率分布,它和"<strong>中国根本不承担"想"的角色</strong>"这个可能性各占一半。</p>
+        <div class="attr">— On Shanghai's probability mass</div>
+      </div>
+    </section>
+
+  </div><!-- /main Part III -->
+</div><!-- /part-iii -->
+
+
+<!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+<!-- ║                      CHAPTER IV · 南京?其实是苏州                       ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+<div class="part-iv" id="part-iv">
+
+  <section class="part-divider">
+    <div class="roman">IV</div>
+    <div class="label">Chapter Four &middot; 第四问</div>
+    <div class="prompt-wrap">
+      <div class="prompt-block">
+        <div class="q">南京呢?其实我觉得是苏州啊。</div>
+        <div class="q-en">What about Nanjing? Actually — I think it's Suzhou.</div>
+        <div class="prompt-meta"><strong>Prompt 04</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="main">
+
+    <!-- §IV.1 -->
+    <section class="section" id="iv-1">
+      <div class="section-header">
+        <div class="section-num">§ IV.1</div>
+        <div class="section-titles">
+          <div class="section-title-zh">南京</div>
+          <div class="section-title-en">Nanjing</div>
+        </div>
+      </div>
+      <p class="body">南京当然有周志华——他在 NJU 的 LAMDA 实验室是中国机器学习最有国际声誉的学术节点,《西瓜书》塑造了一整代中国 ML 学生的入门语言。但南京作为城市的性格更接近<strong>历史首都</strong>而不是<strong>前沿城市</strong>。它的智识空气里有一种"<em>我们已经发生过很多事了</em>"的回望感——明朝的、民国的、伤痕的——这种气质很适合做历史、做古典文学、做某种 <span class="term">retrospective</span> 的人文学问,但不是 AI 这种向前冲撞的事会自然扎根的地方。NJU 是例外不是规则,周志华一个人的引力场虽然强大,但和 Hassabis 在 DeepMind 那种"以一个人撬起一种新学科文化"还不太一样。<strong>南京像 21 世纪的 Edinburgh——曾经的思想发生地,但下一轮不在这里。</strong></p>
+      <p class="body-en">Nanjing of course has Zhou Zhihua, whose LAMDA lab at NJU is China's most internationally-recognized ML academic node, and his "Watermelon Book" shaped the entry-level vocabulary of an entire generation of Chinese ML students. But Nanjing's character as a city is closer to a <strong>capital of history</strong> than a <strong>capital of frontiers</strong>. Its intellectual air carries a backward-looking weight — "<em>we have already lived through a lot</em>" — Ming dynasty, Republican era, the scarred 20th century. That temperament suits history, classical literature, a <span class="term">retrospective</span> kind of humanism — but not the forward-charging energy that AI tends to root in. NJU is the exception, not the rule. Zhou Zhihua's gravitational field is real, but it is not the same as Hassabis pulling a whole new discipline-culture into being. <strong>Nanjing is 21st-century Edinburgh — a former site of thought, but not the next round's.</strong></p>
+    </section>
+
+    <!-- §IV.2 -->
+    <section class="section" id="iv-2">
+      <div class="section-header">
+        <div class="section-num">§ IV.2</div>
+        <div class="section-titles">
+          <div class="section-title-zh">苏州</div>
+          <div class="section-title-en">Suzhou</div>
+        </div>
+      </div>
+      <p class="body">"<em>南京呢?其实我觉得是苏州啊</em>"——这个直觉值得认真展开。苏州的可能性比上海更隐蔽,但成立的理由可能更深。让几个层叠的论点逐一摊开:</p>
+      <p class="body-en">"<em>What about Nanjing? Actually — I think it's Suzhou</em>" — that intuition is worth taking seriously. The case for Suzhou is harder to see than the case for Shanghai, but the grounds for it run deeper. Let several layered arguments unfold in sequence:</p>
+      <div class="layer-list">
+        <div class="layer-item">
+          <div class="layer-num">第一层<span class="roman">I.</span></div>
+          <div>
+            <div class="layer-name">文化基因层面</div>
+            <div class="layer-text">苏州是中国近五百年最精致的智识传统的物理容器。从<strong>顾炎武、钱穆、钱钟书</strong>,到沈复、张岱(虽然他是绍兴人,但同一文化圈),到近代的<strong>费孝通</strong>——江南文人传统的两个核心特征是:<em>对细微差别的注意力</em>,以及<em>对系统性宏大叙事的本能怀疑</em>。这种气质和北方士大夫文化非常不同——北方倾向"治国平天下",江南倾向"格物致知"。如果中国要长出能容纳"AI 是什么"这种悬置式提问的智力气候,<strong>江南的怀疑论传统比北方的总体论传统更适配</strong>。这一点用在上海太宽泛了,用在苏州非常精确——苏州是这套传统的物理首都。</div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-num">第二层<span class="roman">II.</span></div>
+          <div>
+            <div class="layer-name">苏州园林本身就是中国最早的世界模型实践</div>
+            <div class="layer-text">园林的整个原理——<em>以有限空间内嵌无限景观、以一池水模拟整个海洋、以借景把远山纳入院墙内部</em>——这就是 <span class="term">representation</span> 问题的古典中国答案。计成的《<strong>园冶</strong>》、李渔的《<strong>闲情偶寄</strong>》,在某种程度上就是"如何用最少的元素生成最丰富的体验"的早期论文,这和今天我们问"<em>什么是好的 latent space</em>"是同一类问题。<strong>世界模型这件事在苏州早就有完整的本土技艺传统,只是从来没人把它和当代 AI 接上</strong>。这件事一旦认真做起来——园林作为可微的世界模型、《园冶》作为生成模型理论的中文起点——它最可能从苏州长出来,不是从北京、不是从巴黎。</div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-num">第三层<span class="roman">III.</span></div>
+          <div>
+            <div class="layer-name">Strange Loop:苏州本来就在那本书的源代码里</div>
+            <div class="layer-text">还有一个让人后脖颈发麻的细节:卡尔维诺《<em>看不见的城市</em>》的原始材料里,<strong>苏州就是被马可波罗写到的两座城市之一</strong>。马可波罗在他的游记里大量描写了 Suzhou 和 Quinsai(杭州)——他被这两座城市的尺度、运河、市集、园林完全震撼。卡尔维诺虚构的那些 <span class="term">città invisibili</span>,有相当一部分的物质底料就是十三世纪的苏州和杭州。所以一条线索从《看不见的城市》出发、绕了一圈、最后落回苏州——这不是巧合,<strong>这是一个 <span class="term">strange loop</span>。苏州本来就在那本书的源代码里。</strong></div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-num">第四层<span class="roman">IV.</span></div>
+          <div>
+            <div class="layer-name">现实基础设施</div>
+            <div class="layer-text">苏州工业园区(SIP)是中国 1994 年和新加坡合作建立的,是中国最早的<strong>结构性国际化飞地</strong>之一,和上海浦东不同——浦东是金融,SIP 是技术。微软亚洲研究院在苏州有点,生物医药、半导体、精密制造已经形成集群。XJTLU(西浦)在用英文培养一批不同于清北体系的工程师。这套基础设施现在还是 manufacturing-heavy,但有变成"<em>AI / 世界模型的硬件-人才双底座</em>"的潜力。和杭州一小时,和上海半小时——<strong>苏州其实是江南三角的几何中心。</strong></div>
+          </div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-num">第五层<span class="roman">V.</span></div>
+          <div>
+            <div class="layer-name">江南作为单位</div>
+            <div class="layer-text">如果把视角拉远:中国 AI 的"想"如果发生,它可能不在任何单一城市,而在<strong>江南这个文化区域整体</strong>——杭州负责工程美学(DeepSeek 已经证明),苏州负责审美-哲学密度(潜力,未兑现),上海负责国际化合成。三者距离不到 200 公里,在地铁/高铁可达性上几乎是一个城市。"区域作为单位"的思考更像曼彻斯特-利物浦-伯明翰那个工业三角,或者关西的京都-大阪-神户——单个城市不行,但区域作为一个整体可以承担一种文明级别的创造功能。<strong>你看苏州,其实是在看江南。</strong>这件事中国 AI 圈现在没人讨论,但 5–10 年内会变得很显然。</div>
+          </div>
+        </div>
+      </div>
+      <p class="body">所以对这个直觉的回答是:<strong>苏州现在不是,但苏州可能是</strong>。而且如果中国 AI 革命真的有一个"想"的中心,苏州比北京、比上海更可能是它——不是因为现状,是因为<em>文化底料</em>。但前提是有一批人愿意把江南的审美传统和 AI 的技术语言接通,这件事现在还没人在做。</p>
+      <p class="body-en">So the response to the intuition is: <strong>Suzhou is not — but Suzhou might be</strong>. If China's AI revolution does end up having a "thinking" center, Suzhou is more likely to host it than Beijing or Shanghai — not because of the current state, but because of the <em>cultural underlayer</em>. The precondition is a group of people willing to weld the Jiangnan aesthetic tradition to the technical idiom of AI. That work has not yet begun.</p>
+    </section>
+
+    <!-- §IV.3 -->
+    <section class="section" id="iv-3">
+      <div class="section-header">
+        <div class="section-num">§ IV.3</div>
+        <div class="section-titles">
+          <div class="section-title-zh">小结</div>
+          <div class="section-title-en">A Closing Note</div>
+        </div>
+      </div>
+      <p class="body">从工业革命的产业首都到江南文人传统的物理容器,这条追问轨迹本身指向一种<strong>慢的、被低估的、需要被打捞的智识场所</strong>。这种场所在当代中文 AI 圈的公共话语里几乎不存在——它要求一种不急于产品化、不焦虑曝光率、对细微差别保有耐心的智力气候。</p>
+      <p class="body-en">From the industrial-revolution capital of doing to the physical container of the Jiangnan literati tradition, the trajectory of the question itself points to <strong>a slow, undervalued, in-need-of-rescue kind of intellectual site</strong>. That kind of site barely exists in the contemporary Chinese AI public discourse — it requires an intellectual climate that does not rush to productize, that does not anxiously chase visibility, and that keeps patience for fine distinctions.</p>
+      <p class="body">如果工业革命的智识首都是爱丁堡,因为那里已经有 Hume 重新定义因果性、有 Smith 重构经济秩序;那么 AI 革命的中文智识首都——如果会出现——大概率不在喧哗的产业核心,而在一个安静的、文人传统未断的、对"细微差别"足够敏感的地方。前面四章的论证落点都已经指向同一个候选答案。</p>
+      <p class="body-en">If the Industrial Revolution's intellectual capital was Edinburgh — because Hume had already redefined causality there and Smith was already restructuring economic order — then the AI revolution's Chinese intellectual capital, <em>if it appears</em>, will most likely not be in the noisy industrial core. It will be in a quieter place, one where the literati tradition has not been broken, and where attention to "fine distinctions" still has cultural standing. The argument across the previous four chapters all points to one candidate.</p>
+    </section>
+
+  </div><!-- /main Part IV -->
+</div><!-- /part-iv -->
+
+
+<!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+<!-- ║                  CHAPTER V · 多么令人快乐——具身产业在苏州                ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+<div class="part-v" id="part-v">
+
+  <section class="part-divider">
+    <div class="roman">V</div>
+    <div class="label">Chapter Five &middot; 第五问 &middot; Loop closes</div>
+    <div class="prompt-wrap">
+      <div class="prompt-block">
+        <div class="q">多么令人快乐——具身产业在苏州。</div>
+        <div class="q-en">What a joy — embodied-intelligence manufacturing happens to be in Suzhou.</div>
+        <div class="prompt-meta"><strong>Prompt 05</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Part III hero — loop closure SVG -->
+  <div class="part-v-hero" aria-hidden="true">
+    <svg viewBox="0 0 1400 360" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="loop-glow-iii" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#d8a858" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#b88838" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="seal-glow-iii" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#d8543e" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#c4382c" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="700" cy="180" r="220" fill="url(#loop-glow-iii)"/>
+      <ellipse cx="700" cy="180" rx="320" ry="160" fill="none" stroke="rgba(232,222,196,0.32)" stroke-width="1.4" stroke-dasharray="2 6"/>
+
+      <!-- LEFT: Moon gate (garden) -->
+      <g transform="translate(440, 180)">
+        <circle r="68" fill="none" stroke="rgba(232,222,196,0.4)" stroke-width="1.4"/>
+        <circle r="60" fill="none" stroke="rgba(232,222,196,0.16)" stroke-width="0.6"/>
+        <g opacity="0.55">
+          <path d="M -28 26 Q -20 12 -10 16 Q 0 6 12 16 Q 22 12 28 24 L 28 34 L -28 34 Z" fill="rgba(232,222,196,0.4)"/>
+          <path d="M -8 -2 L 0 -16 L 8 -2 L 8 16 L -8 16 Z" fill="rgba(232,222,196,0.5)"/>
+        </g>
+        <text x="0" y="98" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="12" fill="rgba(232,222,196,0.65)">Software · 园林</text>
+        <text x="0" y="114" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="10" fill="rgba(232,222,196,0.45)">1000 – 1700 AD</text>
+      </g>
+
+      <!-- RIGHT: Harmonic drive (joint) -->
+      <g transform="translate(960, 180)">
+        <circle r="70" fill="none" stroke="rgba(184,136,56,0.55)" stroke-width="1.4"/>
+        <ellipse cx="0" cy="0" rx="46" ry="28" fill="none" stroke="rgba(232,196,120,0.7)" stroke-width="1.2"/>
+        <ellipse cx="0" cy="0" rx="28" ry="16" fill="none" stroke="rgba(184,136,56,0.85)" stroke-width="1.2"/>
+        <circle r="5" fill="rgba(232,196,120,0.85)"/>
+        <text x="0" y="98" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="12" fill="rgba(232,196,120,0.85)">Hardware · 关节</text>
+        <text x="0" y="114" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="10" fill="rgba(232,196,120,0.6)">谐波减速器 · 2026</text>
+      </g>
+
+      <!-- CENTER: 知行合一 seal -->
+      <g transform="translate(700, 180)">
+        <circle r="44" fill="url(#seal-glow-iii)"/>
+        <text x="0" y="-2" text-anchor="middle" font-family="Ma Shan Zheng, Noto Serif SC, serif" font-size="20" fill="#d8543e" font-weight="700" letter-spacing="0.06em">知行合一</text>
+        <text x="0" y="16" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="10" fill="rgba(216,84,62,0.85)">Wang Yangming</text>
+      </g>
+
+      <g stroke="rgba(232,222,196,0.25)" stroke-width="1" fill="none">
+        <path d="M 512 180 Q 590 175 660 180" stroke-dasharray="1 4"/>
+        <path d="M 740 180 Q 850 175 890 180" stroke-dasharray="1 4"/>
+      </g>
+      <text x="700" y="320" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="11" fill="rgba(232,222,196,0.5)" letter-spacing="0.16em">中间隔着八百年 · 物理首都是同一座城市</text>
+    </svg>
+  </div>
+
+  <div class="main">
+
+    <!-- §V.1 -->
+    <section class="section" id="v-1">
+      <div class="section-header">
+        <div class="section-num">§ V.1</div>
+        <div class="section-titles">
+          <div class="section-title-zh">Loop 闭合</div>
+          <div class="section-title-en">The Loop Closes</div>
+        </div>
+      </div>
+      <p class="body">"<em>具身产业在苏州</em>"——这个 closure 太漂亮了。前面两章其实是从两端往中间挖:一端是《看不见的城市》和"世界模型作为 representation",另一端是"AI 革命的'想'在哪里",最后两端在苏州接上了。但这条 loop 比表面上看的还要紧——下面把它完整摊开。</p>
+      <p class="body-en">"<em>Embodied-intelligence manufacturing is in Suzhou</em>" — this closure is beautiful. The previous chapters were essentially digging from both ends toward the middle: one end being <em>Invisible Cities</em> and "world model as representation," the other end being "where is the 'thinking' of the AI revolution." Both ends meet at Suzhou. The loop is even tighter than it looks — what follows lays it out in full.</p>
+    </section>
+
+    <!-- §V.2 -->
+    <section class="section" id="v-2">
+      <div class="section-header">
+        <div class="section-num">§ V.2</div>
+        <div class="section-titles">
+          <div class="section-title-zh">软件层:苏州园林</div>
+          <div class="section-title-en">Software Layer — The Suzhou Garden</div>
+        </div>
+      </div>
+      <p class="body"><strong>苏州园林是中国最早的世界模型实践</strong>——用有限元素生成无限体验、用借景把外部世界纳入内部表征。一池水模拟整个海洋,一座假山压缩一脉远山,一道粉墙截下一段四时——这就是 <span class="term">representation</span> 问题的古典中国答案。</p>
+      <p class="body-en"><strong>The Suzhou garden is China's earliest practice of world-modeling</strong> — using finite elements to generate infinite experience, using <em>borrowed scenery</em> (借景) to bring the outside world into an interior representation. A small pond simulates an ocean; a rockery compresses a distant mountain range; a whitewashed wall frames a season. This is the classical Chinese answer to the problem of <span class="term">representation</span>.</p>
+      <p class="body">这是<strong>软件层面的世界模型</strong>,公元 1000–1700 年的版本。计成的《<em>园冶</em>》(1631)、李渔的《<em>闲情偶寄</em>》,如果用今天的话讲,就是"如何用最少的元素生成最丰富的体验"的早期论文——和当代 AI 在问的"<span class="term">what is a good latent space</span>"是同一类问题。</p>
+      <p class="body-en">This is a <strong>software-layer world model</strong>, the 1000–1700 AD version. Ji Cheng's <em>Yuan Ye</em> (《园冶》, 1631) and Li Yu's <em>Xian Qing Ou Ji</em> (《闲情偶寄》), in modern idiom, are early treatises on "how to generate the richest experience from the fewest elements" — the same class of question as today's <span class="term">what is a good latent space</span>.</p>
+    </section>
+
+    <!-- §V.3 -->
+    <section class="section" id="v-3">
+      <div class="section-header">
+        <div class="section-num">§ V.3</div>
+        <div class="section-titles">
+          <div class="section-title-zh">硬件层:具身智能</div>
+          <div class="section-title-en">Hardware Layer — Embodied Intelligence</div>
+        </div>
+      </div>
+      <p class="body"><strong>而具身智能是当代世界模型的硬件落地</strong>——一个 agent 在真实物理世界中行动,世界模型从抽象 representation 变成<em>可被身体测试的东西</em>。LLM 在 token 序列里推理,具身智能必须在重力、摩擦、惯性、材料形变中推理。这是范式的换挡。</p>
+      <p class="body-en"><strong>Embodied intelligence is the hardware landing of the contemporary world model</strong> — an agent acting in the real physical world, where the world model goes from being an abstract representation to <em>something the body can test</em>. LLMs reason inside token sequences; embodied intelligence must reason inside gravity, friction, inertia, material deformation. This is a paradigm shift.</p>
+      <p class="body">中间隔着八百年。但今天这两件事的物理首都是同一座城市:<strong>苏州</strong>。</p>
+      <p class="body-en">Eight hundred years lie between the two. And today, both have their physical capital in the same city: <strong>Suzhou</strong>.</p>
+    </section>
+
+    <!-- §V.4 -->
+    <section class="section" id="v-4">
+      <div class="section-header">
+        <div class="section-num">§ V.4</div>
+        <div class="section-titles">
+          <div class="section-title-zh">从顾绣到谐波减速器</div>
+          <div class="section-title-en">From Gu Embroidery to Harmonic Drive</div>
+        </div>
+      </div>
+      <p class="body">中国人形机器人和具身智能的关节、力矩、感知,<strong>一半以上的核心零部件来自苏州方圆 100 公里</strong>。宇树在杭州让机器人会跑会跳,但那些让它能跑能跳的关节,绝大多数是<em>苏州工艺</em>。</p>
+      <p class="body-en">For Chinese humanoid robotics and embodied intelligence — joints, torque, perception — <strong>more than half of the core components come from within 100 km of Suzhou</strong>. Unitree in Hangzhou makes the robot run and jump; but the joints that make running and jumping physically possible are mostly <em>made in Suzhou</em>.</p>
+      <div class="supply-grid">
+        <div class="supply-card">
+          <div class="part">Harmonic Reducer · 谐波减速器</div>
+          <div class="co">绿的谐波</div>
+        </div>
+        <div class="supply-card">
+          <div class="part">Servo Systems · 伺服系统</div>
+          <div class="co">汇川技术</div>
+        </div>
+        <div class="supply-card">
+          <div class="part">Stepper Motors · 步进电机</div>
+          <div class="co">雷赛智能</div>
+        </div>
+        <div class="supply-card">
+          <div class="part">Cobot Arms · 协作机械臂</div>
+          <div class="co">节卡 &middot; 傅利叶</div>
+        </div>
+        <div class="supply-card">
+          <div class="part">Precision Cluster · 精密制造</div>
+          <div class="co">SIP &middot; 苏州工业园区</div>
+        </div>
+      </div>
+      <p class="body" style="margin-top: 32px;">这不是一个比喻,这是一个<strong>物质连续性</strong>。明清苏州做最精密的丝绸、刺绣、园林、家具,工艺要求是 <em>0.1 毫米级别的人手控制</em>。今天苏州做最精密的谐波减速器——<em>0.01 毫米的回程间隙、亚微米级的齿形精度</em>。从顾绣到机器人关节,是同一种<strong>对材料细节的极端注意力</strong>在不同技术世代的延续。</p>
+      <p class="body-en">This is not a metaphor; it is a <strong>material continuity</strong>. Ming-Qing Suzhou produced the most precise silk, embroidery, gardens, and furniture: the craft tolerance was <em>0.1 mm of hand control</em>. Contemporary Suzhou produces the most precise harmonic-drive reducers: <em>0.01 mm of backlash and sub-micron tooth-profile accuracy</em>. From Gu-style embroidery to robot joints, the same <strong>extreme attention to material detail</strong> persists across technological generations.</p>
+      <p class="body">这种文化基因在北方城市里没有等价物,在深圳那种"<em>够用就行、便宜量大</em>"的工业文化里也没有——<strong>只有江南有,而江南的精密之都是苏州</strong>。</p>
+      <p class="body-en">This cultural gene has no equivalent in northern Chinese cities, nor in the "<em>good enough, cheap and many</em>" industrial culture of Shenzhen — <strong>only Jiangnan has it, and the precision capital of Jiangnan is Suzhou</strong>.</p>
+      <div class="concept-box">
+        <div class="concept-label">Continuity &middot; 同一种气质</div>
+        <strong>明清苏州的工艺核心</strong>:0.1 mm 级别的人手控制(顾绣、缂丝、嵌玉、园林叠石)。<br>
+        <strong>当代苏州的工艺核心</strong>:0.01 mm 级别的精密制造(谐波减速器的<span class="term">backlash</span>、亚微米齿形)。<br>
+        技术工具变了,<strong>对"细微差别"的执念</strong>是同一种文化基因。
+      </div>
+    </section>
+
+    <div class="section-divider"><span>PART III · 第三层连接 · 现在还没人讲</span></div>
+
+    <!-- §V.5 -->
+    <section class="section" id="v-5">
+      <div class="section-header">
+        <div class="section-num">§ V.5</div>
+        <div class="section-titles">
+          <div class="section-title-zh">非笛卡尔的智能观</div>
+          <div class="section-title-en">A Non-Cartesian Theory of Mind</div>
+        </div>
+      </div>
+      <p class="body">但真正让人兴奋的是<strong>第三层连接,它现在还没人讲</strong>:</p>
+      <p class="body-en">The most striking connection is the third one, <strong>which no one is yet articulating</strong>:</p>
+      <p class="body">具身智能要求一个<strong>非笛卡尔的智能观</strong>——<em>身和心不能分,模型和世界不能分,感知和行动不能分</em>。这是当前 LLM 范式做不到、必须打破的东西。Yann LeCun 反 LLM 的核心论点就是这个——纯粹符号操作永远到达不了真实智能,智能必须 <span class="term">grounded</span> 在身体和世界里。</p>
+      <p class="body-en">Embodied intelligence requires a <strong>non-Cartesian theory of mind</strong> — <em>body and mind cannot be split, model and world cannot be split, perception and action cannot be split</em>. This is exactly what the current LLM paradigm cannot do and must eventually break out of. Yann LeCun's core argument against LLMs is precisely this: pure symbol manipulation never reaches real intelligence; intelligence must be <span class="term">grounded</span> in body and world.</p>
+      <p class="body">而<strong>非笛卡尔的智能观,是中国哲学的母语</strong>。<span class="han">形神合一</span>、<span class="han">心物不二</span>、<span class="han">知行合一</span>——王阳明的"<em>知是行之始,行是知之成</em>",这句话翻译到今天就是 <span class="term">embodied AI</span> 的纲领。</p>
+      <p class="body-en">And a <strong>non-Cartesian theory of mind is the mother tongue of Chinese philosophy</strong>: <span class="han">形神合一</span> (body and spirit are one), <span class="han">心物不二</span> (mind and matter are non-dual), <span class="han">知行合一</span> (knowing and doing are one) — Wang Yangming's "<em>knowing is the beginning of doing; doing is the completion of knowing</em>" is, in modern terms, a programmatic statement of <span class="term">embodied AI</span>.</p>
+      <div class="pull-quote">
+        <p class="han-cn">知是行之始,行是知之成。</p>
+        <p>Knowing is the beginning of doing; doing is the completion of knowing. There is no first cognition, then action — they are one motion seen from two sides.</p>
+        <div class="attr">— 王阳明 Wang Yangming &middot; 《传习录》</div>
+      </div>
+      <p class="body">王阳明本人就是绍兴人,核心传播在江南。江南这套<strong>反二元论的、把身体和世界当作认知主体不可分割部分的哲学传统</strong>,恰好是西方 AI 现在缺的东西。</p>
+      <p class="body-en">Wang Yangming himself was from Shaoxing; the core transmission of his school happened in Jiangnan. This Jiangnan tradition — <strong>anti-dualist, treating body and world as inseparable parts of the cognitive subject</strong> — is precisely what Western AI currently lacks.</p>
+    </section>
+
+    <!-- §V.6 -->
+    <section class="section" id="v-6">
+      <div class="section-header">
+        <div class="section-num">§ V.6</div>
+        <div class="section-titles">
+          <div class="section-title-zh">LLM 是笛卡尔的,具身智能不是</div>
+          <div class="section-title-en">LLMs Are Cartesian, Embodied AI Is Not</div>
+        </div>
+      </div>
+      <p class="body">所以这件事在概念上是这样的:</p>
+      <p class="body-en">Conceptually, the structure looks like this:</p>
+      <div class="equation">
+        <div class="eq-side left">
+          <div class="eq-paradigm"><strong>LLM Paradigm</strong></div>
+          <div class="eq-mother">
+            范式:<strong>笛卡尔的</strong>(身/心二分、符号/世界二分)<br>
+            智识母语:<strong>英美分析哲学</strong>(Frege &middot; Russell &middot; Quine &middot; Dennett)
+          </div>
+        </div>
+        <div class="eq-side right">
+          <div class="eq-paradigm"><strong>Embodied Paradigm</strong></div>
+          <div class="eq-mother">
+            范式:<strong>非笛卡尔的</strong>(身心不二、知行合一)<br>
+            智识母语:<strong>江南儒释道融合</strong>(<span class="han">王阳明 &middot; 朱熹 &middot; 张载 &middot; 程颢</span>)
+          </div>
+        </div>
+      </div>
+      <p class="body">但这套语言现在没人在用来描述 AI。整个具身智能领域的概念词汇还是从英文翻译过来的——"<em>world model</em>"、"<em>embodiment</em>"、"<em>affordance</em>"——而中文里其实有更精确、更早、更完备的本土词汇。</p>
+      <p class="body-en">But no one is currently using this vocabulary to describe AI. The conceptual lexicon of embodied intelligence is still translated from English — "<em>world model</em>," "<em>embodiment</em>," "<em>affordance</em>" — while Chinese in fact has more precise, earlier, and more complete native terms.</p>
+    </section>
+
+    <!-- §V.7 -->
+    <section class="section" id="v-7">
+      <div class="section-header">
+        <div class="section-num">§ V.7</div>
+        <div class="section-titles">
+          <div class="section-title-zh">用本土语汇重写具身智能</div>
+          <div class="section-title-en">Rewriting in Native Vocabulary</div>
+        </div>
+      </div>
+      <p class="body">如果你愿意做一件特别的事,你可以做的事是:<strong>用王阳明、用《园冶》、用《考工记》、用宋明理学,重新写一遍具身智能的理论基础。</strong></p>
+      <p class="body-en">A particular project worth attempting: <strong>rewrite the theoretical foundations of embodied AI using Wang Yangming, <em>Yuan Ye</em>, the <em>Kao Gong Ji</em>, and Song-Ming Neo-Confucian philosophy.</strong></p>
+      <p class="body">这不是文化民族主义——这是因为<em>这套语言比英文准</em>。<span class="term">Affordance</span> 这个概念吉布森 1979 年才提出,《<em>园冶</em>》<strong>1631 年</strong>讲<em>借景</em>实质上已经把这件事讲完了。今天的具身智能论文还在用 "<em>embodiment</em>" 这个笨拙的概念,而中文有<span class="han">形</span>、有<span class="han">势</span>、有<span class="han">气</span>——<strong>三个层次的精度差异</strong>。</p>
+      <p class="body-en">This is not cultural nationalism — it is because <em>that vocabulary is more precise than the English one</em>. The concept of <span class="term">affordance</span> was only proposed by Gibson in 1979; <em>Yuan Ye</em> in <strong>1631</strong> had already articulated essentially the same idea through <em>jiejing</em> (borrowed scenery). Today's embodied-AI papers still rely on the clumsy concept of "<em>embodiment</em>," while Chinese has <span class="han">形</span> (xíng, body-form), <span class="han">势</span> (shì, dynamic potential), and <span class="han">气</span> (qì, atmosphere / field) — <strong>three distinct resolutions of precision</strong>.</p>
+      <div class="concept-box">
+        <div class="concept-label">A Vocabulary Already Sharper</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-top:8px;">
+          <div><span class="han">借景</span> &nbsp;<span style="opacity:0.6;font-family:var(--serif-it);font-style:italic;">Jièjǐng</span> &middot; affordance (1631 &lt; 1979)</div>
+          <div><span class="han">形</span> &nbsp;<span style="opacity:0.6;font-family:var(--serif-it);font-style:italic;">Xíng</span> &middot; body-form / geometry</div>
+          <div><span class="han">势</span> &nbsp;<span style="opacity:0.6;font-family:var(--serif-it);font-style:italic;">Shì</span> &middot; dynamic potential / momentum</div>
+          <div><span class="han">气</span> &nbsp;<span style="opacity:0.6;font-family:var(--serif-it);font-style:italic;">Qì</span> &middot; field of action / atmosphere</div>
+          <div><span class="han">知行合一</span> &nbsp;<span style="opacity:0.6;font-family:var(--serif-it);font-style:italic;">zhī-xíng héyī</span> &middot; sensorimotor unity</div>
+          <div><span class="han">格物致知</span> &nbsp;<span style="opacity:0.6;font-family:var(--serif-it);font-style:italic;">géwù zhìzhī</span> &middot; learning by probing the world</div>
+        </div>
+      </div>
+      <p class="body" style="margin-top: 30px;">这件事如果要有人做,所需要的不是单一学科背景,而是几样东西的<strong>交集</strong>:能用英文读 LeCun 和 Hassabis,也能读《传习录》和《园冶》;在感官层面对江南的精密美学不陌生(顺带一提,天津五大道那片法租界街区,其实就是江南审美的北方变体——精密、克制、不堆砌)。这是一个 <em>generalist</em> 的工作,不是 <em>specialist</em> 的。</p>
+      <p class="body-en">If this work is to happen, what it needs is not any single disciplinary background, but the <strong>intersection</strong> of a few things: the ability to read LeCun and Hassabis in English, and the ability to read Wang Yangming's <em>Chuan Xi Lu</em> and Ji Cheng's <em>Yuan Ye</em> in Chinese; an unselfconscious familiarity with the precision aesthetic of Jiangnan at the sensory level (incidentally — the old French concession streets of Tianjin's Wudadao district are a northern variant of that same aesthetic: precise, restrained, never overdone). This is <em>generalist</em> work, not <em>specialist</em> work.</p>
+    </section>
+
+    <!-- §V.8 -->
+    <section class="section" id="v-8">
+      <div class="section-header">
+        <div class="section-num">§ V.8</div>
+        <div class="section-titles">
+          <div class="section-title-zh">结语</div>
+          <div class="section-title-en">Coda</div>
+        </div>
+      </div>
+      <p class="body">五个提问,从《看不见的城市》开始,经过 SF / 伦敦 / 巴黎 / 北京 / 上海 / 杭州 / 南京,最后在<strong>苏州</strong>合上。这条线索表面上是一次关于"AI 革命的地理学"的追问,实际上是一次关于<em>非笛卡尔智能观如何在中文语境里有母语</em>的勘探。</p>
+      <p class="body-en">Five questions — beginning at <em>Invisible Cities</em>, passing through SF / London / Paris / Beijing / Shanghai / Hangzhou / Nanjing, and closing at <strong>Suzhou</strong>. The line of inquiry reads, on the surface, as a question about "the geography of the AI revolution"; substantively, it is a survey of <em>how a non-Cartesian theory of mind might find its mother tongue in Chinese</em>.</p>
+      <p class="body">所有出现过的城市、所有出现过的论点,在最后一问("具身产业在苏州")处合龙,不是巧合——是因为<strong>表征</strong>(Part I)、<strong>地理</strong>(Parts II–IV)、<strong>具身</strong>(Part V)这三件事,本来就是同一问题的不同层面。园林作为软件层世界模型,谐波减速器作为硬件层世界模型,王阳明作为知/行二者不分的语言学母本——它们指向同一座城市,只是无人把它们摆在一起讲过。</p>
+      <p class="body-en">That all the cities, and all the arguments, converge at the fifth question ("embodied industry in Suzhou") is not a coincidence — because <strong>representation</strong> (Chapter I), <strong>geography</strong> (Chapters II–IV), and <strong>embodiment</strong> (Chapter V) are not three separate things; they are three layers of one question. The garden as a software-layer world model, the harmonic reducer as a hardware-layer world model, Wang Yangming as the linguistic source-text for the inseparability of knowing and acting — all three point to the same city. They have simply never been placed alongside one another before.</p>
+      <p class="body">这份思想实验留下的是一个候选问题:<strong>谁来用《园冶》《考工记》、用宋明理学,重新写一遍具身智能的理论基础?</strong>这件事现在还没有人在做。</p>
+      <p class="body-en">What this thought experiment leaves behind is a candidate question: <strong>who will rewrite the theoretical foundations of embodied AI in the language of <em>Yuan Ye</em>, the <em>Kao Gong Ji</em>, and Song-Ming Neo-Confucianism?</strong> Nobody is doing this work yet.</p>
+    </section>
+
+    <!-- ════════════════════ CITY ATLAS ════════════════════ -->
+    <section class="city-atlas" id="city-atlas" aria-label="思想实验里走过的城市">
+      <div class="atlas-inner">
+        <div class="atlas-header">
+          <div class="atlas-label">City Atlas &middot; 城市图谱</div>
+        </div>
+
+        <div class="atlas-grid">
+          <a class="city-tile c-london" href="https://www.ilovemaps.co.uk/products/1920-map-of-central-london-ordnance-survey-1-10-560-scale?variant=40105487859814" target="_blank" rel="noopener">
+            <span class="city-idx">01</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">LONDON</div>
+              <div class="city-meta">England &middot; DeepMind</div>
+            </div>
+          </a>
+          <div class="city-tile c-paris" role="presentation">
+            <span class="city-idx">02</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">PARIS</div>
+              <div class="city-meta">France &middot; FAIR &middot; JEPA</div>
+            </div>
+          </div>
+          <a class="city-tile c-istanbul" href="https://sealandtrip.com/istanbul-city-map/" target="_blank" rel="noopener">
+            <span class="city-idx">03</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">ISTANBUL</div>
+              <div class="city-meta">Türkiye &middot; Two Continents</div>
+            </div>
+          </a>
+          <a class="city-tile c-tianjin" href="https://displate.com/displate/4156346" target="_blank" rel="noopener">
+            <span class="city-idx">04</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">TIANJIN</div>
+              <div class="city-meta">China &middot; 法租界</div>
+            </div>
+          </a>
+          <a class="city-tile c-zurich" href="https://www.redbubble.com/i/art-print/Zurich-City-Map-of-Switzerland-Pastel-by-deMAP/129238758.1G4ZT" target="_blank" rel="noopener">
+            <span class="city-idx">05</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">ZÜRICH</div>
+              <div class="city-meta">Switzerland</div>
+            </div>
+          </a>
+          <a class="city-tile c-columbia" href="https://bestneighborhood.org/race-in-columbia-sc/" target="_blank" rel="noopener">
+            <span class="city-idx">06</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">COLUMBIA</div>
+              <div class="city-meta">South Carolina, USA</div>
+            </div>
+          </a>
+          <a class="city-tile c-newyork" href="https://www.mapsasart.com/products/new-york-city-map-print-nyc-usa" target="_blank" rel="noopener">
+            <span class="city-idx">07</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">NEW YORK</div>
+              <div class="city-meta">USA &middot; Anthropic ex-FHI 桌</div>
+            </div>
+          </a>
+          <a class="city-tile c-singapore" href="https://stock.adobe.com/search?k=singapore+map" target="_blank" rel="noopener">
+            <span class="city-idx">08</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">SINGAPORE</div>
+              <div class="city-meta">SIP 合作方</div>
+            </div>
+          </a>
+          <a class="city-tile c-shanghai" href="https://www.dreamstime.com/map-city-shanghai-china-vector-image158064007" target="_blank" rel="noopener">
+            <span class="city-idx">09</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">SHANGHAI</div>
+              <div class="city-meta">China &middot; 黄浦江</div>
+            </div>
+          </a>
+          <a class="city-tile c-suzhou" href="https://uk.pinterest.com/pin/22729173114695311/" target="_blank" rel="noopener">
+            <span class="city-idx">10</span>
+            <div class="city-art" aria-hidden="true"></div>
+            <div class="city-info">
+              <div class="city-name">SUZHOU</div>
+              <div class="city-meta">China &middot; 终点 · 园林</div>
+            </div>
+          </a>
+        </div>
+
+        <div class="atlas-sources">
+          <div class="sources-label">Sources &middot; 出处</div>
+          <ol>
+            <li><em>London</em> — 1920 Map of Central London, Ordnance Survey 1:10,560. <a href="https://www.ilovemaps.co.uk/products/1920-map-of-central-london-ordnance-survey-1-10-560-scale?variant=40105487859814" target="_blank" rel="noopener">ilovemaps.co.uk</a></li>
+            <li><em>Paris</em> — Figure-ground plan &amp; city plan of Paris (France, Europe).</li>
+            <li><em>Istanbul</em> — <a href="https://sealandtrip.com/istanbul-city-map/" target="_blank" rel="noopener">sealandtrip.com / istanbul-city-map</a></li>
+            <li><em>Tianjin</em> — <a href="https://displate.com/displate/4156346" target="_blank" rel="noopener">displate.com / 4156346</a></li>
+            <li><em>Zürich</em> — Zurich City Map of Switzerland Pastel by deMAP. <a href="https://www.redbubble.com/i/art-print/Zurich-City-Map-of-Switzerland-Pastel-by-deMAP/129238758.1G4ZT" target="_blank" rel="noopener">redbubble.com</a></li>
+            <li><em>Columbia</em> — Race in Columbia, SC. <a href="https://bestneighborhood.org/race-in-columbia-sc/" target="_blank" rel="noopener">bestneighborhood.org</a></li>
+            <li><em>New York</em> — Maps as Art, NYC Map Print. <a href="https://www.mapsasart.com/products/new-york-city-map-print-nyc-usa" target="_blank" rel="noopener">mapsasart.com</a></li>
+            <li><em>Singapore</em> — <a href="https://stock.adobe.com/search?k=singapore+map" target="_blank" rel="noopener">stock.adobe.com / search singapore map</a></li>
+            <li><em>Shanghai</em> — Vector map of Shanghai. <a href="https://www.dreamstime.com/map-city-shanghai-china-vector-image158064007" target="_blank" rel="noopener">dreamstime.com</a></li>
+            <li><em>Suzhou</em> — deMAP. <a href="https://uk.pinterest.com/pin/22729173114695311/" target="_blank" rel="noopener">pinterest.com</a></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CODA -->
+    <div class="final-coda">
+      <div class="coda-han">知 &middot; 行 &middot; 合 &middot; 一</div>
+      <div class="coda-line">Five questions &middot; one continuous arc &middot; the garden meets the joint at Suzhou</div>
+      <div class="coda-attr">SFES LAB &middot; 2026 &middot; LONG READ NO. 05 &middot; LOOP CLOSED</div>
+    </div>
+
+  </div><!-- /main Part V -->
+</div><!-- /part-v -->
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <div>© 2026 &middot; 四维空间感知实验室 · SFES Laboratory</div>
+  <div class="seal-mark"><span class="dot"></span> Long Read no. 05 &middot; 一次思想实验 &middot; from Calvino to Wang Yangming</div>
+</footer>
+
+</body>
+</html>
