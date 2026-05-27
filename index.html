@@ -406,6 +406,77 @@ section.manifesto {
   opacity: 0.55;
 }
 
+/* Manifesto poem — Eva's opening declaration */
+.manifesto-text .poem-title {
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(30px, 3.8vw, 46px);
+  line-height: 1.18;
+  color: var(--dusk-deep);
+  margin-bottom: 8px;
+  letter-spacing: 0.005em;
+}
+.manifesto-text .poem-title .en {
+  display: block;
+  font-family: var(--serif-cn);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.36em;
+  margin-top: 12px;
+  color: var(--ember-deep);
+  letter-spacing: 0.06em;
+  opacity: 0.78;
+}
+.manifesto-text .poem {
+  margin-top: 26px;
+  font-family: var(--serif-en);
+  font-size: 16px;
+  line-height: 1.78;
+  color: #2a2438;
+  letter-spacing: 0.005em;
+}
+.manifesto-text .poem p {
+  margin: 0;
+  font-size: inherit;
+  font-style: normal;
+  font-weight: 300;
+  color: inherit;
+}
+.manifesto-text .poem p.gap { margin-top: 16px; }
+.manifesto-text .poem p strong {
+  font-family: var(--serif-en);
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: var(--ember-deep);
+}
+.manifesto-text .poem p em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--water-deep);
+  letter-spacing: 0.04em;
+}
+.manifesto-text .poem .kw {
+  font-family: var(--serif-cn);
+  color: var(--ember-deep);
+  font-weight: 500;
+}
+.manifesto-text .poem p.closing {
+  font-style: italic;
+  color: var(--ember-deep);
+  margin-top: 22px;
+  font-size: 1.04em;
+}
+.manifesto-text .poem p.welcome {
+  font-family: var(--serif-en);
+  font-style: italic;
+  color: var(--sky-mauve);
+  margin-top: 8px;
+  font-size: 1.08em;
+  letter-spacing: 0.04em;
+}
+
 /* ──────────────────────────────────────────────────────────────
    WORKS — essays as portal cards
    ────────────────────────────────────────────────────────────── */
@@ -549,15 +620,34 @@ section.works {
   clip-path: polygon(0 65%, 12% 30%, 24% 55%, 38% 20%, 54% 45%, 68% 25%, 82% 50%, 100% 35%, 100% 100%, 0 100%);
 }
 
-/* Scene-E — Calvino piece, uses the actual hero image as a portal thumbnail */
-.scene-e {
+/* Scene with article image — 3 cards each use their own assets/0X/ hero image */
+.scene-img-01,
+.scene-img-02,
+.scene-img-03 {
   background-color: #2a1c12;
-  background-image:
-    linear-gradient(180deg, rgba(40,24,12,0.05) 0%, rgba(40,24,12,0.35) 80%, rgba(40,24,12,0.65) 100%),
-    url('assets/05-hero.png');
   background-size: cover;
-  background-position: center 30%;
+  background-position: center center;
   background-repeat: no-repeat;
+  position: relative;
+}
+.scene-img-01::after,
+.scene-img-02::after,
+.scene-img-03::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(40,24,12,0.0) 0%, rgba(40,24,12,0.20) 60%, rgba(40,24,12,0.55) 100%);
+  pointer-events: none;
+}
+.scene-img-01 {
+  background-image: url('assets/01/01-Silent%20Grammar.png');
+}
+.scene-img-02 {
+  background-image: url('assets/02/02-Economic%20of%20Ruin-Relic.png');
+}
+.scene-img-03 {
+  background-image: url('assets/03/03-Invisible%20City+Suzhou.png');
+  background-position: center 30%;
 }
 
 /* ── LONG-READ MARK — for the consolidated No. 05 three-part essay ── */
@@ -1083,15 +1173,29 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
       </div>
     </div>
     <div class="manifesto-text">
-      <div class="eyebrow">Manifesto · 实验室宣言</div>
-      <h2>
-        空间不说话，但它记得一切。
-        <span class="en">Space does not speak — yet it remembers everything.</span>
+      <div class="eyebrow">Manifesto · 缘起</div>
+      <h2 class="poem-title">
+        I am Shiqi Dai.
+        <span class="en">Eva &middot; 戴诗琪</span>
       </h2>
-      <p class="cn">人类文明从来不只栖居于语言符号之中。城市与建筑——从紫禁城的轴线到徽州的马头墙——是人类智能以物质形式书写的史诗，是语言与社会结构之外，另一套沉默而持久的文明语法。</p>
-      <p class="en">Civilization has never dwelt in language alone. The built environment — axes, thresholds, courtyards, ruins — is another grammar of intelligence, slower than speech and harder to forget. This lab asks what that grammar means now, as machine agents learn to navigate space without inhabiting it, and as attention capital empties the places where memory lives.</p>
+      <div class="poem">
+        <p>At 14-year-old, I raised my head from the mathematics</p>
+        <p>and found myself seized — undone —</p>
+        <p>by the irreducible force</p>
+        <p>of <strong>4D&nbsp;SPACE-TIME&nbsp;PERCEPTION</strong>.</p>
+        <p class="gap">Since then, I have followed its curvature —</p>
+        <p>through <em>PHYSICS&nbsp;ARENAS</em> in high school,</p>
+        <p>through the measured silence of <em>ARCHITECTURE&nbsp;&amp;&nbsp;URBAN&nbsp;PLANNING&nbsp;PRACTICES</em>,</p>
+        <p>into the living logic of <em>SPATIAL&nbsp;INTELLIGENCE</em>,</p>
+        <p>which rose in 2024 — but I've been waiting at the <span class="kw">「terminus」</span> for ten years.</p>
+        <p class="gap">Now I stand where <strong>BODIES</strong> meet <strong>CITIES</strong>,</p>
+        <p>where <strong>PERCEPTION</strong> becomes <strong>STRUCTURE</strong>,</p>
+        <p>and <strong>SPACE</strong> begins to be <strong>AWARED</strong>.</p>
+        <p class="gap closing">Can't wait to jump inside my life-long dream.</p>
+        <p class="welcome">Wel- Come! &nbsp; ^_^ ☀️</p>
+      </div>
       <div class="rule"></div>
-      <p class="cn" style="font-size: 14.5px; opacity: 0.78;">—— Eva &middot; 戴诗琪 &nbsp;·&nbsp; 独立观察者视角</p>
+      <p class="cn" style="font-size: 14.5px; opacity: 0.78;">—— Eva &middot; 戴诗琪 &nbsp;·&nbsp; 四维空间感知实验室</p>
     </div>
   </div>
 </section>
@@ -1104,85 +1208,52 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
         已刊行的思考
         <span class="en">Essays & Field Notes</span>
       </div>
-      <div class="count">05 &nbsp;/&nbsp; Pieces</div>
+      <div class="count">03 &nbsp;/&nbsp; Pieces</div>
     </div>
 
     <div class="works-grid">
 
-      <a class="work" href="space_and_agi_perspective.html">
+      <a class="work" href="01-空间的沉默语言_双语版.html">
         <div class="work-portal">
-          <div class="scene scene-a"></div>
-          <div class="tiny-fig"><svg viewBox="0 0 8 22"><rect x="3" y="0" width="2" height="6" fill="#1a1528" rx="1"/><rect x="2" y="6" width="4" height="10" fill="#1a1528"/><rect x="2" y="16" width="2" height="6" fill="#1a1528"/><rect x="4" y="16" width="2" height="6" fill="#1a1528"/></svg></div>
+          <div class="scene scene-img-01"></div>
         </div>
         <div class="work-meta">
-          <div class="num">No. 01 &nbsp;·&nbsp; Perspective</div>
+          <div class="num">No. 01 &nbsp;·&nbsp; Essay</div>
           <h3>
             空间的沉默语言
             <span class="en">The Silent Language of Space</span>
           </h3>
-          <p>Machine perception, the built environment, and the incommensurability of human civilization.</p>
-        </div>
-      </a>
-
-      <a class="work" href="01-空间的沉默语言_双语版.html">
-        <div class="work-portal">
-          <div class="scene scene-c"></div>
-          <div class="tiny-fig"><svg viewBox="0 0 8 22"><rect x="3" y="0" width="2" height="6" fill="#1a1528" rx="1"/><rect x="2" y="6" width="4" height="10" fill="#1a1528"/><rect x="2" y="16" width="2" height="6" fill="#1a1528"/><rect x="4" y="16" width="2" height="6" fill="#1a1528"/></svg></div>
-        </div>
-        <div class="work-meta">
-          <div class="num">No. 02 &nbsp;·&nbsp; Bilingual Edition</div>
-          <h3>
-            空间的沉默语言 · 双语版
-            <span class="en">The Silent Language of Space — 中/EN</span>
-          </h3>
-          <p>A parallel-text edition on embodied cognition, collective memory, and why machines cannot inhabit space.</p>
-        </div>
-      </a>
-
-      <a class="work" href="02-废墟经济学_双语版.html">
-        <div class="work-portal">
-          <div class="scene scene-b"></div>
-          <div class="tiny-fig"><svg viewBox="0 0 8 22"><rect x="3" y="0" width="2" height="6" fill="#1a1528" rx="1"/><rect x="2" y="6" width="4" height="10" fill="#1a1528"/><rect x="2" y="16" width="2" height="6" fill="#1a1528"/><rect x="4" y="16" width="2" height="6" fill="#1a1528"/></svg></div>
-        </div>
-        <div class="work-meta">
-          <div class="num">No. 03 &nbsp;·&nbsp; Political Economy</div>
-          <h3>
-            废墟经济学
-            <span class="en">The Economics of Ruins</span>
-          </h3>
-          <p>How the attention economy dispossesses physical space — from Google's Downtown West to Tianjin's Five Avenues.</p>
+          <p>Machine perception, the built environment, and the incommensurability of human civilization — a bilingual essay on embodied cognition and collective memory.</p>
         </div>
       </a>
 
       <a class="work" href="02-废墟经济学_图文版_final.html">
         <div class="work-portal">
-          <div class="scene scene-d"></div>
-          <div class="tiny-fig"><svg viewBox="0 0 8 22"><rect x="3" y="0" width="2" height="6" fill="#1a1528" rx="1"/><rect x="2" y="6" width="4" height="10" fill="#1a1528"/><rect x="2" y="16" width="2" height="6" fill="#1a1528"/><rect x="4" y="16" width="2" height="6" fill="#1a1528"/></svg></div>
+          <div class="scene scene-img-02"></div>
         </div>
         <div class="work-meta">
-          <div class="num">No. 04 &nbsp;·&nbsp; Illustrated Edition</div>
+          <div class="num">No. 02 &nbsp;·&nbsp; Political Economy &middot; Illustrated</div>
           <h3>
-            废墟经济学 · 图文版
-            <span class="en">The Economics of Ruins — Illustrated</span>
+            废墟经济学
+            <span class="en">The Economics of Ruins</span>
           </h3>
-          <p>An extended, image-rich genealogy connecting Shanghai, Detroit, Istanbul, Mumbai, Seoul, and Beirut.</p>
+          <p>How the attention economy dispossesses physical space — an extended, image-rich genealogy connecting Shanghai, Detroit, Istanbul, Mumbai, Seoul, and Beirut.</p>
         </div>
       </a>
 
       <a class="work latest long-read" href="03-看不见的城市_世界模型.html">
         <div class="work-portal">
-          <div class="scene scene-e"></div>
+          <div class="scene scene-img-03"></div>
           <span class="latest-badge">Latest · 最新</span>
-          <span class="long-read-mark">A Long Read &middot; Three Parts</span>
-          <div class="tiny-fig"><svg viewBox="0 0 8 22"><rect x="3" y="0" width="2" height="6" fill="#1a1528" rx="1"/><rect x="2" y="6" width="4" height="10" fill="#1a1528"/><rect x="2" y="16" width="2" height="6" fill="#1a1528"/><rect x="4" y="16" width="2" height="6" fill="#1a1528"/></svg></div>
+          <span class="long-read-mark">A Long Read &middot; Five Questions</span>
         </div>
         <div class="work-meta">
-          <div class="num">No. 05 &nbsp;·&nbsp; A Thought Experiment in Three Parts</div>
+          <div class="num">No. 03 &nbsp;·&nbsp; A Thought Experiment in Five Questions</div>
           <h3>
             一次思想实验:从《看不见的城市》到苏州
             <span class="en">From Calvino &amp; Genie, through London / Paris / SF, to 王阳明 — One Continuous Arc</span>
           </h3>
-          <p>Part I: Google &amp; AutoNavi read Calvino. Part II: the geography of the AI revolution lands on Suzhou. Part III: the loop closes — garden as software, joint as hardware, Wang Yangming as the non-Cartesian mother tongue.</p>
+          <p>Five prompts traced from the question "how would Google and AutoNavi read Calvino?" — through the geography of the AI revolution to Suzhou, where the garden as software meets the harmonic-drive reducer as hardware, and 知行合一 as the native compiler.</p>
         </div>
       </a>
 
