@@ -630,10 +630,11 @@ section.works {
   clip-path: polygon(0 65%, 12% 30%, 24% 55%, 38% 20%, 54% 45%, 68% 25%, 82% 50%, 100% 35%, 100% 100%, 0 100%);
 }
 
-/* Scene with article image — 3 cards each use their own assets/0X/ hero image */
+/* Scene with article image — 4 cards each use their own assets/0X/ hero image */
 .scene-img-01,
 .scene-img-02,
-.scene-img-03 {
+.scene-img-03,
+.scene-img-04 {
   background-color: #2a1c12;
   background-size: cover;
   background-position: center center;
@@ -642,7 +643,8 @@ section.works {
 }
 .scene-img-01::after,
 .scene-img-02::after,
-.scene-img-03::after {
+.scene-img-03::after,
+.scene-img-04::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -658,6 +660,14 @@ section.works {
 .scene-img-03 {
   background-image: url('assets/03/03-Invisible%20City%2BSuzhou.png');
   background-position: center 30%;
+}
+.scene-img-04 {
+  background-color: #0c1620;
+  background-image: url('assets/04/04-Moonlit-Dwelling.png');
+  background-position: center 38%;
+}
+.scene-img-04::after {
+  background: linear-gradient(180deg, rgba(8,14,22,0.0) 0%, rgba(8,14,22,0.20) 50%, rgba(8,14,22,0.60) 100%);
 }
 
 /* ── LONG-READ MARK — for the consolidated No. 05 three-part essay ── */
@@ -1218,7 +1228,7 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
         已刊行的思考
         <span class="en">Essays & Field Notes</span>
       </div>
-      <div class="count">03 &nbsp;/&nbsp; Pieces</div>
+      <div class="count">04 &nbsp;/&nbsp; Pieces</div>
     </div>
 
     <div class="works-grid">
@@ -1251,10 +1261,9 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
         </div>
       </a>
 
-      <a class="work latest long-read" href="03-看不见的城市_世界模型.html">
+      <a class="work long-read" href="03-看不见的城市_世界模型.html">
         <div class="work-portal">
           <div class="scene scene-img-03"></div>
-          <span class="latest-badge">Latest · 最新</span>
           <span class="long-read-mark">A Long Read &middot; Five Questions</span>
         </div>
         <div class="work-meta">
@@ -1264,6 +1273,22 @@ footer .sig { color: var(--gold-dust); opacity: 0.85; }
             <span class="en">From Calvino &amp; Genie, through London / Paris / SF, to 王阳明 — One Continuous Arc</span>
           </h3>
           <p>Five prompts traced from the question "how would Google and AutoNavi read Calvino?" — through the geography of the AI revolution to Suzhou, where the garden as software meets the harmonic-drive reducer as hardware, and 知行合一 as the native compiler.</p>
+        </div>
+      </a>
+
+      <a class="work latest long-read" href="04-阿尔忒弥斯_技术政治审美.html">
+        <div class="work-portal">
+          <div class="scene scene-img-04"></div>
+          <span class="latest-badge">Latest · 最新</span>
+          <span class="long-read-mark">A Long Read &middot; Fifteen Chapters</span>
+        </div>
+        <div class="work-meta">
+          <div class="num">No. 04 &nbsp;·&nbsp; A Night-Long Conversation in Fifteen Chapters</div>
+          <h3>
+            阿尔忒弥斯计划实施:技术、政治与审美
+            <span class="en">The Artemis Implementation — Technology, Politics, and Aesthetics</span>
+          </h3>
+          <p>One night, fifteen chapters. Two intertwined threads — the politics of <em>tech accelerationism</em> (Musk, Thiel, technofeudalism, space colonization, Mao's late vigilance, Bastani &amp; Frase) and the politics of <em>aesthetics</em> (项飙, Haidian, Dreame, art as political frontline) — closing with a looking-back on China's particular model of state-led tech acceleration and a reserved view on the real-estate / new-productivity scale mismatch.</p>
         </div>
       </a>
 
